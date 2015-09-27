@@ -191,7 +191,7 @@ class Player {
 
 
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras
-        composite_haste() {
+        total_haste() {
             // 1.5 = 150% haste and so on
             return 1;
         }
