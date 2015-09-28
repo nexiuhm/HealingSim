@@ -98,18 +98,20 @@ class Player {
         }
 
 
-        cast_spell(spellName:string) {
+        cast_spell(spellName: string) {
+
+            // ## Find spell ####
             if (!this.spells[spellName])
                 return;
             var spell = this.spells[spellName];
-            
-            if (!spell.ready() || this.isCasting) {
+            // ##################
+            if (this.isCasting) {
     
-                game.UI_ERROR_MESSAGE.dispatch("Spell not ready yet");        
+                game.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
             }
          
             else
-            spell.cast();
+                spell.use();
         }
 
 

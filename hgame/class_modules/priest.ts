@@ -56,11 +56,13 @@ namespace Priest {
         }
 
         can_use() {
+          
             // Can't use shield if target has 'Weakened Soul' debuff
             if (this.target.hasAura("weakened_soul"))
                 return false;
-
-            return true;
+            else 
+            return super.can_use();
+            
         }
 
         execute() {
