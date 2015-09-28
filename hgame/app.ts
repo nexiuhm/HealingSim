@@ -1,10 +1,13 @@
-﻿var game: Game;
-var cd_overlay ;
+﻿enum stat_e { STRENGHT, AGILITY, STAMINA, INTELLECT, SPIRIT };
+enum class_e { WARRIOR, PALADIN, HUNTER, ROGUE, PRIEST, DEATHKNIGHT, SHAMAN, MAGE, WARLOCK, MONK, DRUID };
+
+
+var game: Game;
+
 
 window.onload = () => {
     game = new Game;
 };
-
 
 
 class Game extends Phaser.Game {
