@@ -3,15 +3,19 @@
 namespace Priest {
 
     export class Priest extends Player {
-        constructor(playerData) {
-            super(playerData);
+        constructor(race: race_e, level:number, name:string) {
+            super(class_e.PRIEST, race ,level, name);
 
+            this.init_spells();
         }
 
-        spells = {
-            power_word_shield:  new power_word_shield(this),
-            flash_of_light:     new flash_of_light(this),
-            clarity_of_will:    new clarity_of_will(this)
+        
+        init_spells() {
+            this.spells = {
+                power_word_shield: new power_word_shield(this),
+                flash_of_light: new flash_of_light(this),
+                clarity_of_will: new clarity_of_will(this)
+            };
         }
 
         

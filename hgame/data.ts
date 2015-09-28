@@ -14,7 +14,11 @@
     }
 
     export function classBaseStats(_class: class_e, level: number, stat: stat_e): number {
-        return class_base_stats_by_level[_class][level-1][stat];
+        return class_base_stats_by_level[_class+1][level-1][stat];
+    }
+
+    export function raceBaseStats(race: race_e, stat: stat_e) {
+        return race_base_stats[race][stat];
     }
 
     /* Future goal:  grab spelldata from simcraft files.  */
@@ -74,7 +78,7 @@
     }
 
 
-    export var class_base_stats_by_level =
+    var class_base_stats_by_level =
         [
             [ // No Class
                 //    Str     Agi     Sta     Int     Spi
@@ -1315,7 +1319,7 @@
         ];
 
     //  Racial Base Stats(Str Agi Sta Int Spi)
-    var race_stats = [
+    var race_base_stats = [
         // Str Agi Sta Int Spi
         [0, 0, 0, 0, 0], // No Race
         [0, 0, 0, 0, 0], // Human

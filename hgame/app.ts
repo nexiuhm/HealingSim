@@ -1,6 +1,6 @@
 ﻿enum stat_e { STRENGHT, AGILITY, STAMINA, INTELLECT, SPIRIT };
 enum class_e { WARRIOR, PALADIN, HUNTER, ROGUE, PRIEST, DEATHKNIGHT, SHAMAN, MAGE, WARLOCK, MONK, DRUID };
-
+enum race_e { RACE_NONE = 0,RACE_BEAST, RACE_DRAGONKIN, RACE_GIANT, RACE_HUMANOID, RACE_DEMON, RACE_ELEMENTAL,RACE_NIGHT_ELF, RACE_HUMAN, RACE_GNOME, RACE_DWARF, RACE_DRAENEI, RACE_WORGEN,RACE_ORC, RACE_TROLL, RACE_UNDEAD, RACE_BLOOD_ELF, RACE_TAUREN, RACE_GOBLIN,RACE_PANDAREN, RACE_PANDAREN_ALLIANCE, RACE_PANDAREN_HORDE, RACE_MAX,RACE_UNKNOWN};
 
 var game: Game;
 
@@ -30,7 +30,7 @@ class Game extends Phaser.Game {
         super(window.innerWidth, window.innerHeight, Phaser.WEBGL, "game_wrapper");
         
         // Create the local player
-        this.playerControlledUnit = new Priest.Priest({ name: "You", classid: 5, health: 440000 });
+        this.playerControlledUnit = new Priest.Priest(race_e.RACE_NIGHT_ELF,100,"PlayerName");
         
         
         // Start main state/loop

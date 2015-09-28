@@ -1,61 +1,71 @@
 ﻿
 class Player {
-
-        id: number;
+        // --- Basic unit data ------------
         level: number = 100;
         name: string;
-        classId: number;
-        alive: boolean = true;
+        classId: class_e;
+        race: race_e;
+        // ----Players current target--------------
         target: Player = this;
-        onGlobal: boolean = false;
         isCasting: boolean = false;
-        currentCast = null;
+        alive: boolean = true;
         instance: Raid = null; // reference to the raid group the players are in
-        spells: any; // spells are added in the class modules
-       
-        constructor(options) {
-            
-            this.id = options.id;
-            this.level = 100;
-
-            // Create some random data for testing 
-            this.name = options.name || util.generatePlayerName();
-            this.stats.health = options.health || util.randomNumberFromTo(0, this.getMaxHealth());
-            this.classId = options.classid || Math.round(util.randomNumberFromTo(0, 11));
-        }
-
+        // --- Players spells ---------------------
+        spells: any; 
         base_stats = {
-            int: 2000,
+            strenght: 2000,
             agility: 24,
-            stamina: 2000,
-            hasteRating: 1200,
-            masteryRating: 2414,
-            critRating: 455,
-            dodgeRating: 142,
-            spirit: 4555,
-            armorRating: 2413,
-            maxMana: 300000,
-            maxHealth: 440000
+            stamina: 0,
+            intellect: 0,
+            spirit: 0
         };
 
         stats = {
             health: 440000,
             mana: 300000,
-            absorb: 50000
-            
+            absorb: 50000,
+            maxHealth: 440000
+
         };
+        constructor( _class:class_e, race:race_e, level, name:string) {
+        
+            this.level = level;
+            this.race = race;
+            this.name = name;
+            this.classId = _class;
+
+            this.init_base_stats();
+           
+           
+        }
+
+        init_base_stats() {
+            /* This is the stats someone would have 0 gear */
+            this.base_stats.agility =   data.classBaseStats(this.classId, this.level, stat_e.AGILITY) + data.raceBaseStats(this.race, stat_e.AGILITY); // + race base
+            this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA); // + race base
+            this.base_stats.intellect = data.classBaseStats(this.classId, this.level, stat_e.INTELLECT) + data.raceBaseStats(this.race, stat_e.INTELLECT);
+            this.base_stats.spirit =    data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);
+            this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);
+
+            // *TODO* add stats from gear
+
+        }
+
+        init_stats() {
+            /* ### TODO ###
+            - This will calculate the current stats. 
+                 stat * scaling = current stat
+                 stamina * health_per_stamina = health; etc
+            */
+        }
 
         avoid() {
             //returns dodge, parry, or miss?. Returns false if nothing was avoided.
         }
         
-        getAbsorb() {
-            return this.stats.absorb;
-        }
+     
 
-        hasAbsorb() {
-            return true;
-        }
+
         recive_damage(dmg) {
             if (!this.alive)
                 return;
@@ -67,7 +77,7 @@ class Player {
             if ( dmg.isAvoidable ) {
 
                 if ( this.avoid() ) {
-                    avoided_damage = true;
+                    avoided_damage = true; // Note: Only warriors and paladins have block
                 }
             }
             */
@@ -132,7 +142,9 @@ class Player {
 
         }
 
-        
+        getAbsorb() {
+            return this.stats.absorb;
+        }s
         setHealth(value: number) {
             if (!this.alive) 
                 return;
@@ -141,8 +153,8 @@ class Player {
                 this.alive = false;
                 return;
             }
-            if (value >= this.base_stats.maxHealth) {
-                this.stats.health = this.base_stats.maxHealth;
+            if (value >= this.getMaxHealth()) {
+                this.stats.health = this.getMaxHealth();
             }
             else {
                 this.stats.health = value;
@@ -170,7 +182,7 @@ class Player {
         }
 
         getMaxHealth() {
-            return this.base_stats.maxHealth;
+            return this.stats.maxHealth;
         }
 
         getCurrentHealth() {

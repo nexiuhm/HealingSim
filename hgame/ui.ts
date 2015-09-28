@@ -178,7 +178,7 @@ class RaidFrame {
         for (var g = 0; g < groups; g++) {
             
             for (var p = 0; p < 5; p++) {
-                var x = new Player({});
+                var x = new Player(class_e.DRUID,race_e.RACE_GOBLIN,100,"RaidX");
                 this.raid.push(new UnitFrame(this.unitFrameWidth*g + this.x+5, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, x, this.screen));
 
             }

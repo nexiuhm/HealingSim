@@ -15,13 +15,7 @@ module util {
         return randomNumber;
     };
 
-    export function getClassColorTxT(classId) {
-        var classColorsTxT = ["#C41F3B", "#FF7D0A", "#ABD473", "#69CCF0", "#00FF96", "#F58CBA", "#FFFFFF", "#FFF569", "#0070DE", "#9482C9", "#C79C6E"
-        ];
 
-        return classColorsTxT[classId] || classColorsTxT[0];
-
-    }
     export function getClassColor(classId: number): number {
         var classColors = [0xC79C6E,0xF58CBA,0xABD473,0xFFF569,0xFFFFFF, 0xC41F3B,0x0070DE,0x69CCF0,0x9482C9,0x00FF96, 0xFF7D0A]
 
