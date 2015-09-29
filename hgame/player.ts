@@ -12,6 +12,7 @@ class Player {
         instance: Raid = null; // reference to the raid group the players are in
         // --- Players spells ---------------------
         spells: any; 
+
         base_stats = {
             strenght: 2000,
             agility: 24,
@@ -27,16 +28,14 @@ class Player {
             maxHealth: 440000
 
         };
+
         constructor( _class:class_e, race:race_e, level, name:string) {
         
             this.level = level;
             this.race = race;
             this.name = name;
             this.classId = _class;
-
-            this.init_base_stats();
-           
-           
+            this.init_base_stats();  
         }
 
         init_base_stats() {
@@ -63,9 +62,6 @@ class Player {
             //returns dodge, parry, or miss?. Returns false if nothing was avoided.
         }
         
-     
-
-
         recive_damage(dmg) {
             if (!this.alive)
                 return;
@@ -99,14 +95,10 @@ class Player {
                     this.stats.absorb = 0;
                     game.UNIT_ABSORB.dispatch(this);
                 }
-               
-
                 this.setHealth(this.stats.health - dmg.amount);
                 game.UNIT_HEALTH_CHANGE.dispatch(this);
-
             }
         }
-
 
         cast_spell(spellName: string) {
 
@@ -116,10 +108,8 @@ class Player {
             var spell = this.spells[spellName];
             // ##################
             if (this.isCasting) {
-    
                 game.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
             }
-         
             else
                 spell.use();
         }
@@ -139,12 +129,12 @@ class Player {
             //## TODO ## 
             // - Remove all auras that doesnt presist through death.
             // - Other stuff that needs to happen when you die.
-
         }
 
         getAbsorb() {
             return this.stats.absorb;
-        }s
+        }
+
         setHealth(value: number) {
             if (!this.alive) 
                 return;
@@ -164,7 +154,6 @@ class Player {
             // ## TODO ##
             // - Make sure it doesnt exceed maximum possible health
             // - Handle overhealing here? or somewhere else
-            
         }
 
         setAbsorb(value: number) {
@@ -172,13 +161,11 @@ class Player {
                 return;
             
             this.stats.absorb += value;
-            
 
             game.UNIT_ABSORB.dispatch(this);
             
             // ## TODO ##
             // - Handle overhealing here? or somewhere else
-            
         }
 
         getMaxHealth() {
@@ -224,9 +211,7 @@ class Player {
                         return 0;
                     }
                 }
-                );
+            );
             return lowestPlayers.slice(0,players);
         }
-
-
  }

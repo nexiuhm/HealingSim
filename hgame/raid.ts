@@ -1,12 +1,7 @@
-﻿
-
-class Raid {
+﻿class Raid {
     players: Array<Player>
 
-    getPlayerList():any {
-        
+    getPlayerList():any {   
     }
-
-
 }
 

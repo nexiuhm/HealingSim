@@ -4,7 +4,6 @@
 /*      In it most basic form it will only display a healthbar.  */
 /*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
 
-
 class UnitFrame { 
     //options
     unit: Player;
@@ -23,7 +22,6 @@ class UnitFrame {
     overlay_texture: Phaser.Sprite;
     unit_name: Phaser.BitmapText;
     health_text: Phaser.BitmapText;
-
 
     constructor(x, y, w, h, unit: Player, screen: Phaser.State) {
         this.x = x;
@@ -57,8 +55,6 @@ class UnitFrame {
         this.unit_name = this.screen.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
         this.unit_name.tint = util.getClassColor(this.unit.classId);
         this.unit_name.anchor.set(0.5);
-
-      
        
         // Add the layers as children of the container
         this.container.addChild(this.health);
@@ -80,8 +76,8 @@ class UnitFrame {
         // Set up event listeners. ### TODO Need a way to filter out events that is not coming from this unit
         game.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
         game.UNIT_ABSORB.add(() => this.UPDATE());
-
     }
+
     UPDATE() {
 
         var new_health_width = this.calcBarWidth(this.unit.getCurrentHealth(), this.unit.getMaxHealth());
@@ -93,7 +89,6 @@ class UnitFrame {
         this.screen.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
         this.screen.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);
         this.screen.add.tween(this.absorb).to({ width: new_absorb_width }, 50, "Linear", true);
-
     }
 
     UNIT_MANA_CHANGE(eventData) {
@@ -104,32 +99,26 @@ class UnitFrame {
         // make healthbar grey? show skull icon?
     }
 
-    
     calcBarWidth(currentValue, maxValue): number {
         var barWidthInPixels = Math.round((currentValue / maxValue ) * this.width);
         return barWidthInPixels;
     }
-
-    
+ 
     initUnitName() {
         this.unit_name.setText(this.unit.name);
         this.unit_name.tint = util.getClassColor(this.unit.classId);
     }
 
-
     initHealthBar() { // Its not possible to change the color of the health bar. It needs to be redrawn from scratch.
         this.health.clear();
         this.health.beginFill(util.getClassColor(this.unit.classId));
         this.health.drawRect(0, 0, 1, this.height);
-
     }
     
     initAbsorbBar() {  
         this.absorb.clear();
         this.absorb.beginFill(0x43b6e8);
         this.absorb.drawRect(0, 0, 1, this.height);
-        
-
     }
 }
 
@@ -141,19 +130,15 @@ class TargetFrame extends UnitFrame {
         this.unit = this.ownerUnit.target;
         // Subscribe to the target change event. This event is emitted in the Player.setTarget() function
         game.TARGET_CHANGE_EVENT.add(() => this.UNIT_TARGET_CHANGE());
-
     }
-
 
     UNIT_TARGET_CHANGE() {
           this.unit = this.ownerUnit.target;
-          
           this.initUnitName();
           this.initHealthBar();
           this.initAbsorbBar();
           this.UPDATE();
     }
-      
 }
 
 class RaidFrame {
@@ -171,6 +156,7 @@ class RaidFrame {
         this.screen = screen;
         this.init();
     }
+
     init() {
         // TODO
         // Create a UnitFrame for each plyer in the raid
@@ -180,18 +166,10 @@ class RaidFrame {
             for (var p = 0; p < 5; p++) {
                 var x = new Player(class_e.DRUID,race_e.RACE_GOBLIN,100,"RaidX");
                 this.raid.push(new UnitFrame(this.unitFrameWidth*g + this.x+5, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, x, this.screen));
-
-            }
-           
+            } 
         }
-
-        
-
         // Arrange the frames spacing etc. to be within the boundaries set in this class
-      
     }
-
-
 }
 
 class ActionBar {
@@ -199,10 +177,8 @@ class ActionBar {
 }
 
 class Frame extends Phaser.Sprite { //### TODO,### add this as a base class for UI elements?
-    
-
+   
 }
-
 
 class CastFrame  {
 
@@ -218,8 +194,7 @@ class CastFrame  {
     y;
     width;
     height;
-    screen:Phaser.State;
-
+    screen: Phaser.State;
 
     constructor(x,y,w, h, castingUnit: Player,screen:Phaser.State) {
 
@@ -229,7 +204,7 @@ class CastFrame  {
         this.height = h;
         this.castingUnit = castingUnit;
         this.screen = screen;
-      
+  
         this.container = this.screen.add.graphics(x, y);
         this.container.width = w;
         this.container.height = h;
@@ -253,9 +228,7 @@ class CastFrame  {
 
         // Name of the spell
         this.spell_name = this.screen.add.bitmapText(w / 2, h / 2, "myriad", "", 12);
-
         this.spell_name.anchor.set(0.5);
-
         
         this.container.addChild(this.background);
         this.container.addChild(this.cast_bar);
@@ -264,8 +237,6 @@ class CastFrame  {
         
         // CastBar is hidden by default
         this.container.alpha = 0;
-        
-        
         
         //  - Setup event listeners with callback functions ## TODO ###
         game.UNIT_STARTS_SPELLCAST.add((s,t) => this.UNIT_STARTS_SPELLCAST(s,t));
@@ -297,7 +268,6 @@ class CastFrame  {
         // ### TODO #######
         // - Stop any current casting animation(s)
         // - Start animation: make spellbar red then fade it away
-    
     }
 
     private UNIT_FINISH_SPELLCAST() {
@@ -306,10 +276,7 @@ class CastFrame  {
         // ### TODO #######
         // - Play cast sucess sound?
         // - Start animation: background color green - > fade castbar away quickly
-
-
     }
-    
 }
 
 //* Future goal: This frame will listen for spells being used by the player and play cool animations based on that spell. Maybe even play spell sounds?
@@ -323,7 +290,6 @@ class BossTimers {
     init() {
         // getBossTimingData(boss);
     }
-
 }
 /*
 // Can't use that yet! spell not ready yet ! :p

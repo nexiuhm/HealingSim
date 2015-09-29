@@ -1349,6 +1349,4 @@
         [0, -2, 1, -1, 2], // Pandaren - Alliance
         [0, -2, 1, -1, 2] // Pandaren - Horde
     ];
-
 }
-

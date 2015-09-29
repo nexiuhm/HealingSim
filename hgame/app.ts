@@ -93,8 +93,9 @@ class Main extends Phaser.State {
         this.load.image("spell_flash", "graphics/spell_ready_shader.png");
         this.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
     }
+
     create() {
-        // Enable to this to capture FPS
+        // Enable this to capture FPS
         this.time.advancedTiming = true; 
         
         // Start the world fade-in effect
@@ -111,10 +112,8 @@ class Main extends Phaser.State {
        
         // Start the boss/healing simulator
         this.startSimulation();
-
     }
     
-
     handleKeyboardInput(event) {
         switch (event.keyCode) {
             case this.keybindings.ACTION_BUTTON_1:
@@ -137,8 +136,8 @@ class Main extends Phaser.State {
         var createSomeRandomDamage3 = setInterval(absrb, 1960);
         function randomDamage2() {
             game.playerControlledUnit.recive_damage({ amount: game.rnd.between(11, 128900) });
-
         }
+
         function randomDamage() {
             game.playerControlledUnit.recive_damage({ amount: game.rnd.between(215555, 338900) });
         }
@@ -148,8 +147,8 @@ class Main extends Phaser.State {
             game.playerControlledUnit.setHealth(game.playerControlledUnit.stats.health + game.rnd.between(20000, 88900));
         }
        // ---------------------------------------------------------
-       
     }
+
     loadAddons() {
         var test_target_frame = new TargetFrame(1200, 600, 300, 50, game.playerControlledUnit, this);
         var test_cast_frame = new CastFrame(400, 670, 300, 30, game.playerControlledUnit, this);
@@ -166,8 +165,8 @@ class Main extends Phaser.State {
     worldFadeInEffect() {
         this.world.alpha = 0;
         this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
-
     }
+
     render() {
 
         // This function wont be used much as most of the graphical animations are rendered using Tweens.
@@ -176,11 +175,8 @@ class Main extends Phaser.State {
         game.debug.text("#### UNIT TARGET INFO ########## ", 20, 60, '#00FF96');
         if (game.playerControlledUnit.target) {
             game.debug.text("#### Name: " + game.playerControlledUnit.target.name, 20, 80, '#00FF96');
-
             game.debug.text("#### Health: " + game.playerControlledUnit.target.stats.health, 20, 100, '#00FF96');
             game.debug.text("#### Class: " + game.playerControlledUnit.target.classId, 20, 120, '#00FF96');
         }
-
     }
-    
 }

@@ -39,10 +39,7 @@ class SpellBase {
 
         if (this.base_casttime == 0)
             this.isInstant = true;
-
     }
-
-
 
     use() {
        
@@ -93,11 +90,8 @@ class SpellBase {
         if (this.onCooldown) {
             return false;
         }
-
         return true;
-        
     }
-
 
     cast_finished() {
         this.player.isCasting = false;
@@ -105,30 +99,20 @@ class SpellBase {
         this.execute();
     }
 
-
-
     cast_time() {
         // ### TODO #######
-        
         return this.base_casttime * this.player.total_haste();
     }
 
-
     cancel_cast() {
-
         game.time.events.remove(this.current_cast);
-
     }
-
-
 
     consumeResource() {
         if (!this.hasPowerCost)
             return;
-
         this.player.consume_resource(this.powerType, this.powerCost);
     }
-
 
     onCooldownReady() {
         console.log("CD READY");
@@ -141,9 +125,5 @@ class SpellBase {
     
     cost() {
         return this.powerCost;
-
     }
-
-
 }
-
