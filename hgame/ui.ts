@@ -4,7 +4,7 @@
 /*      In it most basic form it will only display a healthbar.  */
 /*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
 
-class UnitFrame { 
+class UnitFrame {
     //options
     unit: Player;
     width: number;
@@ -46,11 +46,13 @@ class UnitFrame {
         
         this.absorb.blendMode = PIXI.blendModes.COLOR_BURN;
         this.absorb.alpha = 0.5;
+
         // Create the texture layer
         this.overlay_texture = this.screen.add.sprite(0, 0, "castbar_texture");
         this.overlay_texture.blendMode = PIXI.blendModes.MULTIPLY;
         this.overlay_texture.width = w;
         this.overlay_texture.height = h;
+
         // Create the player name layer
         this.unit_name = this.screen.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
         this.unit_name.tint = util.getClassColor(this.unit.classId);
@@ -160,11 +162,11 @@ class RaidFrame {
     init() {
         // TODO
         // Create a UnitFrame for each plyer in the raid
-        var groups = 4;
-        for (var g = 0; g < groups; g++) {
+        
+        for (var g = 0; g < 4; g++) {
             
             for (var p = 0; p < 5; p++) {
-                var x = new Player(class_e.DRUID,race_e.RACE_GOBLIN,100,"RaidX");
+                var x = new Player(game.rnd.between(0, 10), game.rnd.between(7,19), 100, util.generatePlayerName());
                 this.raid.push(new UnitFrame(this.unitFrameWidth*g + this.x+5, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, x, this.screen));
             } 
         }

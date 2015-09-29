@@ -11,12 +11,15 @@ module util {
     }
 
     export function randomNumberFromTo(min, max) { // returns a random number between min & max
-        var randomNumber = Math.random() * (max - min) + min;
-        return randomNumber;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
     export function getClassColor(classId: number): number {
         var classColors = [0xC79C6E,0xF58CBA,0xABD473,0xFFF569,0xFFFFFF, 0xC41F3B,0x0070DE,0x69CCF0,0x9482C9,0x00FF96, 0xFF7D0A]
         return classColors[classId] || classColors[1];
+    }
+
+    // Check if raid contains x tanks and y healers.
+    export function checkRaid() {
     }
 } 

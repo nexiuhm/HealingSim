@@ -1,6 +1,6 @@
 ﻿enum stat_e { STRENGHT, AGILITY, STAMINA, INTELLECT, SPIRIT };
 enum class_e { WARRIOR, PALADIN, HUNTER, ROGUE, PRIEST, DEATHKNIGHT, SHAMAN, MAGE, WARLOCK, MONK, DRUID };
-enum race_e { RACE_NONE = 0,RACE_BEAST, RACE_DRAGONKIN, RACE_GIANT, RACE_HUMANOID, RACE_DEMON, RACE_ELEMENTAL,RACE_NIGHT_ELF, RACE_HUMAN, RACE_GNOME, RACE_DWARF, RACE_DRAENEI, RACE_WORGEN,RACE_ORC, RACE_TROLL, RACE_UNDEAD, RACE_BLOOD_ELF, RACE_TAUREN, RACE_GOBLIN,RACE_PANDAREN, RACE_PANDAREN_ALLIANCE, RACE_PANDAREN_HORDE, RACE_MAX,RACE_UNKNOWN};
+enum race_e { RACE_NONE = 0,RACE_BEAST, RACE_DRAGONKIN, RACE_GIANT, RACE_HUMANOID, RACE_DEMON, RACE_ELEMENTAL,RACE_NIGHT_ELF, RACE_HUMAN, RACE_GNOME, RACE_DWARF, RACE_DRAENEI, RACE_WORGEN,RACE_ORC, RACE_TROLL, RACE_UNDEAD, RACE_BLOOD_ELF, RACE_TAUREN, RACE_GOBLIN, RACE_PANDAREN, RACE_PANDAREN_ALLIANCE, RACE_PANDAREN_HORDE, RACE_MAX,RACE_UNKNOWN};
 
 var game: Game;
 
@@ -16,7 +16,7 @@ class Game extends Phaser.Game {
     playerControlledUnit: Player;
     defaultFont:string =  "myriad";
 
-    // Custom singals/events
+    // Custom signals/events
     TARGET_CHANGE_EVENT: Phaser.Signal = new Phaser.Signal();
     UNIT_HEALTH_CHANGE: Phaser.Signal = new Phaser.Signal();
     UNIT_ABSORB: Phaser.Signal = new Phaser.Signal();
@@ -28,15 +28,13 @@ class Game extends Phaser.Game {
     constructor() {
         // Set up webGL renderer.
         super(window.innerWidth, window.innerHeight, Phaser.WEBGL, "game_wrapper");
-        
+
         // Create the local player
-        this.playerControlledUnit = new Priest.Priest(race_e.RACE_NIGHT_ELF,100,"PlayerName");
-        
+        this.playerControlledUnit = new Priest.Priest(race_e.RACE_NIGHT_ELF, 100, "PlayerName");
         
         // Start main state/loop
         this.state.add("Main", Main, false);
         this.state.add("SelectionScreen", SelectionScreen, true);
-  
     }
  
     start() {
@@ -52,19 +50,16 @@ class Game extends Phaser.Game {
             console.log('%c Debug ', 'background: #222; color: #bada55', message);
             return;
         }
-
-      
     }
-
 }
+
 class SelectionScreen extends Phaser.State {
     preload() {
         this.load.image("ss", "graphics/temp.png");
-
     }
+
     create() {
         this.input.keyboard.onDownCallback = function () { this.game.start() };
-        
         this.add.image(0, 0, "ss");
     }
 }
@@ -123,6 +118,7 @@ class Main extends Phaser.State {
             case this.keybindings.ACTION_BUTTON_2:
                 game.playerControlledUnit.cast_spell('power_word_shield');
                 break;
+
             case this.keybindings.ACTION_BUTTON_3:
                 game.playerControlledUnit.cast_spell('clarity_of_will');
                 break;
@@ -133,7 +129,7 @@ class Main extends Phaser.State {
         // --- Create some random damage for testing purposes ----
         var createSomeRandomDamage = setInterval(randomDamage, 3600);
         var createSomeRandomDamage2 = setInterval(randomDamage2, 1160);
-        var createSomeRandomDamage3 = setInterval(absrb, 1960);
+        var createSomeRandomDamage3 = setInterval(absorb, 1960);
         function randomDamage2() {
             game.playerControlledUnit.recive_damage({ amount: game.rnd.between(11, 128900) });
         }
@@ -142,7 +138,7 @@ class Main extends Phaser.State {
             game.playerControlledUnit.recive_damage({ amount: game.rnd.between(215555, 338900) });
         }
 
-        function absrb() {
+        function absorb() {
             game.playerControlledUnit.setAbsorb(game.rnd.between(115, 88900));
             game.playerControlledUnit.setHealth(game.playerControlledUnit.stats.health + game.rnd.between(20000, 88900));
         }

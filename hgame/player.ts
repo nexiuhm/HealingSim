@@ -47,7 +47,6 @@ class Player {
             this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);
 
             // *TODO* add stats from gear
-
         }
 
         init_stats() {
@@ -107,9 +106,8 @@ class Player {
                 return;
             var spell = this.spells[spellName];
             // ##################
-            if (this.isCasting) {
+            if (this.isCasting) 
                 game.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
-            }
             else
                 spell.use();
         }
@@ -189,7 +187,6 @@ class Player {
         
         consume_resource(resource,amount) {
         }
-
 
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras
         total_haste() {

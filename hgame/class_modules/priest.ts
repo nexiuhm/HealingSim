@@ -5,10 +5,8 @@ namespace Priest {
     export class Priest extends Player {
         constructor(race: race_e, level:number, name:string) {
             super(class_e.PRIEST, race ,level, name);
-
             this.init_spells();
         }
-
         
         init_spells() {
             this.spells = {
@@ -16,14 +14,8 @@ namespace Priest {
                 flash_of_light: new flash_of_light(this),
                 clarity_of_will: new clarity_of_will(this)
             };
-        }
-
-        
+        }   
     }
-
-    
-
-
 
     // ### SPELLS #########################
 
@@ -49,9 +41,6 @@ namespace Priest {
             var crit = game.rnd.between(1, 2);
             this.target.setHealth(this.target.stats.health + 110000 * crit);
         }
-
-
-
     }
 
     class power_word_shield extends SpellBase {
@@ -60,24 +49,19 @@ namespace Priest {
         }
 
         can_use() {
-          
+         
             // Can't use shield if target has 'Weakened Soul' debuff
             if (this.target.hasAura("weakened_soul"))
                 return false;
             else 
-            return super.can_use();
-            
+                return super.can_use();
         }
 
         execute() {
             super.execute();
             var crit = game.rnd.between(1, 2);
             this.target.setAbsorb(90000 * crit);
-
         }
-
-
-
 }
 
     class clarity_of_will extends SpellBase {
@@ -85,19 +69,12 @@ namespace Priest {
             super(data.getSpellData('clarity_of_will'), player);
         }
 
-
-
         execute() {
             super.execute();
             var crit = game.rnd.between(1, 2);
             this.target.setAbsorb(110000 * crit);
-
         }
-
-
-
-}
-
+    }
 }
 /*
 
