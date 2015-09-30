@@ -87,6 +87,13 @@ class UnitFrame {
         // Need to update the x value of the absorb everytime the health "moves"
         var new_absorb_x = new_health_width;
         
+        // Some weird stuff happens if the width of a displayObject is set to 0? Fucks up targetting. No idea why
+        // This fixes it for now
+        if (new_health_width <= 0)
+            new_health_width = 1;
+        if (new_absorb_width <= 0)
+            new_absorb_width = 1;
+
         // ugly
         this.screen.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
         this.screen.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);
