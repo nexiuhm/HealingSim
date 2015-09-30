@@ -161,7 +161,7 @@ class RaidFrame {
 
     init() {
         // TODO
-        // Create a UnitFrame for each plyer in the raid
+        // Create a UnitFrame for each player in the raid
         
         for (var g = 0; g < 4; g++) {
             

@@ -116,11 +116,11 @@ class Player {
         hasAura(aura:String) {
             return false;
         }
+
         resistance(dmg): number {
             return 0;
 
         }
-
 
         die() {
             this.alive = false;
