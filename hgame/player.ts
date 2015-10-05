@@ -14,18 +14,28 @@ class Player {
         spells: any; 
 
         base_stats = {
-            strenght: 2000,
-            agility: 24,
+            strenght: 0,
+            agility: 0,
             stamina: 0,
             intellect: 0,
-            spirit: 0
+            spirit: 0,
+            // ratings
+            mastery_rating: 0,
+            haste_rating: 0,
+            crit_rating: 0,
         };
+
+        stat_min_max_data = {
+            health: { min: 0, max: 440000},
+            mana: { min: 0, max: 0 }
+        }
 
         stats = {
             health: 440000,
-            mana: 300000,
             absorb: 50000,
-            maxHealth: 440000
+            spellpower: 0,
+            attackpower: 0,
+            mastery: 0,
 
         };
 
@@ -40,13 +50,17 @@ class Player {
 
         init_base_stats() {
             /* This is the stats someone would have 0 gear */
-            this.base_stats.agility =   data.classBaseStats(this.classId, this.level, stat_e.AGILITY) + data.raceBaseStats(this.race, stat_e.AGILITY); // + race base
-            this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA); // + race base
-            this.base_stats.intellect = data.classBaseStats(this.classId, this.level, stat_e.INTELLECT) + data.raceBaseStats(this.race, stat_e.INTELLECT);
-            this.base_stats.spirit =    data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);
-            this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);
+            this.base_stats.agility =   data.classBaseStats(this.classId, this.level, stat_e.AGILITY) + data.raceBaseStats(this.race, stat_e.AGILITY); // +gear
+            this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA); // + gear
+            this.base_stats.intellect = data.classBaseStats(this.classId, this.level, stat_e.INTELLECT) + data.raceBaseStats(this.race, stat_e.INTELLECT);// + gear
+            this.base_stats.spirit = data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);// + gear
+            this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);// + gear
 
-            // *TODO* add stats from gear
+            this.base_stats.mastery_rating = 0;
+            this.base_stats.haste_rating = 0;
+            this.base_stats.crit_rating = 0;
+
+            // *TODO* add stats from gear in this function or somewhere else?
         }
 
         init_stats() {
@@ -167,7 +181,7 @@ class Player {
         }
 
         getMaxHealth() {
-            return this.stats.maxHealth;
+            return this.stat_min_max_data.health.max;
         }
 
         getCurrentHealth() {
