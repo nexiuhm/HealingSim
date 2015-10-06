@@ -31,14 +31,12 @@
     <Content Include="graphics\spell_ready_shader.png" />
     <Content Include="graphics\temp.png" />
     <Content Include="index.html" />
-    <Content Include="libs\jquery-2.1.4.js" />
     <Content Include="libs\phaser.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="class_modules\priest.ts" />
     <TypeScriptCompile Include="data.ts" />
-    <TypeScriptCompile Include="libs\jquery.d.ts" />
     <TypeScriptCompile Include="randomstuff.ts" />
     <TypeScriptCompile Include="spell_base.ts" />
     <TypeScriptCompile Include="app.ts" />
