@@ -1,7 +1,31 @@
 ﻿enum stat_e { STRENGHT, AGILITY, STAMINA, INTELLECT, SPIRIT };
 enum class_e { WARRIOR, PALADIN, HUNTER, ROGUE, PRIEST, DEATHKNIGHT, SHAMAN, MAGE, WARLOCK, MONK, DRUID };
 enum race_e { RACE_NONE = 0,RACE_BEAST, RACE_DRAGONKIN, RACE_GIANT, RACE_HUMANOID, RACE_DEMON, RACE_ELEMENTAL,RACE_NIGHT_ELF, RACE_HUMAN, RACE_GNOME, RACE_DWARF, RACE_DRAENEI, RACE_WORGEN,RACE_ORC, RACE_TROLL, RACE_UNDEAD, RACE_BLOOD_ELF, RACE_TAUREN, RACE_GOBLIN, RACE_PANDAREN, RACE_PANDAREN_ALLIANCE, RACE_PANDAREN_HORDE, RACE_MAX,RACE_UNKNOWN};
-
+enum combat_rating_e {
+    RATING_MOD_DODGE,
+    RATING_MOD_PARRY,
+    RATING_MOD_HIT_MELEE,
+    RATING_MOD_HIT_RANGED,
+    RATING_MOD_HIT_SPELL,
+    RATING_MOD_CRIT_MELEE,
+    RATING_MOD_CRIT_RANGED,
+    RATING_MOD_CRIT_SPELL,
+    RATING_MOD_MULTISTRIKE,
+    RATING_MOD_READINESS,
+    RATING_MOD_SPEED,
+    RATING_MOD_RESILIENCE,
+    RATING_MOD_LEECH,
+    RATING_MOD_HASTE_MELEE,
+    RATING_MOD_HASTE_RANGED,
+    RATING_MOD_HASTE_SPELL,
+    RATING_MOD_EXPERTISE,
+    RATING_MOD_MASTERY,
+    RATING_MOD_PVP_POWER,
+    RATING_MOD_VERS_DAMAGE,
+    RATING_MOD_VERS_HEAL,
+    RATING_MOD_VERS_MITIG,
+};
+var PLAYER_MAX_LEVEL = 100;
 var game: Game;
 
 
@@ -83,9 +107,7 @@ class Main extends Phaser.State {
         this.load.image("castbar_texture2", "graphics/LiteStep.png");
         this.load.image("ab_texture", "graphics/ab_texture.png");
         this.load.image("bg", "graphics/bg.jpg");
-        this.load.image("alpha_mask", "graphics/alpha_mask.png");
         this.load.image("pws", "graphics/spell_holy_powerwordshield.jpg");
-        this.load.image("spell_flash", "graphics/spell_ready_shader.png");
         this.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
     }
 
@@ -140,7 +162,7 @@ class Main extends Phaser.State {
 
         function absorb() {
             game.playerControlledUnit.setAbsorb(game.rnd.between(115, 88900));
-            game.playerControlledUnit.setHealth(game.playerControlledUnit.stats.health + game.rnd.between(20000, 88900));
+            game.playerControlledUnit.setHealth(game.playerControlledUnit.getCurrentHealth() + game.rnd.between(20000, 88900));
         }
        // ---------------------------------------------------------
     }
@@ -171,8 +193,11 @@ class Main extends Phaser.State {
         game.debug.text("#### UNIT TARGET INFO ########## ", 20, 60, '#00FF96');
         if (game.playerControlledUnit.target) {
             game.debug.text("#### Name: " + game.playerControlledUnit.target.name, 20, 80, '#00FF96');
-            game.debug.text("#### Health: " + game.playerControlledUnit.target.stats.health, 20, 100, '#00FF96');
+            game.debug.text("#### Health: " + game.playerControlledUnit.target.getCurrentHealth(), 20, 100, '#00FF96');
             game.debug.text("#### Class: " + game.playerControlledUnit.target.classId, 20, 120, '#00FF96');
+            game.debug.text("#### Race: " + game.playerControlledUnit.target.race, 20, 140, '#00FF96');
+            game.debug.text("#### Haste_percent: " + game.playerControlledUnit.target.total_haste() + ' %', 20, 160, '#00FF96');
+
         }
     }
 }

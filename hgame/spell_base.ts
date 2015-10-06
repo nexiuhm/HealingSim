@@ -101,7 +101,8 @@ class SpellBase {
 
     cast_time() {
         // ### TODO #######
-        return this.base_casttime * this.player.total_haste();
+        return this.base_casttime * 1-(this.player.total_haste()/100);
+
     }
 
     cancel_cast() {

@@ -1,5 +1,4 @@
-﻿
-class Player {
+﻿class Player {
         // --- Basic unit data ------------
         level: number = 100;
         name: string;
@@ -12,69 +11,80 @@ class Player {
         instance: Raid = null; // reference to the raid group the players are in
         // --- Players spells ---------------------
         spells: any; 
-
+        buffs: any;
+        
+        gear_stats = {
+            stamina: 7105,
+            haste_rating: 1399
+        };
         base_stats = {
             strenght: 0,
             agility: 0,
             stamina: 0,
             intellect: 0,
             spirit: 0,
-            // ratings
             mastery_rating: 0,
             haste_rating: 0,
             crit_rating: 0,
         };
-
-        stat_min_max_data = {
-            health: { min: 0, max: 440000},
-            mana: { min: 0, max: 0 }
-        }
-
         stats = {
-            health: 440000,
-            absorb: 50000,
+            health: { value: 0, max_value: 0, min_value: 0 },
+            mana: { value: 0, max_value: 0, min_value: 0 },
+            absorb: 0,
+            haste: 0,
+            crit: 0,
             spellpower: 0,
             attackpower: 0,
-            mastery: 0,
-
+            mastery: 0.08, // 8% is base mastery for every class
         };
 
         constructor( _class:class_e, race:race_e, level, name:string) {
-        
-            this.level = level;
+            if (level < 0 || level > PLAYER_MAX_LEVEL)
+                level = PLAYER_MAX_LEVEL;
+            else
+                level = level;
+
             this.race = race;
             this.name = name;
             this.classId = _class;
             this.init_base_stats();  
+            this.init_stats();
         }
 
         init_base_stats() {
             /* This is the stats someone would have 0 gear */
             this.base_stats.agility =   data.classBaseStats(this.classId, this.level, stat_e.AGILITY) + data.raceBaseStats(this.race, stat_e.AGILITY); // +gear
-            this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA); // + gear
+            this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA) + this.gear_stats.stamina; // + gear
             this.base_stats.intellect = data.classBaseStats(this.classId, this.level, stat_e.INTELLECT) + data.raceBaseStats(this.race, stat_e.INTELLECT);// + gear
             this.base_stats.spirit = data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);// + gear
             this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);// + gear
 
             this.base_stats.mastery_rating = 0;
-            this.base_stats.haste_rating = 0;
+            this.base_stats.haste_rating = this.gear_stats.haste_rating;
             this.base_stats.crit_rating = 0;
 
             // *TODO* add stats from gear in this function or somewhere else?
-        }
+        }    
 
         init_stats() {
-            /* ### TODO ###
-            - This will calculate the current stats. 
-                 stat * scaling = current stat
-                 stamina * health_per_stamina = health; etc
-            */
+             
+            // ### HEALTH ########  ---- scale stat ------   ### -------scale value ------------------------------------
+            this.stats.health.value = this.base_stats.stamina * data.getHpPerStamina(this.level) ;
+            this.stats.health.max_value = this.stats.health.value;
+            // ### HASTE ####  -----------------------------------------------------------------------------------------
+            this.stats.haste = this.base_stats.haste_rating * data.getCombatRating(combat_rating_e.RATING_MOD_HASTE_SPELL, this.level);
+            console.log(this.stats.haste);
+            // ### MANA ##########  ------------------------------------------------------------------------------------
+            // Note: When you are specced as restoration, holy etc. you will get a hidden aura that increases your manapool by 400%, this is how healers get more mana.
+            this.stats.mana.value = data.getManaByClass(this.classId, this.level);
+            this.stats.mana.max_value = this.stats.mana.value;
+  
         }
 
         avoid() {
             //returns dodge, parry, or miss?. Returns false if nothing was avoided.
         }
-        
+
         recive_damage(dmg) {
             if (!this.alive)
                 return;
@@ -108,7 +118,7 @@ class Player {
                     this.stats.absorb = 0;
                     game.UNIT_ABSORB.dispatch(this);
                 }
-                this.setHealth(this.stats.health - dmg.amount);
+                this.setHealth(this.getCurrentHealth() - dmg.amount);
                 game.UNIT_HEALTH_CHANGE.dispatch(this);
             }
         }
@@ -119,6 +129,7 @@ class Player {
             if (!this.spells[spellName])
                 return;
             var spell = this.spells[spellName];
+            
             // ##################
             if (this.isCasting) 
                 game.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
@@ -151,15 +162,15 @@ class Player {
             if (!this.alive) 
                 return;
             if (value <= 0) {
-                this.stats.health = 0;
+                this.stats.health.value = 0;
                 this.alive = false;
                 return;
             }
             if (value >= this.getMaxHealth()) {
-                this.stats.health = this.getMaxHealth();
+                this.stats.health.value = this.getMaxHealth();
             }
             else {
-                this.stats.health = value;
+                this.stats.health.value = value;
             }
 
             game.UNIT_HEALTH_CHANGE.dispatch(this);
@@ -181,11 +192,11 @@ class Player {
         }
 
         getMaxHealth() {
-            return this.stat_min_max_data.health.max;
+            return this.stats.health.max_value;
         }
 
         getCurrentHealth() {
-            return this.stats.health;
+            return this.stats.health.value;
         }
 
         setTarget(unit: Player) {
@@ -205,7 +216,7 @@ class Player {
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras
         total_haste() {
             // 1.5 = 150% haste and so on
-            return 1;
+            return this.stats.haste;
         }
 
         // Needed for some spells. Chain heal comes to mind
