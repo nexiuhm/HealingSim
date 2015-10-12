@@ -68,23 +68,27 @@
 
         init_stats() {
              
-            // ### HEALTH ########  ---- scale stat ------   ### -------scale value ------------------------------------
-            this.stats.health.value = this.base_stats.stamina * data.getHpPerStamina(this.level) ;
-            this.stats.health.max_value = this.stats.health.value;
+            // ### HEALTH ########  ------------------------------------------------------------------------------------
+            this.stats.health.value = this.stats.health.max_value = this.base_stats.stamina * data.getHpPerStamina(this.level);
             // ### HASTE ####  -----------------------------------------------------------------------------------------
             this.stats.haste = this.base_stats.haste_rating * data.getCombatRating(combat_rating_e.RATING_MOD_HASTE_SPELL, this.level);
-            console.log(this.stats.haste);
             // ### MANA ##########  ------------------------------------------------------------------------------------
             // Note: When you are specced as restoration, holy etc. you will get a hidden aura that increases your manapool by 400%, this is how healers get more mana.
-            this.stats.mana.value = data.getManaByClass(this.classId, this.level);
-            this.stats.mana.max_value = this.stats.mana.value;
-  
+            this.stats.mana.value = this.stats.mana.max_value = data.getManaByClass(this.classId, this.level);
+           
         }
 
         avoid() {
             //returns dodge, parry, or miss?. Returns false if nothing was avoided.
         }
+        getSpellList(): Array<string> {
+            var spellList = [];
+            for (var spell in this.spells)
+                spellList.push(spell);
+           
+            return spellList;
 
+        }
         recive_damage(dmg) {
             if (!this.alive)
                 return;

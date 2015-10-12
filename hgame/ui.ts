@@ -191,9 +191,14 @@ class Frame extends Phaser.Sprite { //### TODO,### add this as a base class for 
 
 class CastFrame  {
 
+    config = {
+        castSuccessColor: 0x00FF96,
+        castingColor: 0xFF7D0A,
+
+    }
     castingUnit:Player = null; 
     cast_timer: Phaser.TimerEvent; // internal timer to be able to show cast progress on bar as text.
-
+    anim:any = {};
     container: Phaser.Graphics;
     background: Phaser.Graphics;
     cast_bar: Phaser.Graphics;
@@ -208,7 +213,7 @@ class CastFrame  {
     constructor(x,y,w, h, castingUnit: Player,screen:Phaser.State) {
 
         this.x = x;
-        this.y = y;
+        this.y = y;   
         this.width = w;
         this.height = h;
         this.castingUnit = castingUnit;
@@ -221,13 +226,14 @@ class CastFrame  {
         // Background layer
         this.background = this.screen.add.graphics(0, 0);
         this.background.beginFill(0x368975);
-        this.background.drawRect(0, 0, w,h);
+        this.background.drawRect(0, 0, w, h);
         
         // Cast bar layer
         this.cast_bar = this.screen.add.graphics(0, 0);
-        this.cast_bar.beginFill(0x00FF96);
+        this.cast_bar.beginFill(0xFFFFFF);
         this.cast_bar.drawRect(0, 0, w,h);
         this.cast_bar.width = 0;
+        this.cast_bar.tint = 0xFF7D0A;
 
         // Overlay texture
         this.texture = this.screen.add.sprite(0, 0, "castbar_texture2");
@@ -246,8 +252,11 @@ class CastFrame  {
         
         // CastBar is hidden by default
         this.container.alpha = 0;
+
+        // Init animations
+        this.anim.fadeCastBar = this.screen.add.tween(this.container).to({ alpha: 0 }, 1000, "Linear", true);
         
-        //  - Setup event listeners with callback functions ## TODO ###
+        // Setup event listeners with callback functions
         game.UNIT_STARTS_SPELLCAST.add((s,t) => this.UNIT_STARTS_SPELLCAST(s,t));
         game.UNIT_FINISH_SPELLCAST.add(() => this.UNIT_FINISH_SPELLCAST());
     }
@@ -257,18 +266,22 @@ class CastFrame  {
         if (event.source != this.castingUnit)
             return;
         */
-        this.spell_name.text = spellName;
-        this.container.alpha = 1;
+        this.cast_bar.tint = this.config.castingColor;
+        this.spell_name.text = spellName + ' ' + (castTime/1000).toFixed(2) + "s";
+        
         this.cast_bar.width = 0;
+
+        if (this.anim.fadeCastBar.isRunning == true) {
+            this.anim.fadeCastBar.reverse = true;
+        }
+        else 
+            this.container.alpha = 1;
+
         var castbar_animation = this.screen.add.tween(this.cast_bar).to({ width: this.width }, castTime, "Linear", true);
          // ### TODO #######
-         //  - Show spellbar  X
-         //  - Draw name of spell on cast bar X
          //  - Draw icon for the spell on the cast bar
-        // - Cancel any current anymation if any
-        //  - Start animation: progress bar from left to right.
-        // - Play casting sound?
-        //  ( Considering Tween.js as animation libary, seems simple and it has the funtionality needed )
+         // - Play casting sound?
+
     }
 
     private UNIT_STOP_SPELLCAST(event) {
@@ -280,11 +293,12 @@ class CastFrame  {
     }
 
     private UNIT_FINISH_SPELLCAST() {
+        this.cast_bar.tint = this.config.castSuccessColor;
+        this.anim.fadeCastBar.reverse = false;
+        this.anim.fadeCastBar.start();
         
-       this.container.alpha = 0;
         // ### TODO #######
         // - Play cast sucess sound?
-        // - Start animation: background color green - > fade castbar away quickly
     }
 }
 

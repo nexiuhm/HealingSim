@@ -28,7 +28,6 @@
     <Content Include="graphics\LiteStep.png" />
     <Content Include="graphics\setup_screen.png" />
     <Content Include="graphics\spell_holy_powerwordshield.jpg" />
-    <Content Include="graphics\spell_ready_shader.png" />
     <Content Include="graphics\temp.png" />
     <Content Include="index.html" />
     <Content Include="libs\phaser.js" />

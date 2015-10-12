@@ -17,7 +17,7 @@ module cl_parser {
             event_obj,
             parsedCombatLog = [],
             line;
-        //--- Cycle through every element in the combatlog array, and save the data to an object ----------
+        //--- Cycle through every element in the combatlog array, and save the data to an object ----------s
         for (line in combatlog) {
             currentLine = combatlog[line];
             evt_data = currentLine.slice(20).split(',');

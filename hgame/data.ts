@@ -33,9 +33,7 @@
     }
     /* Future goal:  grab spelldata from simcraft files.  */
     export function getSpellData(spell) {
-
         return spelldata[spell];
-
     }
 
 

@@ -90,16 +90,16 @@ class SelectionScreen extends Phaser.State {
 /* Simulation game-state*/
 class Main extends Phaser.State {
   
-    keybindings = {
-        'ACTION_BUTTON_1': Phaser.Keyboard.ONE,
-        'ACTION_BUTTON_2': Phaser.Keyboard.TWO,
-        'ACTION_BUTTON_3': Phaser.Keyboard.THREE,
-        'ACTION_BUTTON_4': Phaser.Keyboard.FOUR,
-        'ACTION_BUTTON_5': Phaser.Keyboard.FIVE,
-        'ACTION_BUTTON_6': Phaser.Keyboard.SIX,
-        'ACTION_BUTTON_7': Phaser.Keyboard.F,
-        'ACTION_BUTTON_8': Phaser.Keyboard.V
-    };
+    keybindings = {              // keybinding         // spellbidning
+        ACTION_BUTTON_1: { key: Phaser.Keyboard.ONE, spell: 'flash_of_light' },
+        ACTION_BUTTON_2: { key: Phaser.Keyboard.TWO, spell: 'power_word_shield' },
+        ACTION_BUTTON_3: { key: Phaser.Keyboard.THREE, spell: 'clarity_of_will' },
+        ACTION_BUTTON_4: { key: Phaser.Keyboard.FOUR, spell: 'flash_of_light' },
+        ACTION_BUTTON_5: { key: Phaser.Keyboard.FIVE, spell: 'flash_of_light' },
+        ACTION_BUTTON_6: { key: Phaser.Keyboard.SIX, spell: 'flash_of_light' },
+        ACTION_BUTTON_7: { key: Phaser.Keyboard.F, spell: 'flash_of_light' },
+        ACTION_BUTTON_8: { key: Phaser.Keyboard.V, spell: 'flash_of_light' }
+    }; 
 
     preload() {
         // load some textures
@@ -130,23 +130,25 @@ class Main extends Phaser.State {
         // Start the boss/healing simulator
         this.startSimulation();
     }
-    
-    handleKeyboardInput(event) {
-        switch (event.keyCode) {
-            case this.keybindings.ACTION_BUTTON_1:
-                game.playerControlledUnit.cast_spell('flash_of_light'); 
-                break;
+    initKeyBindings() {
 
-            case this.keybindings.ACTION_BUTTON_2:
-                game.playerControlledUnit.cast_spell('power_word_shield');
-                break;
-
-            case this.keybindings.ACTION_BUTTON_3:
-                game.playerControlledUnit.cast_spell('clarity_of_will');
-                break;
-        }
     }
-
+    handleKeyboardInput(event) {
+      
+            for (var binding in this.keybindings) {
+                var bindobj = this.keybindings[binding] ;
+                if (bindobj.key == event.keyCode) {
+                    if (bindobj.spell)
+                        this.do_action(bindobj.spell);
+                    break;
+                }
+            }
+        
+    }
+    do_action(spellName: string) {
+ 
+        game.playerControlledUnit.cast_spell(spellName);
+    }
     startSimulation() {
         // --- Create some random damage for testing purposes ----
         var createSomeRandomDamage = setInterval(randomDamage, 3600);
