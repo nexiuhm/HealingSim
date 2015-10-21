@@ -57,8 +57,8 @@ class Game extends Phaser.Game {
         this.playerControlledUnit = new Priest.Priest(race_e.RACE_NIGHT_ELF, 100, "PlayerName");
         
         // Start main state/loop
-        this.state.add("Main", Main, false);
         this.state.add("SelectionScreen", SelectionScreen, true);
+        this.state.add("Main", Main, false);
     }
  
     start() {
@@ -126,10 +126,11 @@ class Main extends Phaser.State {
 
         // Setup keyboard input callback function
         this.input.keyboard.onDownCallback = (event) => this.handleKeyboardInput(event);
-       
+
         // Start the boss/healing simulator
         this.startSimulation();
     }
+    
     initKeyBindings() {
 
     }
