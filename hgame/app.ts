@@ -39,7 +39,7 @@ class Game extends Phaser.Game {
     gameVersion: number = 0;
     playerControlledUnit: Player;
     defaultFont:string =  "myriad";
-
+    addons = [];
     // Custom signals/events
     TARGET_CHANGE_EVENT: Phaser.Signal = new Phaser.Signal();
     UNIT_HEALTH_CHANGE: Phaser.Signal = new Phaser.Signal();
@@ -64,7 +64,9 @@ class Game extends Phaser.Game {
     start() {
         this.state.start("Main");
     }
-
+    registerAddon(addonName:string, code) {
+        this.addons.push([addonName, code]);
+    }
     dbg(message) {
         if (!this.debugMessagesOn)
             return;
