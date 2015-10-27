@@ -36,6 +36,35 @@
         return spelldata[spell];
     }
 
+    export function getClassColor(classId: number): number {
+        var classColors = [0xC79C6E, 0xF58CBA, 0xABD473, 0xFFF569, 0xFFFFFF, 0xC41F3B, 0x0070DE, 0x69CCF0, 0x9482C9, 0x00FF96, 0xFF7D0A]
+        return classColors[classId] || classColors[1];
+    }
+
+    export function generatePlayerName(): string {
+        var nameList = "Eowiragan,Ferraseth,Umeilith,Wice,Brierid,Fedriric,Higod,Gweann,Thigovudd,Fraliwyr,Zardorin,Halrik,Qae,Gwoif,Zoican,Tjolme,Dalibwyn,Miram,Medon,Aseannor,Angleus,Seita,Sejta,Fraggoji,Verdisha,Oixte,Lazeil,Jhazrun,Kahva,Ussos,Usso,Neverknow,Sco,Treckie,Slootbag,Unpl,Smirk,Lappe,Fraggoboss,Devai,Luumu,Alzu,Altzu"
+        var nameArray = nameList.split(",")
+        return nameArray[game.rnd.between(0, nameArray.length - 1)];
+    }
+
+    // Needed for some spells. Chain heal comes to mind
+    export function findMostInjuredPlayers(players: number): Array < Player > {
+
+        var playersInRange = this.instance.getPlayerList();
+        var lowestPlayers = playersInRange.sort(
+            function sortByDamageTakenAscending(player, otherPlayer) {
+                if (player.getHealthPercent() < otherPlayer.getHealthPercent()) {
+                    return -1;
+                } else if (player.getHealthPercent() > otherPlayer.getHealthPercent()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        );
+        return lowestPlayers.slice(0, players);
+    }
+
 
     var spelldata = {
 

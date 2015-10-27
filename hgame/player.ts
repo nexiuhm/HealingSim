@@ -17,6 +17,7 @@
             stamina: 7105,
             haste_rating: 1399
         };
+
         base_stats = {
             strenght: 0,
             agility: 0,
@@ -27,6 +28,7 @@
             haste_rating: 0,
             crit_rating: 0,
         };
+
         stats = {
             health: { value: 0, max_value: 0, min_value: 0 },
             mana: { value: 0, max_value: 0, min_value: 0 },
@@ -75,12 +77,12 @@
             // ### MANA ##########  ------------------------------------------------------------------------------------
             // Note: When you are specced as restoration, holy etc. you will get a hidden aura that increases your manapool by 400%, this is how healers get more mana.
             this.stats.mana.value = this.stats.mana.max_value = data.getManaByClass(this.classId, this.level);
-           
         }
 
         avoid() {
             //returns dodge, parry, or miss?. Returns false if nothing was avoided.
         }
+
         getSpellList(): Array<string> {
             var spellList = [];
             for (var spell in this.spells)
@@ -89,6 +91,7 @@
             return spellList;
 
         }
+
         recive_damage(dmg) {
             if (!this.alive)
                 return;
@@ -221,23 +224,5 @@
         total_haste() {
             // 1.5 = 150% haste and so on
             return this.stats.haste;
-        }
-
-        // Needed for some spells. Chain heal comes to mind
-        findMostInjuredPlayers(players: number): Array<Player> {
-        
-            var playersInRange = this.instance.getPlayerList();
-            var lowestPlayers = playersInRange.sort(
-                function sortByDamageTakenAscending(player, otherPlayer) {
-                    if (player.getHealthPercent() < otherPlayer.getHealthPercent()) {
-                        return -1;
-                    } else if (player.getHealthPercent() > otherPlayer.getHealthPercent()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            );
-            return lowestPlayers.slice(0,players);
         }
  }

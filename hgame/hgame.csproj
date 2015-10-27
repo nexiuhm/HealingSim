@@ -51,7 +51,6 @@
     <TypeScriptCompile Include="typescript_def_files\phaser.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\pixi.d.ts" />
     <TypeScriptCompile Include="ui.ts" />
-    <TypeScriptCompile Include="util.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

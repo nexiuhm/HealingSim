@@ -177,6 +177,8 @@ class Main extends Phaser.State {
         var test_cast_frame = new CastFrame(400, 670, 300, 30, game.playerControlledUnit, this);
         var test_group_frame = new RaidFrame(790, 350, this);
         var test_player_frame = new UnitFrame(400, 600, 300, 50, game.playerControlledUnit, this);
+
+        // Use whats defined in the addons folder and dont make new ones here.
     }
     
     loadBackground() {

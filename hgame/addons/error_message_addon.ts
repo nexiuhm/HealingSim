@@ -1,4 +1,4 @@
-﻿// Can't use that yet! spell not ready yet ! :p
+﻿// Can't use that yet! spell not ready yet ! 
 /*
 class UIErrorsFrame extends Frame {
 

@@ -1,5 +1,7 @@
 ﻿/* Some random work-in-progress stuff
 
+// Stuff made here will probably fit in other files with normal names ;)
+
 /*
 // ######## Test ability ######################################################################
 var container = this.add.graphics(500, 500);

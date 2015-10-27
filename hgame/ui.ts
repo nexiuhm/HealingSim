@@ -55,7 +55,7 @@ class UnitFrame {
 
         // Create the player name layer
         this.unit_name = this.screen.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
-        this.unit_name.tint = util.getClassColor(this.unit.classId);
+        this.unit_name.tint = data.getClassColor(this.unit.classId);
         this.unit_name.anchor.set(0.5);
        
         // Add the layers as children of the container
@@ -115,12 +115,12 @@ class UnitFrame {
  
     initUnitName() {
         this.unit_name.setText(this.unit.name);
-        this.unit_name.tint = util.getClassColor(this.unit.classId);
+        this.unit_name.tint = data.getClassColor(this.unit.classId);
     }
 
     initHealthBar() { // Its not possible to change the color of the health bar. It needs to be redrawn from scratch.
         this.health.clear();
-        this.health.beginFill(util.getClassColor(this.unit.classId));
+        this.health.beginFill(data.getClassColor(this.unit.classId));
         this.health.drawRect(0, 0, 1, this.height);
     }
     

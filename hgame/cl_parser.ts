@@ -1,7 +1,6 @@
 ﻿/* Reads WoW combatlog and puts the data into a javascript-object for easy access. */
 /* Not really used by the game atm, but could be cool thing to expand upon later */
 
-
 module cl_parser {
     
     export function parse(rawCombatLog) {
