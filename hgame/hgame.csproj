@@ -45,7 +45,7 @@
     <TypeScriptCompile Include="spell_base.ts" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="player.ts" />
-    <TypeScriptCompile Include="cl_parser.ts" />
+    <TypeScriptCompile Include="libs\cl_parser.ts" />
     <TypeScriptCompile Include="raid.ts" />
     <TypeScriptCompile Include="typescript_def_files\p2.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\phaser.d.ts" />

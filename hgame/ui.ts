@@ -66,8 +66,9 @@ class UnitFrame {
 
         // Add interaction
         this.container.inputEnabled = true;
+        
         this.container.events.onInputDown.add(() => {
-            game.playerControlledUnit.setTarget(this.unit );
+            this.screen.player.setTarget(this.unit );
         });
         
         //Scale the health bar to represent the player's health.

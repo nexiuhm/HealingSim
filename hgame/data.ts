@@ -1,22 +1,23 @@
-﻿module data {
+﻿namespace data {
 
-
+    
     // ## TODO ## import character data from armory
     function getArmoryData(name: string = 'Blome', realm: string = 'the-maelstrom') {
-        //validate realm
+        //validate realm <- Check out regular expressions for this
         //validate name
         var blizz_api_url = "https://eu.api.battle.net";
         var api_key = 'fhmzgc7qd2ypwdg87t2j8nuv6pxcbftb'; // risky to have it here ? :p
 
       //  var data = $.getJSON(blizz_api_url + '/wow/character/' + realm + '/' + name + '?fields=stats&locale=en_GB&apikey=' + api_key);
-
-    //    game.dbg(data);
     }
 
     export function classBaseStats(_class: class_e, level: number, stat: stat_e): number {
         return class_base_stats_by_level[_class+1][level-1][stat];
     }
 
+    export function getKeyBindings() {
+        return keybindings;
+    };
     export function raceBaseStats(race: race_e, stat: stat_e) {
         return race_base_stats[race][stat];
     }
@@ -47,7 +48,7 @@
         return nameArray[game.rnd.between(0, nameArray.length - 1)];
     }
 
-    // Needed for some spells. Chain heal comes to mind
+    // Needed for some spells. ## Todo: fix this function since its been moved from player
     export function findMostInjuredPlayers(players: number): Array < Player > {
 
         var playersInRange = this.instance.getPlayerList();
@@ -65,6 +66,11 @@
         return lowestPlayers.slice(0, players);
     }
 
+    var keybindings = {              // keybinding         // spellbidning
+        ACTION_BUTTON_1: { key: '1', spell: 'flash_of_light' },
+        ACTION_BUTTON_2: { key: '2', spell: 'power_word_shield' },
+        ACTION_BUTTON_3: { key: '3', spell: 'clarity_of_will' }
+    };
 
     var spelldata = {
 

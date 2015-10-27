@@ -4468,6 +4468,7 @@ declare module Phaser {
         sound: Phaser.SoundManager;
         stage: Phaser.Stage;
         time: Phaser.Time;
+        player: any;
         tweens: Phaser.TweenManager;
         world: Phaser.World;
 
@@ -4484,6 +4485,7 @@ declare module Phaser {
         resumed(): void;
         shutdown(): void;
         update(): void;
+        handleKeyBoardInput(...args: any[]): void;
 
     }
 
