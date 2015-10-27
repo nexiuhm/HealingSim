@@ -36,7 +36,6 @@ window.onload = () => {
 
 class Game extends Phaser.Game {
     gameVersion: number = 0;
-    playerControlledUnit: Player;
     defaultFont:string =  "myriad";
     addons = [];
     // Custom signals/events
@@ -74,7 +73,7 @@ class Game extends Phaser.Game {
     }
 }
 class Boot extends Phaser.State {
-    // All the assets we need we load here and only here
+    // All the assets we need we load here
     preload() {
         this.load.image("SelectionScreenBackground", "graphics/temp.png");
         this.load.image("castbar_texture", "graphics/BantoBar.png");
@@ -87,7 +86,7 @@ class Boot extends Phaser.State {
 
     create() {
         // Setup the keyboard for the game.
-        game.input.keyboard.addCallbacks(game, undefined, undefined,(event) => game.sendKeyBoardInputToCurrentState(event));
+        game.input.keyboard.addCallbacks(game, undefined, undefined, game.sendKeyBoardInputToCurrentState);
         // Start the post-boot state
         game.state.start("SelectionScreen");
     }
@@ -109,7 +108,7 @@ class SelectionScreen extends Phaser.State {
 
 class Main extends Phaser.State {
     
-    player;
+    player:Player;
 
     create() {
         // Enable this to capture FPS
@@ -121,7 +120,7 @@ class Main extends Phaser.State {
         // Add a background to the screen
         this.loadBackground();
 
-        // Init player
+        // Init player. TODO: Use data from selection screen. See Phaser documentation for sending args between states?
         this.player = new Priest.Priest(race_e.RACE_BLOOD_ELF, 100, "PlayerControlledUnit");
 
         // Load enabled addons
@@ -130,28 +129,23 @@ class Main extends Phaser.State {
         // Start the boss/healing simulator
         this.startSimulation();
     }
-    
 
     handleKeyBoardInput(key) {
-        console.log(key);
+        // ## Todo ## : Find a better way to deal with this, maybe just send the input to the addons, and let the addons/ui decide what to do with it.
+
         var keybindings = data.getKeyBindings();
         for (var binding in keybindings) {
-            console.log(true);
-                var bindobj = keybindings[binding] ;
-                if (bindobj.key == key) {
-                    console.log(true);
-                    if (bindobj.spell)
-                        this.do_action(bindobj.spell);
+                var keybinding = keybindings[binding] ;
+                if (keybinding.key == key) {
+                    if (keybinding.spell)
+                        this.player.cast_spell(keybinding.spell);
                     break;
                 }
             }
-        
     }
-    do_action(spellName: string) {
- 
-        this.player.cast_spell(spellName);
-    }
+
     startSimulation() {
+        //## TODO: Do this in a proper way: Create a boss, boss does damage. Timed events. Aggro etc. This needs some thought
         // --- Create some random damage for testing purposes ----
         var createSomeRandomDamage = setInterval(() => randomDamage, 3600);
         var createSomeRandomDamage2 = setInterval(() => randomDamage2, 1160);
@@ -172,6 +166,7 @@ class Main extends Phaser.State {
     }
 
     loadAddons() {
+        // # Todo, load only enabled addons etc. Not with "new"
         var test_target_frame = new TargetFrame(1200, 600, 300, 50, this.player, this);
         var test_cast_frame = new CastFrame(400, 670, 300, 30, this.player, this);
         var test_group_frame = new RaidFrame(790, 350, this);
@@ -191,7 +186,7 @@ class Main extends Phaser.State {
     }
 
     render() {
-
+        // TODO: Find a cleaner way to display information on the screen. 
         // This function wont be used much as most of the graphical animations are rendered using Tweens.
         game.debug.text(game.time.fps.toString()+ " FPS", 20, 20, '#00FF96');
         game.debug.text("v. " + game.gameVersion, 20, 40, '#00FF96');
