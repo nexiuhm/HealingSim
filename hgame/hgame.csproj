@@ -40,17 +40,22 @@
     <TypeScriptCompile Include="addons\raid_frame_addon.ts" />
     <TypeScriptCompile Include="addons\spell_effect_addon.ts" />
     <TypeScriptCompile Include="class_modules\priest.ts" />
-    <TypeScriptCompile Include="data.ts" />
-    <TypeScriptCompile Include="randomstuff.ts" />
-    <TypeScriptCompile Include="spell_base.ts" />
+    <TypeScriptCompile Include="gameObjects\data.ts" />
+    <TypeScriptCompile Include="gameObjects\randomstuff.ts" />
+    <TypeScriptCompile Include="gameObjects\spell_base.ts" />
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="player.ts" />
+    <TypeScriptCompile Include="gameObjects\player.ts" />
     <TypeScriptCompile Include="libs\cl_parser.ts" />
-    <TypeScriptCompile Include="raid.ts" />
+    <TypeScriptCompile Include="gameObjects\raid.ts" />
+    <TypeScriptCompile Include="states\Boot.ts" />
+    <TypeScriptCompile Include="states\Load.ts" />
+    <TypeScriptCompile Include="states\Menu.ts" />
+    <TypeScriptCompile Include="states\Play.ts" />
+    <TypeScriptCompile Include="states\Win.ts" />
     <TypeScriptCompile Include="typescript_def_files\p2.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\phaser.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\pixi.d.ts" />
-    <TypeScriptCompile Include="ui.ts" />
+    <TypeScriptCompile Include="gameObjects\ui.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
