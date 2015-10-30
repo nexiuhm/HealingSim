@@ -88,7 +88,7 @@ class CastFrame {
         else
             this.container.alpha = 1;
 
-        var castbar_animation = this.screen.add.tween(this.cast_bar).to({ width: this.width }, castTime, "Linear", true);
+        this.screen.add.tween(this.cast_bar).to({ width: this.width }, castTime, "Linear", true);
         // ### TODO #######
         //  - Draw icon for the spell on the cast bar
         // - Play casting sound?

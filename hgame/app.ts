@@ -75,16 +75,20 @@ class Game extends Phaser.Game {
 class Boot extends Phaser.State {
     // All the assets we need we load here
     preload() {
-        this.load.image("SelectionScreenBackground", "graphics/temp.png");
-        this.load.image("castbar_texture", "graphics/BantoBar.png");
-        this.load.image("castbar_texture2", "graphics/LiteStep.png");
-        this.load.image("ab_texture", "graphics/ab_texture.png");
-        this.load.image("bg", "graphics/bg.jpg");
-        this.load.image("pws", "graphics/spell_holy_powerwordshield.jpg");
-        this.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
+        game.load.image("SelectionScreenBackground", "graphics/temp.png");
+        game.load.image("castbar_texture", "graphics/BantoBar.png");
+        game.load.image("castbar_texture2", "graphics/LiteStep.png");
+        game.load.image("ab_texture", "graphics/ab_texture.png");
+        game.load.image("bg", "graphics/bg.jpg");
+        game.load.image("pws", "graphics/spell_holy_powerwordshield.jpg");
+        game.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
     }
 
     create() {
+        // Enable this to capture FPS
+        game.time.advancedTiming = true;
+        // Needed for Phaser 2.4.4 or tweens act weird
+        game.tweens.frameBased = true;
         // Setup the keyboard for the game.
         game.input.keyboard.addCallbacks(game, undefined, undefined, game.sendKeyBoardInputToCurrentState);
         // Start the post-boot state
@@ -111,9 +115,7 @@ class Main extends Phaser.State {
     player:Player;
 
     create() {
-        // Enable this to capture FPS
-        this.time.advancedTiming = true; 
-        
+
         // Start the world fade-in effect
         this.worldFadeInEffect();
         
@@ -127,7 +129,7 @@ class Main extends Phaser.State {
         this.loadAddons();
 
         // Start the boss/healing simulator
-        this.startSimulation();
+       // this.startSimulation();
     }
 
     handleKeyBoardInput(key) {
@@ -171,7 +173,6 @@ class Main extends Phaser.State {
         var test_cast_frame = new CastFrame(400, 670, 300, 30, this.player, this);
         var test_group_frame = new RaidFrame(790, 350, this);
         var test_player_frame = new UnitFrame(400, 600, 300, 50, this.player, this);
-
     }
     
     loadBackground() {
@@ -186,7 +187,8 @@ class Main extends Phaser.State {
     }
 
     render() {
-        // TODO: Find a cleaner way to display information on the screen. 
+        /*
+        // Phaser 2.4.4 hates this. Slows the game down
         // This function wont be used much as most of the graphical animations are rendered using Tweens.
         game.debug.text(game.time.fps.toString()+ " FPS", 20, 20, '#00FF96');
         game.debug.text("v. " + game.gameVersion, 20, 40, '#00FF96');
@@ -199,5 +201,7 @@ class Main extends Phaser.State {
             game.debug.text("#### Haste_percent: " + this.player.target.total_haste() + ' %', 20, 160, '#00FF96');
 
         }
+        */
     }
+        
 }
