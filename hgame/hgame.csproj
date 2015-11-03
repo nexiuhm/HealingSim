@@ -40,6 +40,7 @@
     <TypeScriptCompile Include="addons\raid_frame_addon.ts" />
     <TypeScriptCompile Include="addons\spell_effect_addon.ts" />
     <TypeScriptCompile Include="class_modules\priest.ts" />
+    <TypeScriptCompile Include="enums.ts" />
     <TypeScriptCompile Include="gameObjects\data.ts" />
     <TypeScriptCompile Include="gameObjects\randomstuff.ts" />
     <TypeScriptCompile Include="gameObjects\spell_base.ts" />
@@ -48,7 +49,6 @@
     <TypeScriptCompile Include="libs\cl_parser.ts" />
     <TypeScriptCompile Include="gameObjects\raid.ts" />
     <TypeScriptCompile Include="states\Boot.ts" />
-    <TypeScriptCompile Include="states\Load.ts" />
     <TypeScriptCompile Include="states\Menu.ts" />
     <TypeScriptCompile Include="states\Play.ts" />
     <TypeScriptCompile Include="states\Win.ts" />

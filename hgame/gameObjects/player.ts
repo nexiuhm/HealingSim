@@ -41,8 +41,8 @@
         };
 
         constructor( _class:class_e, race:race_e, level, name:string) {
-            if (level < 0 || level > PLAYER_MAX_LEVEL)
-                level = PLAYER_MAX_LEVEL;
+            if (level < player_level.MIN || level > player_level.MAX)
+                level = player_level.DEFAULT;
             else
                 level = level;
 
