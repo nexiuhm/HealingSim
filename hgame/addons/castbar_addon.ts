@@ -4,16 +4,16 @@
         config = {
             castSuccessColor: 0x00FF96,
             castingColor: 0xFF7D0A,
-            width: 200,
-            height: 20,
+            width: 300,
+            height: 30,
             x: 500,
-            y: 500,
+            y: 500
         };
 
         castingUnit: Player = null;
         cast_timer: Phaser.TimerEvent; // internal timer to be able to show cast progress on bar as text.
         anim: any = {};
-        container: Phaser.Graphics;
+        container: Phaser.Group;
         background: Phaser.Graphics;
         cast_bar: Phaser.Graphics;
         texture: Phaser.Sprite;
@@ -26,12 +26,12 @@
 
             this.castingUnit = screen.player;
             this.screen = screen;
-
+            this.config.x = this.screen.world.centerX - this.config.width / 2;
+            this.config.y = this.screen.world.centerY + 200;
             // Parent container
-            this.container = this.screen.add.graphics(this.config.x, this.config.y);
-            this.container.width = this.config.width;
-            this.container.height = this.config.height;
-
+            this.container = this.screen.add.group();
+            this.container.x = this.config.x;
+            this.container.y = this.config.y;
             // Background layer
             this.background = this.screen.add.graphics(0, 0);
             this.background.beginFill(0x368975);
@@ -60,7 +60,7 @@
             this.container.addChild(this.spell_name);
         
             // CastBar is hidden by default
-            this.container.alpha = 1;
+            this.container.alpha = 0;
 
             // Init animations
             this.anim.fadeCastBar = this.screen.add.tween(this.container).to({ alpha: 0 }, 1000, "Linear", false);

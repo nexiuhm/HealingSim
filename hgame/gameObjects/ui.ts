@@ -11,7 +11,9 @@ class UnitFrame {
     height: number;
     x: number;
     y: number;
-
+    config = {
+        allowedAbsorbOverflow: 10
+    };
     container: Phaser.Graphics;
     screen: Phaser.State;
 
@@ -44,7 +46,7 @@ class UnitFrame {
         // Create absorb layer
         this.absorb = this.screen.add.graphics(0, 0);
         
-        this.absorb.blendMode = PIXI.blendModes.COLOR_BURN;
+        this.absorb.blendMode = PIXI.blendModes.ADD;
         this.absorb.alpha = 0.5;
 
         // Create the texture layer
@@ -90,11 +92,16 @@ class UnitFrame {
         
         // Some weird stuff happens if the width of a displayObject is set to 0? Fucks up targetting. No idea why
         // This fixes it for now
+
+        /* Make sure the absorb never overflows the bar width */
+        if ((new_absorb_width + new_health_width) > this.width)
+            new_absorb_width = this.width - new_health_width + this.config.allowedAbsorbOverflow;
+
         if (new_health_width <= 0)
             new_health_width = 1;
         if (new_absorb_width <= 0)
             new_absorb_width = 1;
-
+        
         // ugly
         this.screen.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
         this.screen.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);

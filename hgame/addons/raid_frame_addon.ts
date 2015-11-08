@@ -22,7 +22,7 @@
             for (var g = 0; g < 4; g++) {
                 for (var p = 0; p < 5; p++) {
                     var x = new Player(game.rnd.between(0, 10), game.rnd.between(7, 19), 100, data.generatePlayerName());
-                    this.raid.push(new UnitFrame(this.unitFrameWidth * g + this.x + 5, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, x, this.screen));
+                    this.raid.push(new UnitFrame(this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, x, this.screen));
                 }
             }
             // Arrange the frames spacing etc. to be within the boundaries set in this class
