@@ -2,6 +2,8 @@
     export class Play extends Phaser.State {
 
         player: Player;
+        events = new EventManager(); //### TODO ###
+        raid: any; // ### TODO ###
 
         create() {
             
@@ -11,8 +13,8 @@
             // Add a background to the screen
             this.loadBackground();
 
-            // Init player. TODO: Use data from selection screen. See Phaser documentation for sending args between states?
-            this.player = new Priest.Priest(race_e.RACE_BLOOD_ELF, 100, "PlayerControlledUnit");
+            // Init player. ## TODO ##: Use data from selection screen. See Phaser documentation for sending args between states?
+            this.player = new Priest.Priest(race_e.RACE_BLOOD_ELF, 100, "PlayerControlledUnit"); 
 
             // Load enabled addons
             this.loadAddons();
@@ -22,7 +24,7 @@
         }
 
         handleKeyBoardInput(key) {
-            // ## Todo ## : Find a better way to deal with this, maybe just send the input to the addons, and let the addons/ui decide what to do with it.
+            // ## TODO ## : Find a better way to deal with this, maybe just send the input to the addons, and let the addons/ui decide what to do with it.
 
             var keybindings = data.getKeyBindings();
             for (var binding in keybindings) {
@@ -34,9 +36,11 @@
                 }
             }
         }
-
+        createUnit() { //## TODO ##
+            // When you create a unit you also have to pass them a reference to the event manager, so they know how to communicate events.
+        }
         startSimulation() {
-            //## TODO: Do this in a proper way: Create a boss, boss does damage. Timed events. Aggro etc. This needs some thought
+            //## TODO: Do this in a proper way: Load boss , much like we load addons? Timed events. Aggro etc. This needs some thought
             // --- Create some random damage for testing purposes ----
             var createSomeRandomDamage = setInterval(randomDamage.bind(this), 3600);
             var createSomeRandomDamage2 = setInterval(randomDamage2.bind(this), 1160);
@@ -73,7 +77,7 @@
         }
 
         render() {
-           
+            //* ### TODO ### Nicer way of doing exactly this. Make it an addon? Listen to target change events etc.
             game.debug.text(game.time.fps + " FPS", 20, 20, '#00FF96');
             game.debug.text("v. " + game.gameVersion, 20, 40, '#00FF96');
             game.debug.text("#### UNIT TARGET INFO ########## ", 20, 60, '#00FF96');
@@ -89,4 +93,11 @@
         }
 
     }
+}
+
+// ### TODO ### 
+class EventManager {
+    constructor() {
+    }
+
 }

@@ -29,11 +29,6 @@ class Game extends Phaser.Game {
         this.state.add("MainMenu", States.MainMenu);
         this.state.add("Play", States.Play);
 
-        // Register addons to the game
-        this.addons.add("Cast Bar 0.1", Addons.CastFrame);
-        this.addons.add("Raid Frames 0.1", Addons.RaidFrame);
-        this.addons.add("Unit Frames 0.1", Addons.UnitFrames);
-
         // Start boot state
         this.state.start("Boot");
     }
@@ -51,7 +46,7 @@ class Game extends Phaser.Game {
 }
 
 /* Addon manager class - To keep things consistant it works a lot like how Phaser deals with states.
-/* Clarification: An addon is basicly a subroutine that displays graphical information to the screen where they are loaded */
+/* Clarification: An addon is basicly a subroutine that displays graphical information to the screen and modifies this information as a reaction to events the game creates*/
 class AddonManager {
     private addons = {};
 

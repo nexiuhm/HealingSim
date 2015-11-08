@@ -37,6 +37,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="addons\action_bar_addon.ts" />
     <TypeScriptCompile Include="addons\castbar_addon.ts" />
+    <TypeScriptCompile Include="addons\console_addon.ts" />
     <TypeScriptCompile Include="addons\error_message_addon.ts" />
     <TypeScriptCompile Include="addons\raid_frame_addon.ts" />
     <TypeScriptCompile Include="addons\spell_effect_addon.ts" />
