@@ -25,6 +25,7 @@
     <Content Include="graphics\ab_texture.png" />
     <Content Include="graphics\BantoBar.png" />
     <Content Include="graphics\bg.jpg" />
+    <Content Include="graphics\blue.png" />
     <Content Include="graphics\LiteStep.png" />
     <Content Include="graphics\setup_screen.png" />
     <Content Include="graphics\spell_holy_powerwordshield.jpg" />
@@ -39,6 +40,7 @@
     <TypeScriptCompile Include="addons\error_message_addon.ts" />
     <TypeScriptCompile Include="addons\raid_frame_addon.ts" />
     <TypeScriptCompile Include="addons\spell_effect_addon.ts" />
+    <TypeScriptCompile Include="addons\unit_frames_addon.ts" />
     <TypeScriptCompile Include="class_modules\priest.ts" />
     <TypeScriptCompile Include="enums.ts" />
     <TypeScriptCompile Include="gameObjects\data.ts" />

@@ -5,11 +5,13 @@ window.onload = () => {
     game = new Game;
 };
 
+
 class Game extends Phaser.Game {
     gameVersion: number = 0;
     defaultFont:string =  "myriad";
-    addons = [];
-    // Custom signals/events
+    addons = new AddonManager();
+    
+    /* ## TODO ## Find a better soulution for dealing with events, feels weird to keep them here. Perhaps a EventManager class in the Play state? Please come with suggestions */
     TARGET_CHANGE_EVENT: Phaser.Signal = new Phaser.Signal();
     UNIT_HEALTH_CHANGE: Phaser.Signal = new Phaser.Signal();
     UNIT_ABSORB: Phaser.Signal = new Phaser.Signal();
@@ -19,13 +21,18 @@ class Game extends Phaser.Game {
     UI_ERROR_MESSAGE: Phaser.Signal = new Phaser.Signal();
 
     constructor() {
-        // Set up webGL renderer.
+        // Create an instance of the Phaser game engine. Force WEBGL since Canvas doesnt support textures / blendmodes which we use heavily.
         super(window.innerWidth, window.innerHeight, Phaser.WEBGL, "game_wrapper");
         
         // Register game states
         this.state.add("Boot", States.Boot);
         this.state.add("MainMenu", States.MainMenu);
         this.state.add("Play", States.Play);
+
+        // Register addons to the game
+        this.addons.add("Cast Bar 0.1", Addons.CastFrame);
+        this.addons.add("Raid Frames 0.1", Addons.RaidFrame);
+        this.addons.add("Unit Frames 0.1", Addons.UnitFrames);
 
         // Start boot state
         this.state.start("Boot");
@@ -41,8 +48,46 @@ class Game extends Phaser.Game {
            currentState.handleKeyBoardInput(keyPressData);
 
     };
+}
 
-    registerAddon(addonName, addonCode) {
+/* Addon manager class - To keep things consistant it works a lot like how Phaser deals with states.
+/* Clarification: An addon is basicly a subroutine that displays graphical information to the screen where they are loaded */
+class AddonManager {
+    private addons = {};
 
+    add(addonKey: string, addonCode:Function) {
+        this.addons[addonKey] = { name: addonKey, enabled: true, code: addonCode };
+    }
+
+    disableAddon(addonKey:string) {
+        if (!this.addons[addonKey])
+            return;
+        else
+            this.addons[addonKey].enabled = false;
+    }
+    enableAddon(addonKey:string) {
+        if (!this.addons[addonKey])
+            return;
+        else
+            this.addons[addonKey].enabled = true;
+    }
+
+    /* Returns info about all registred addons. */
+    getListOfAddons() {
+        var addonList = [];
+        for (var addon in this.addons) {
+            var currentAddon = this.addons[addon];
+            addonList.push([currentAddon.name, currentAddon.enabled]);
+        }
+        return addonList;
+    }
+
+    /* Executes the addon code to the current state/stage */
+    loadEnabledAddons(stateToDrawTo:Phaser.State) {
+        for (var addon in this.addons) {
+            var currentAddon = this.addons[addon];
+            if (currentAddon.enabled)
+                new currentAddon.code(stateToDrawTo);
+        }
     }
 }

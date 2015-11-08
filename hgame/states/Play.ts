@@ -4,10 +4,10 @@
         player: Player;
 
         create() {
-
+            
             // Start the world fade-in effect
             this.worldFadeInEffect();
-        
+
             // Add a background to the screen
             this.loadBackground();
 
@@ -18,7 +18,7 @@
             this.loadAddons();
 
             // Start the boss/healing simulator
-            // this.startSimulation();
+            this.startSimulation();
         }
 
         handleKeyBoardInput(key) {
@@ -38,9 +38,9 @@
         startSimulation() {
             //## TODO: Do this in a proper way: Create a boss, boss does damage. Timed events. Aggro etc. This needs some thought
             // --- Create some random damage for testing purposes ----
-            var createSomeRandomDamage = setInterval(() => randomDamage, 3600);
-            var createSomeRandomDamage2 = setInterval(() => randomDamage2, 1160);
-            var createSomeRandomDamage3 = setInterval(() => absorb, 1960);
+            var createSomeRandomDamage = setInterval(randomDamage.bind(this), 3600);
+            var createSomeRandomDamage2 = setInterval(randomDamage2.bind(this), 1160);
+            var createSomeRandomDamage3 = setInterval(absorb.bind(this), 1960);
             function randomDamage2() {
                 this.player.recive_damage({ amount: game.rnd.between(11, 128900) });
             }
@@ -57,11 +57,7 @@
         }
 
         loadAddons() {
-            // # Todo, load only enabled addons etc. Not with "new"
-            var test_target_frame = new TargetFrame(1200, 600, 300, 50, this.player, this);
-            var test_cast_frame = new CastFrame(400, 670, 300, 30, this.player, this);
-            var test_group_frame = new RaidFrame(790, 350, this);
-            var test_player_frame = new UnitFrame(400, 600, 300, 50, this.player, this);
+            game.addons.loadEnabledAddons(this);
         }
 
         loadBackground() {
@@ -71,15 +67,14 @@
         }
 
         worldFadeInEffect() {
+    
             this.world.alpha = 0;
             this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
         }
 
         render() {
-            /*
-            // Phaser 2.4.4 hates this. Slows the game down
-            // This function wont be used much as most of the graphical animations are rendered using Tweens.
-            game.debug.text(game.time.fps.toString()+ " FPS", 20, 20, '#00FF96');
+           
+            game.debug.text(game.time.fps + " FPS", 20, 20, '#00FF96');
             game.debug.text("v. " + game.gameVersion, 20, 40, '#00FF96');
             game.debug.text("#### UNIT TARGET INFO ########## ", 20, 60, '#00FF96');
             if (this.player.target) {
@@ -90,7 +85,7 @@
                 game.debug.text("#### Haste_percent: " + this.player.target.total_haste() + ' %', 20, 160, '#00FF96');
     
             }
-            */
+            
         }
 
     }

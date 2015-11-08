@@ -9,6 +9,7 @@ namespace States {
             game.load.image("ab_texture", "graphics/ab_texture.png");
             game.load.image("bg", "graphics/bg.jpg");
             game.load.image("pws", "graphics/spell_holy_powerwordshield.jpg");
+            game.load.image("blue_particle", "graphics/blue.png");
             game.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
         }
 
