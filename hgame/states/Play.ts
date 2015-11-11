@@ -35,6 +35,7 @@
             switch (classs) {
                 case class_e.PRIEST:
                     return new Priest.Priest(race, level, name, this.events);
+                    break;
                 
                 default:
                     return new Player(classs, race, level,name, this.events);

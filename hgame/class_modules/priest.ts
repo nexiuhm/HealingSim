@@ -12,7 +12,8 @@ namespace Priest {
             this.spells = {
                 power_word_shield: new power_word_shield(this),
                 flash_of_light: new flash_of_light(this),
-                clarity_of_will: new clarity_of_will(this)
+                clarity_of_will: new clarity_of_will(this),
+                power_infusion: new power_infusion(this)
             };
         }   
     }
@@ -63,6 +64,18 @@ namespace Priest {
             this.target.setAbsorb(90000 * crit);
         }
 }
+
+
+    class power_infusion extends SpellBase {
+        constructor(player) {
+            super(data.getSpellData('power_infusion'), player);
+        }
+
+        execute() {
+            super.execute();
+            this.player.stats.haste += 15;
+        }
+    }
 
     class clarity_of_will extends SpellBase {
         constructor(player) {
