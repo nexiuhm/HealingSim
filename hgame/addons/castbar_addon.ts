@@ -19,39 +19,39 @@
         texture: Phaser.Sprite;
         spell_name: Phaser.BitmapText;
 
-        screen: Phaser.State;
+        state: States.Play;
 
-        constructor(screen: Phaser.State) {
+        constructor(state: States.Play) {
 
-
-            this.castingUnit = screen.player;
-            this.screen = screen;
-            this.config.x = this.screen.world.centerX - this.config.width / 2;
-            this.config.y = this.screen.world.centerY + 200;
+            this.state = state;
+            this.castingUnit = this.state.player;
+            
+            this.config.x = this.state.world.centerX - this.config.width / 2;
+            this.config.y = this.state.world.centerY + 200;
             // Parent container
-            this.container = this.screen.add.group();
+            this.container = this.state.add.group();
             this.container.x = this.config.x;
             this.container.y = this.config.y;
             // Background layer
-            this.background = this.screen.add.graphics(0, 0);
+            this.background = this.state.add.graphics(0, 0);
             this.background.beginFill(0x368975);
             this.background.drawRect(0, 0, this.config.width, this.config.height);
         
             // Cast bar layer
-            this.cast_bar = this.screen.add.graphics(0, 0);
+            this.cast_bar = this.state.add.graphics(0, 0);
             this.cast_bar.beginFill(0xFFFFFF);
             this.cast_bar.drawRect(0, 0, this.config.width, this.config.height);
             this.cast_bar.width = 0;
             this.cast_bar.tint = 0xFF7D0A;
         
             // Overlay texture
-            this.texture = this.screen.add.sprite(0, 0, "castbar_texture2");
+            this.texture = this.state.add.sprite(0, 0, "castbar_texture2");
             this.texture.width = this.config.width;
             this.texture.height = this.config.height;
             this.texture.blendMode = PIXI.blendModes.MULTIPLY;
 
             // Name of the spell
-            this.spell_name = this.screen.add.bitmapText(this.config.width / 2, this.config.height / 2, "myriad", "", 12);
+            this.spell_name = this.state.add.bitmapText(this.config.width / 2, this.config.height / 2, "myriad", "", 12);
             this.spell_name.anchor.set(0.5);
 
             this.container.addChild(this.background);
@@ -63,11 +63,11 @@
             this.container.alpha = 0;
 
             // Init animations
-            this.anim.fadeCastBar = this.screen.add.tween(this.container).to({ alpha: 0 }, 1000, "Linear", false);
+            this.anim.fadeCastBar = this.state.add.tween(this.container).to({ alpha: 0 }, 1000, "Linear", false);
         
             // Setup event listeners with callback functions
-            game.UNIT_STARTS_SPELLCAST.add((s, t) => this.UNIT_STARTS_SPELLCAST(s, t));
-            game.UNIT_FINISH_SPELLCAST.add(() => this.UNIT_FINISH_SPELLCAST());
+            this.state.events.UNIT_STARTS_SPELLCAST.add((s, t) => this.UNIT_STARTS_SPELLCAST(s, t));
+            this.state.events.UNIT_FINISH_SPELLCAST.add(() => this.UNIT_FINISH_SPELLCAST());
         }
 
         private UNIT_STARTS_SPELLCAST(castTime, spellName) {
@@ -86,7 +86,7 @@
             else
                 this.container.alpha = 1;
 
-            this.screen.add.tween(this.cast_bar).to({ width: this.config.width }, castTime, "Linear", true);
+            this.state.add.tween(this.cast_bar).to({ width: this.config.width }, castTime, "Linear", true);
             // ### TODO #######
             //  - Draw icon for the spell on the cast bar
             // - Play casting sound?

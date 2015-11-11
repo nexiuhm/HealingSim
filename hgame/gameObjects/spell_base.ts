@@ -75,9 +75,9 @@ class SpellBase {
         this.current_cast = game.time.events.add(ct, () => this.cast_finished());
 
         // Send a signal/event that a spell is starting its cast.
-        game.UNIT_STARTS_SPELLCAST.dispatch(ct, this.name);
+        this.player.events.UNIT_STARTS_SPELLCAST.dispatch(ct, this.name);
     }
-
+    
     start_cooldown() {
         this.onCooldown = true;
         // Get the cooldown
@@ -95,7 +95,7 @@ class SpellBase {
 
     cast_finished() {
         this.player.isCasting = false;
-        game.UNIT_FINISH_SPELLCAST.dispatch();
+        this.player.events.UNIT_FINISH_SPELLCAST.dispatch();
         this.execute();
     }
 

@@ -11,15 +11,6 @@ class Game extends Phaser.Game {
     defaultFont:string =  "myriad";
     addons = new AddonManager();
     
-    /* ## TODO ## Find a better soulution for dealing with events, feels weird to keep them here. Perhaps a EventManager class in the Play state? Please come with suggestions */
-    TARGET_CHANGE_EVENT: Phaser.Signal = new Phaser.Signal();
-    UNIT_HEALTH_CHANGE: Phaser.Signal = new Phaser.Signal();
-    UNIT_ABSORB: Phaser.Signal = new Phaser.Signal();
-    UNIT_STARTS_SPELLCAST: Phaser.Signal = new Phaser.Signal();
-    UNIT_FINISH_SPELLCAST: Phaser.Signal = new Phaser.Signal();
-    UNIT_CANCEL_SPELLCAST: Phaser.Signal = new Phaser.Signal();
-    UI_ERROR_MESSAGE: Phaser.Signal = new Phaser.Signal();
-
     constructor() {
         // Create an instance of the Phaser game engine. Force WEBGL since Canvas doesnt support textures / blendmodes which we use heavily.
         super(window.innerWidth, window.innerHeight, Phaser.WEBGL, "game_wrapper");

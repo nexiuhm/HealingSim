@@ -15,7 +15,7 @@ class UnitFrame {
         allowedAbsorbOverflow: 10
     };
     container: Phaser.Graphics;
-    screen: Phaser.State;
+    state: States.Play;
 
     // Atonomy of the unit frame
     health: Phaser.Graphics;
@@ -25,7 +25,7 @@ class UnitFrame {
     unit_name: Phaser.BitmapText;
     health_text: Phaser.BitmapText;
 
-    constructor(x, y, w, h, unit: Player, screen: Phaser.State) {
+    constructor(x, y, w, h, unit: Player, state: States.Play) {
         this.x = x;
         this.y = y;
         this.width = w;
@@ -34,29 +34,29 @@ class UnitFrame {
         
         // Reference to the player object we are representing.
         this.unit = unit;
-        // Reference to the screen we are going to draw to ( This feels like a weird way to do it, improve later)
-        this.screen = screen;
+        // Reference to the state we are going to draw to ( This feels like a weird way to do it, improve later)
+        this.state = state;
 
         //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
-        this.container = this.screen.add.graphics(x, y);
+        this.container = this.state.add.graphics(x, y);
         this.container.width = w;
         this.container.height = h; 
         // Create the healthbar layer
-        this.health = this.screen.add.graphics(0, 0);
+        this.health = this.state.add.graphics(0, 0);
         // Create absorb layer
-        this.absorb = this.screen.add.graphics(0, 0);
+        this.absorb = this.state.add.graphics(0, 0);
         
         this.absorb.blendMode = PIXI.blendModes.ADD;
         this.absorb.alpha = 0.5;
 
         // Create the texture layer
-        this.overlay_texture = this.screen.add.sprite(0, 0, "castbar_texture");
+        this.overlay_texture = this.state.add.sprite(0, 0, "castbar_texture");
         this.overlay_texture.blendMode = PIXI.blendModes.MULTIPLY;
         this.overlay_texture.width = w;
         this.overlay_texture.height = h;
 
         // Create the player name layer
-        this.unit_name = this.screen.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
+        this.unit_name = this.state.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
         this.unit_name.tint = data.getClassColor(this.unit.classId);
         this.unit_name.anchor.set(0.5);
        
@@ -70,7 +70,7 @@ class UnitFrame {
         this.container.inputEnabled = true;
         
         this.container.events.onInputDown.add(() => {
-            this.screen.player.setTarget(this.unit );
+            this.state.player.setTarget(this.unit );
         });
         
         //Scale the health bar to represent the player's health.
@@ -79,8 +79,9 @@ class UnitFrame {
         this.UPDATE();
         
         // Set up event listeners. ### TODO Need a way to filter out events that is not coming from this unit
-        game.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
-        game.UNIT_ABSORB.add(() => this.UPDATE());
+        this.state.events.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
+        this.state.events.UNIT_ABSORB.add(() => this.UPDATE());
+        this.state.events.UNIT_DEATH.add(() => this.UNIT_DEATH());
     }
 
     UPDATE() {
@@ -103,17 +104,21 @@ class UnitFrame {
             new_absorb_width = 1;
         
         // ugly
-        this.screen.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
-        this.screen.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);
-        this.screen.add.tween(this.absorb).to({ width: new_absorb_width }, 50, "Linear", true);
+        this.state.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
+        this.state.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);
+        this.state.add.tween(this.absorb).to({ width: new_absorb_width }, 50, "Linear", true);
     }
 
     UNIT_MANA_CHANGE(eventData) {
         // animate the change in resource
     }
 
-    UNIT_DEATH(eventData) {
-        // make healthbar grey? show skull icon?
+    UNIT_DEATH() {
+
+        this.health.width = this.width;
+        this.unit_name.setText("DEAD");
+        this.health.alpha = 0;
+        this.absorb.alpha = 0;
     }
 
     calcBarWidth(currentValue, maxValue): number {
@@ -141,12 +146,12 @@ class UnitFrame {
 
 class TargetFrame extends UnitFrame {
     ownerUnit: Player;
-    constructor(x, y, w, h, unit: Player, screen: Phaser.State) {
-        super(x, y, w, h, unit, screen);
+    constructor(x, y, w, h, unit: Player, state: States.Play) {
+        super(x, y, w, h, unit, state);
         this.ownerUnit = this.unit;
         this.unit = this.ownerUnit.target;
         // Subscribe to the target change event. This event is emitted in the Player.setTarget() function
-        game.TARGET_CHANGE_EVENT.add(() => this.UNIT_TARGET_CHANGE());
+        this.state.events.TARGET_CHANGE_EVENT.add(() => this.UNIT_TARGET_CHANGE());
     }
 
     UNIT_TARGET_CHANGE() {

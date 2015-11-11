@@ -12,6 +12,8 @@
         // --- Players spells ---------------------
         spells: any; 
         buffs: any;
+        // --- Reference to the event manager --- //
+        events: EventManager;
         
         gear_stats = {
             stamina: 7105,
@@ -40,11 +42,9 @@
             mastery: 0.08, // 8% is base mastery for every class
         };
 
-        constructor( _class:class_e, race:race_e, level, name:string) {
-            if (level < player_level.MIN || level > player_level.MAX)
-                level = player_level.DEFAULT;
-            else
-                level = level;
+        constructor( _class:class_e, race:race_e, level, name:string,events:EventManager) {
+            
+            this.events = events;
 
             this.race = race;
             this.name = name;
@@ -109,24 +109,24 @@
             */
             //--- Resistance and absorb ---------------------------
 
-            if ( !avoided_damage ) {
+            if (!avoided_damage) {
 
                 //dmg.amount *= this.getResistancePercent('PHYSICAL');
-                
+
                 // Full absorb
                 if (this.stats.absorb > dmg.amount) {
-                    this.stats.absorb -= dmg.amount;
-                    game.UNIT_ABSORB.dispatch(this);
-                    return;
+                    this.setAbsorb(-dmg.amount);
+
                 }
-                // Partial absorb
-                if (this.stats.absorb > 0) {
+     
+                else {
                     dmg.amount -= this.stats.absorb;
-                    this.stats.absorb = 0;
-                    game.UNIT_ABSORB.dispatch(this);
+                    this.setAbsorb(-this.stats.absorb);
+
+
+                    this.setHealth(this.getCurrentHealth() - dmg.amount);
                 }
-                this.setHealth(this.getCurrentHealth() - dmg.amount);
-                game.UNIT_HEALTH_CHANGE.dispatch(this);
+
             }
         }
 
@@ -139,7 +139,7 @@
             
             // ##################
             if (this.isCasting) 
-                game.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
+                this.events.UI_ERROR_MESSAGE.dispatch("Can't do that yet");        
             else
                 spell.use();
         }
@@ -171,6 +171,7 @@
             if (value <= 0) {
                 this.stats.health.value = 0;
                 this.alive = false;
+                this.events.UNIT_DEATH.dispatch();
                 return;
             }
             if (value >= this.getMaxHealth()) {
@@ -180,19 +181,20 @@
                 this.stats.health.value = value;
             }
 
-            game.UNIT_HEALTH_CHANGE.dispatch(this);
+            this.events.UNIT_HEALTH_CHANGE.dispatch(this);
             // ## TODO ##
             // - Make sure it doesnt exceed maximum possible health
             // - Handle overhealing here? or somewhere else
         }
 
         setAbsorb(value: number) {
-            if (value <= 0)
+            if (!this.alive)
                 return;
+
             
             this.stats.absorb += value;
 
-            game.UNIT_ABSORB.dispatch(this);
+            this.events.UNIT_ABSORB.dispatch(this);
             
             // ## TODO ##
             // - Handle overhealing here? or somewhere else
@@ -214,7 +216,8 @@
 
             // Set target & emitt event 
             this.target = unit;
-            game.TARGET_CHANGE_EVENT.dispatch();
+            
+            this.events.TARGET_CHANGE_EVENT.dispatch();
         }
         
         consume_resource(resource,amount) {

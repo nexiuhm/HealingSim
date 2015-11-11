@@ -3,8 +3,8 @@
 namespace Priest {
 
     export class Priest extends Player {
-        constructor(race: race_e, level:number, name:string) {
-            super(class_e.PRIEST, race ,level, name);
+        constructor(race: race_e, level:number, name:string, eventManager) {
+            super(class_e.PRIEST, race ,level, name, eventManager);
             this.init_spells();
         }
         
