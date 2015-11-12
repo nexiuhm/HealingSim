@@ -9,11 +9,11 @@
           
             this.printAddonList();
             this.addBackground();
-
         }
 
         addBackground() {
             this.add.image(0, 0, "SelectionScreenBackground");
+
             var emitter = this.add.emitter(this.world.centerX, this.world.centerY, 200);
 
             emitter.makeParticles(['blue_particle']);

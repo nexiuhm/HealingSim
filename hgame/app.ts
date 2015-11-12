@@ -1,5 +1,7 @@
 ﻿
 var game: Game;
+var heightFactor: number = window.innerHeight/12;
+var widthFactor: number = window.innerWidth/8;
 
 window.onload = () => {
     game = new Game;
@@ -12,8 +14,10 @@ class Game extends Phaser.Game {
     addons = new AddonManager();
     
     constructor() {
+
+
         // Create an instance of the Phaser game engine. Force WEBGL since Canvas doesnt support textures / blendmodes which we use heavily.
-        super(window.innerWidth, window.innerHeight, Phaser.WEBGL, "game_wrapper");
+        super(window.innerWidth, window.innerHeight, Phaser.AUTO, "game_wrapper");
         
         // Register game states
         this.state.add("Boot", States.Boot);

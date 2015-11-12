@@ -25,9 +25,9 @@
 
             this.state = state;
             this.castingUnit = this.state.player;
-            
-            this.config.x = this.state.world.centerX - this.config.width / 2;
-            this.config.y = this.state.world.centerY + 200;
+
+            this.config.x = widthFactor* 2 - this.config.width / 2;
+            this.config.y = heightFactor * 7;
             // Parent container
             this.container = this.state.add.group();
             this.container.x = this.config.x;

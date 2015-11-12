@@ -14,6 +14,12 @@ namespace States {
         }
 
         create() {
+            // Set scalemode for the game.
+            game.scale.scaleMode = Phaser.ScaleManager.RESIZE;    
+             
+            //have the game centered 
+            this.scale.pageAlignHorizontally = true;
+            this.scale.pageAlignVertically = true;
 
             // Register addons to the game
             game.addons.add("Cast Bar 0.1", Addons.CastFrame);

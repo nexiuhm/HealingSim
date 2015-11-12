@@ -1,9 +1,13 @@
 ﻿namespace Addons {
     export class UnitFrames {
+        state: States.Play;
 
+        x;
+        y;
         constructor(screen: States.Play) {
-            new UnitFrame(screen.world.centerX - 490, screen.world.centerY + 200, 300, 50, screen.player, screen);
-            new TargetFrame(screen.world.centerX + 190, screen.world.centerY +200, 300, 50, screen.player, screen);
+
+            new UnitFrame(widthFactor, heightFactor * 6, 300, 50, screen.player, screen);
+            new TargetFrame(widthFactor * 4, heightFactor * 6, 300, 50, screen.player, screen);
         }
 
     }

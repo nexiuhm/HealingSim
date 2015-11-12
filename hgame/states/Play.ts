@@ -84,13 +84,10 @@
         }
 
         loadBackground() {
-            var background = this.add.image(0, 0, "bg");
-            background.width = window.innerWidth;
-            background.height = window.innerHeight;
+            this.add.image(0, 0, "bg");
         }
 
         worldFadeInEffect() {
-    
             this.world.alpha = 0;
             this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
         }
@@ -109,9 +106,20 @@
                 game.debug.text("#### Absorb: " + this.player.stats.absorb, 20, 180, '#00FF96');
     
             }
+            game.debug.text("window.innerWidth: " + window.innerWidth, 20, 200, '#00FF96');
+            game.debug.text("window.innerHeight: " + window.innerHeight, 20, 220, '#00FF96');
+            //game.debug.text("World CenterX: " + game.world.centerX, 20, 360, '#00FF96');
+            //game.debug.text("World CenterY: " + game.world.centerY, 20, 380, '#00FF96');
+            //game.debug.text("Stage X: " + game.stage.x, 20, 240, '#00FF96');
+            //game.debug.text("Stage Y: " + game.stage.y, 20, 260, '#00FF96');
+            //game.debug.text("World Width: " + game.world.width, 20, 280, '#00FF96');
+            //game.debug.text("World Height: " + game.world.height, 20, 300, '#00FF96');
+            //game.debug.text("Game canvas Width: " + game.canvas.width, 20, 320, '#00FF96');
+            //game.debug.text("Game canvas Height: " + game.canvas.height, 20, 340, '#00FF96');
+            //game.debug.text("World CenterX: " + game.world.centerX, 20, 360, '#00FF96');
+            //game.debug.text("World CenterY: " + game.world.centerY, 20, 380, '#00FF96');
             
         }
-
     }
 }
 

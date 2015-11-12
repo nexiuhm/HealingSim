@@ -9,8 +9,8 @@
         y;
         
         constructor(state: States.Play) {
-            this.x = state.world.centerX - 180;
-            this.y = state.world.centerY - 100;
+            this.x = widthFactor*2;
+            this.y = heightFactor;
             this.state = state;
             this.createRaidFrame();
         }
