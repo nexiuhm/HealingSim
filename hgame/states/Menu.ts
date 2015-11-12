@@ -12,7 +12,7 @@
         }
 
         addBackground() {
-            this.add.image(0, 0, "SelectionScreenBackground");
+            game.add.image(0, 0, "SelectionScreenBackground");
 
             var emitter = this.add.emitter(this.world.centerX, this.world.centerY, 200);
 

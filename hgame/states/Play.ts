@@ -8,19 +8,21 @@
         create() {
          
             // Start the world fade-in effect
-            this.worldFadeInEffect();
+            this.world.alpha = 0;
+            this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
 
             // Add a background to the screen
-            this.loadBackground();
+            game.add.image(game.stage.x, game.stage.y, "bg");
 
             // Init player. ## TODO ##: Use data from selection screen. See Phaser documentation for sending args between states?
             this.player = this.createUnit(class_e.PRIEST, race_e.RACE_BLOOD_ELF, 100, "Player");
 
             // Load enabled addons
-            this.loadAddons();
+            game.addons.loadEnabledAddons(this);
 
             // Start the boss/healing simulator
             this.startSimulation();
+
         }
 
         // When you create a unit you also have to pass them a reference to the event manager, so they know how to communicate events.
@@ -79,18 +81,6 @@
             // ---------------------------------------------------------
         }
 
-        loadAddons() {
-            game.addons.loadEnabledAddons(this);
-        }
-
-        loadBackground() {
-            this.add.image(0, 0, "bg");
-        }
-
-        worldFadeInEffect() {
-            this.world.alpha = 0;
-            this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
-        }
 
         render() {
             //* ### TODO ### Nicer way of doing exactly this. Make it an addon? Listen to target change events etc.
@@ -118,22 +108,7 @@
             //game.debug.text("Game canvas Height: " + game.canvas.height, 20, 340, '#00FF96');
             //game.debug.text("World CenterX: " + game.world.centerX, 20, 360, '#00FF96');
             //game.debug.text("World CenterY: " + game.world.centerY, 20, 380, '#00FF96');
-            
+
         }
     }
-}
-
-class EventManager {
-   
-    // ### TODO ### 
-    TARGET_CHANGE_EVENT = new Phaser.Signal();
-    UNIT_HEALTH_CHANGE = new Phaser.Signal();
-    UNIT_ABSORB = new Phaser.Signal();
-    UNIT_STARTS_SPELLCAST = new Phaser.Signal();
-    UNIT_FINISH_SPELLCAST = new Phaser.Signal();
-    UNIT_CANCEL_SPELLCAST = new Phaser.Signal();
-    UI_ERROR_MESSAGE = new Phaser.Signal();
-    UNIT_DEATH = new Phaser.Signal();
-    
-
 }

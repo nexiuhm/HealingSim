@@ -44,7 +44,9 @@
     <TypeScriptCompile Include="addons\unit_frames_addon.ts" />
     <TypeScriptCompile Include="class_modules\priest.ts" />
     <TypeScriptCompile Include="enums.ts" />
+    <TypeScriptCompile Include="gameObjects\addonManager.ts" />
     <TypeScriptCompile Include="gameObjects\data.ts" />
+    <TypeScriptCompile Include="gameObjects\eventManager.ts" />
     <TypeScriptCompile Include="gameObjects\spell_base.ts" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="gameObjects\player.ts" />

@@ -13,13 +13,20 @@ namespace States {
             game.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
         }
 
+        onWindowResize(data) {
+            console.log("NEW WIDTH: "+ data.width, "NEW HEIGHT: " + data.height);
+            //currentState.world.resize(data.width, data.height);
+            game.canvas.height = window.innerHeight;
+            game.canvas.width = window.innerWidth;
+        }
+
         create() {
             // Set scalemode for the game.
-           // game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
-            
+            game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+            game.scale.onSizeChange.add((data) => this.onWindowResize(data));
             //have the game centered 
-            this.scale.pageAlignHorizontally = true;
-            this.scale.pageAlignVertically = true;
+
+
 
             // Register addons to the game
             game.addons.add("Cast Bar 0.1", Addons.CastFrame);
