@@ -6,8 +6,8 @@
             castingColor: 0xFF7D0A,
             width: 300,
             height: 30,
-            x: 500,
-            y: 500
+            x: 0,
+            y: 0
         };
 
         castingUnit: Player = null;
@@ -26,8 +26,8 @@
             this.state = state;
             this.castingUnit = this.state.player;
 
-            this.config.x = widthFactor* 2 - this.config.width / 2;
-            this.config.y = heightFactor * 7;
+            this.config.x = widthFactor * 50 - this.config.width / 2;
+            this.config.y = heightFactor * 75 - this.config.height /2 ;
             // Parent container
             this.container = this.state.add.group();
             this.container.x = this.config.x;

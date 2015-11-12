@@ -15,8 +15,8 @@ namespace States {
 
         create() {
             // Set scalemode for the game.
-            game.scale.scaleMode = Phaser.ScaleManager.RESIZE;    
-             
+           // game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+            
             //have the game centered 
             this.scale.pageAlignHorizontally = true;
             this.scale.pageAlignVertically = true;

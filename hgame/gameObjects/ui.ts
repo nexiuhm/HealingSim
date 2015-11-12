@@ -41,6 +41,7 @@ class UnitFrame {
         this.container = this.state.add.graphics(x, y);
         this.container.width = w;
         this.container.height = h; 
+        
         // Create the healthbar layer
         this.health = this.state.add.graphics(0, 0);
         // Create absorb layer

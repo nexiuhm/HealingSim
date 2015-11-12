@@ -9,8 +9,8 @@
         y;
         
         constructor(state: States.Play) {
-            this.x = widthFactor*2;
-            this.y = heightFactor;
+            this.x = widthFactor*50 - this.unitFrameWidth * 2;
+            this.y = heightFactor*50 - this.unitFrameHeight * 2;
             this.state = state;
             this.createRaidFrame();
         }
@@ -27,7 +27,7 @@
                     var race = game.rnd.between(player_race.MIN, player_race.MAX);
                     var level = 100;
                     var name = data.generatePlayerName();
-                   
+                    
                     var unit = this.state.createUnit(classs,race,level,name);
                     this.raid.push(new UnitFrame(this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit, this.state));
                 }

@@ -1,7 +1,7 @@
 ﻿
 var game: Game;
-var heightFactor: number = window.innerHeight/12;
-var widthFactor: number = window.innerWidth/8;
+var heightFactor: number = window.innerHeight/100;
+var widthFactor: number = window.innerWidth/100;
 
 window.onload = () => {
     game = new Game;
@@ -13,6 +13,7 @@ class Game extends Phaser.Game {
     defaultFont:string =  "myriad";
     addons = new AddonManager();
     
+
     constructor() {
 
 
