@@ -3,7 +3,7 @@
 
         player: Player;
         events = new EventManager(); //### TODO ###
-        raid: any; // ### TODO ###
+        raid = new Raid(this.events); // ### TODO ###
         
         create() {
          
@@ -15,7 +15,7 @@
             game.add.image(game.stage.x, game.stage.y, "bg");
 
             // Init player. ## TODO ##: Use data from selection screen. See Phaser documentation for sending args between states?
-            this.player = this.createUnit(class_e.PRIEST, race_e.RACE_BLOOD_ELF, 100, "Player");
+            this.player = this.raid.createUnit(class_e.PRIEST, race_e.RACE_BLOOD_ELF, 100, "Player");
 
             // Load enabled addons
             game.addons.loadEnabledAddons(this);
@@ -25,26 +25,10 @@
 
         }
 
-        // When you create a unit you also have to pass them a reference to the event manager, so they know how to communicate events.
-        createUnit(classs, race, level, name) { 
+        update() {
 
-            // Check if a valid "level" is chosen;
-            if (level < player_level.MIN || level > player_level.MAX)
-                level = player_level.DEFAULT;
-            else
-                level = level;
-
-            switch (classs) {
-                case class_e.PRIEST:
-                    return new Priest.Priest(race, level, name, this.events);
-                    break;
-                
-                default:
-                    return new Player(classs, race, level,name, this.events);
-
-            }
-
-        }
+            this.events.GAME_LOOP_UPDATE.dispatch();
+        };
 
         handleKeyBoardInput(key) {
             // ## TODO ## : Find a better way to deal with this, maybe just send the input to the addons, and let the addons/ui decide what to do with it.
@@ -108,7 +92,8 @@
             //game.debug.text("Game canvas Height: " + game.canvas.height, 20, 340, '#00FF96');
             //game.debug.text("World CenterX: " + game.world.centerX, 20, 360, '#00FF96');
             //game.debug.text("World CenterY: " + game.world.centerY, 20, 380, '#00FF96');
-
+             game.debug.text("Mouse X: " + game.input.x , 20, 400, '#00FF96');
+             game.debug.text("Mouse Y: " + game.input.y, 20,420, '#00FF96');
         }
     }
 }
