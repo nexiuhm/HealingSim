@@ -32,6 +32,8 @@ namespace States {
             game.addons.add("Cast Bar 0.1", Addons.CastFrame);
             game.addons.add("Raid Frames 0.1", Addons.RaidFrame);
             game.addons.add("Unit Frames 0.1", Addons.UnitFrames);
+            game.addons.add("Debug", Addons.Debug);
+
 
             // Enable this to capture FPS
             game.time.advancedTiming = true;

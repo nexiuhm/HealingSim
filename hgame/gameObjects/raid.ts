@@ -1,6 +1,7 @@
 ﻿class Raid {
     players: Array<Player>
     events;
+    deathCounter: number;
 
     constructor(eventManager: EventManager) {
         this.events = eventManager;
@@ -31,5 +32,29 @@
         }
 
     }
+
+    startTestDamage(playerToBeDamaged: Player) {
+        var player = playerToBeDamaged;
+
+        // --- Create some random damage for testing purposes ----
+        var createSomeRandomDamage = setInterval(randomDamage.bind(this), 3600);
+        var createSomeRandomDamage2 = setInterval(randomDamage2.bind(this), 1160);
+        var createSomeRandomDamage3 = setInterval(applyAbsorb.bind(this), 1960);
+        function randomDamage2() {
+            player.recive_damage({ amount: game.rnd.between(11, 128900) });
+        }
+
+        function randomDamage() {
+            player.recive_damage({ amount: game.rnd.between(215555, 338900) });
+        }
+
+        function applyAbsorb() {
+            //this.player.setAbsorb(game.rnd.between(115, 88900));
+            player.setHealth(player.getCurrentHealth() + game.rnd.between(20000, 88900));
+        }
+        // ---------------------------------------------------------
+    }
+
+
 }
 

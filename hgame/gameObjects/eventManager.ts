@@ -10,6 +10,6 @@
     UNIT_CANCEL_SPELLCAST = new Phaser.Signal();
     UI_ERROR_MESSAGE = new Phaser.Signal();
     UNIT_DEATH = new Phaser.Signal();
-
+    GAME_LOOP_RENDER = new Phaser.Signal();
 
 }
