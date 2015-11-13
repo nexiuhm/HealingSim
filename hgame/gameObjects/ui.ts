@@ -25,7 +25,7 @@ class UnitFrame {
     unit_name: Phaser.BitmapText;
     health_text: Phaser.BitmapText;
 
-    constructor(x, y, w, h, unit: Player, state: States.Play) {
+    constructor(parentContainer,x, y, w, h, unit: Player, playState: States.Play) {
         this.x = x;
         this.y = y;
         this.width = w;
@@ -35,23 +35,23 @@ class UnitFrame {
         // Reference to the player object we are representing.
         this.unit = unit;
         // Reference to the state we are going to draw to ( This feels like a weird way to do it, improve later)
-        this.state = state;
+        this.state = playState;
 
         //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
-        this.container = this.state.add.graphics(x, y);
+        this.container = new Phaser.Graphics(game,x, y);
         this.container.width = w;
         this.container.height = h; 
         
         // Create the healthbar layer
-        this.health = this.state.add.graphics(0, 0);
+        this.health = new Phaser.Graphics(game,0, 0);
         // Create absorb layer
-        this.absorb = this.state.add.graphics(0, 0);
+        this.absorb = new Phaser.Graphics(game,0, 0);
         
         this.absorb.blendMode = PIXI.blendModes.ADD;
         this.absorb.alpha = 0.5;
 
         // Create the texture layer
-        this.overlay_texture = this.state.add.sprite(0, 0, "castbar_texture");
+        this.overlay_texture = new Phaser.Sprite(game,0, 0, "castbar_texture");
         this.overlay_texture.blendMode = PIXI.blendModes.MULTIPLY;
         this.overlay_texture.width = w;
         this.overlay_texture.height = h;
@@ -66,6 +66,9 @@ class UnitFrame {
         this.container.addChild(this.overlay_texture);
         this.container.addChild(this.absorb);
         this.container.addChild(this.unit_name);
+
+        parentContainer.add(this.container);
+       
 
         // Add interaction
         this.container.inputEnabled = true;
@@ -147,8 +150,8 @@ class UnitFrame {
 
 class TargetFrame extends UnitFrame {
     ownerUnit: Player;
-    constructor(x, y, w, h, unit: Player, state: States.Play) {
-        super(x, y, w, h, unit, state);
+    constructor(parentContainer,x, y, w, h, unit: Player, state: States.Play) {
+        super(parentContainer,x, y, w, h, unit, state);
         this.ownerUnit = this.unit;
         this.unit = this.ownerUnit.target;
         // Subscribe to the target change event. This event is emitted in the Player.setTarget() function
