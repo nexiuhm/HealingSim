@@ -1,5 +1,5 @@
-﻿///<reference path='../gameObjects/player.ts' />
-///<reference path='../gameObjects/spell_base.ts' />
+﻿///<reference path='../player.ts' />
+///<reference path='../spell_base.ts' />
 namespace Priest {
 
     export class Priest extends Player {

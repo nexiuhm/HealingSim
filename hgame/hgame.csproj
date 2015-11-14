@@ -20,30 +20,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
-    <Content Include="fonts\font.png" />
-    <Content Include="fonts\font.xml" />
-    <Content Include="graphics\ab_texture.png" />
-    <Content Include="graphics\BantoBar.png" />
-    <Content Include="graphics\bg.jpg" />
-    <Content Include="graphics\blue.png" />
-    <Content Include="graphics\LiteStep.png" />
-    <Content Include="graphics\setup_screen.png" />
-    <Content Include="graphics\spell_holy_powerwordshield.jpg" />
-    <Content Include="graphics\temp.png" />
+    <Content Include="assets\fonts\font.png" />
+    <Content Include="assets\fonts\font.xml" />
+    <Content Include="assets\textures\action_bar_texture.png" />
+    <Content Include="assets\textures\BantoBar.png" />
+    <Content Include="assets\play_state_background.png" />
+    <Content Include="assets\textures\bg_texture.png" />
+    <Content Include="assets\textures\blue_particle.png" />
+    <Content Include="assets\textures\LiteStep.png" />
+    <Content Include="assets\menu_state_background.png" />
+    <Content Include="assets\icons\spell_holy_powerwordshield.jpg" />
+    <Content Include="assets\menu_state_text.png" />
     <Content Include="index.html" />
     <Content Include="libs\phaser.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="addons\action_bar_addon.ts" />
-    <TypeScriptCompile Include="addons\castbar_addon.ts" />
-    <TypeScriptCompile Include="addons\console_addon.ts" />
+    <TypeScriptCompile Include="addons\action_bar.ts" />
+    <TypeScriptCompile Include="addons\castbar.ts" />
+    <TypeScriptCompile Include="addons\console.ts" />
     <TypeScriptCompile Include="addons\debug.ts" />
-    <TypeScriptCompile Include="addons\error_message_addon.ts" />
-    <TypeScriptCompile Include="addons\raid_frame_addon.ts" />
-    <TypeScriptCompile Include="addons\spell_effect_addon.ts" />
-    <TypeScriptCompile Include="addons\unit_frames_addon.ts" />
-    <TypeScriptCompile Include="class_modules\priest.ts" />
+    <TypeScriptCompile Include="addons\error_frame.ts" />
+    <TypeScriptCompile Include="addons\raid_frame.ts" />
+    <TypeScriptCompile Include="addons\spell_effects.ts" />
+    <TypeScriptCompile Include="addons\unit_frames.ts" />
+    <TypeScriptCompile Include="gameObjects\class_modules\priest.ts" />
     <TypeScriptCompile Include="enums.ts" />
     <TypeScriptCompile Include="gameObjects\addonManager.ts" />
     <TypeScriptCompile Include="gameObjects\data.ts" />

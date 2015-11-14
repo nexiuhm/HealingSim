@@ -3,13 +3,14 @@ namespace States {
 
     export class Boot extends Phaser.State {
         preload() {
-            game.load.image("SelectionScreenBackground", "graphics/temp.png");
-            game.load.image("castbar_texture", "graphics/BantoBar.png");
-            game.load.image("castbar_texture2", "graphics/LiteStep.png");
-            game.load.image("ab_texture", "graphics/ab_texture.png");
-            game.load.image("bg", "graphics/bg.jpg");
-            game.load.image("pws", "graphics/spell_holy_powerwordshield.jpg");
-            game.load.image("blue_particle", "graphics/blue.png");
+            game.load.image("MenuScreenText", "assets/menu_state_text.png");
+            game.load.image("MenuScreenBackground", "assets/textures/bg_texture.png");
+            game.load.image("castbar_texture", "assets/textures/BantoBar.png");
+            game.load.image("castbar_texture2", "assets/textures/LiteStep.png");
+            game.load.image("ab_texture", "assets/textures/action_bar_texture.png");
+            game.load.image("bg", "assets/play_state_background.png");
+            game.load.image("spell_holy_powerwordshield", "assets/icons/spell_holy_powerwordshield.jpg");
+            game.load.image("blue_particle", "assets/textures/blue.png");
             game.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
         }
 
@@ -20,6 +21,7 @@ namespace States {
             game.canvas.width = window.innerWidth;
 
             // Recalculate the factors used to place displayObjects.
+            // ### TODO ### Need to find a way for the displayObjects to reposition themselves with these new values.
             heightFactor = window.innerHeight / 100;
             widthFactor = window.innerWidth / 100;
         }

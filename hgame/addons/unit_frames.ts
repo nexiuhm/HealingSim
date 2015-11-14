@@ -29,7 +29,7 @@
             
             this.container.addChild(this.interactionLayer);
 
-            this.interactionLayer.events.onInputDown.add(() => this.drag());
+            this.interactionLayer.events.onInputDown.add(() => { this.drag() });
             this.interactionLayer.events.onInputUp.add(() => {
                 // If (isDragging ) 
                 this.state.events.GAME_LOOP_UPDATE.removeAll(); this.interactionLayer.alpha = 0;
