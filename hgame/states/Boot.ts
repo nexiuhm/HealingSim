@@ -18,22 +18,22 @@ namespace States {
             //currentState.world.resize(data.width, data.height);
             game.canvas.height = window.innerHeight;
             game.canvas.width = window.innerWidth;
+
+            // Recalculate the factors used to place displayObjects.
+            heightFactor = window.innerHeight / 100;
+            widthFactor = window.innerWidth / 100;
         }
 
         create() {
             // Set scalemode for the game.
             game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
             game.scale.onSizeChange.add((data) => this.onWindowResize(data));
-            //have the game centered 
-
-
-
+           
             // Register addons to the game
             game.addons.add("Cast Bar 0.1", Addons.CastFrame);
             game.addons.add("Raid Frames 0.1", Addons.RaidFrame);
             game.addons.add("Unit Frames 0.1", Addons.UnitFrames);
             game.addons.add("Debug", Addons.Debug);
-
 
             // Enable this to capture FPS
             game.time.advancedTiming = true;
