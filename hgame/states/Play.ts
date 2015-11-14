@@ -9,7 +9,7 @@
          
             // Start the world fade-in effect
             this.world.alpha = 0;
-            this.add.tween(this.world).to({ alpha: 1 }, 3500, Phaser.Easing.Cubic.InOut, true);
+            this.add.tween(this.world).to({ alpha: 1 }, 4000, Phaser.Easing.Cubic.InOut, true);
 
             // Add a background to the screen
             game.add.image(game.stage.x, game.stage.y, "bg");
@@ -26,7 +26,6 @@
         }
 
         update() {
-
             this.events.GAME_LOOP_UPDATE.dispatch();
         };
 

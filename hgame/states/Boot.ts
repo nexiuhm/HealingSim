@@ -3,15 +3,15 @@ namespace States {
 
     export class Boot extends Phaser.State {
         preload() {
-            game.load.image("MenuScreenText", "assets/menu_state_text.png");
-            game.load.image("MenuScreenBackground", "assets/textures/bg_texture.png");
-            game.load.image("castbar_texture", "assets/textures/BantoBar.png");
-            game.load.image("castbar_texture2", "assets/textures/LiteStep.png");
-            game.load.image("ab_texture", "assets/textures/action_bar_texture.png");
-            game.load.image("bg", "assets/play_state_background.png");
-            game.load.image("spell_holy_powerwordshield", "assets/icons/spell_holy_powerwordshield.jpg");
-            game.load.image("blue_particle", "assets/textures/blue.png");
-            game.load.bitmapFont("myriad", "fonts/font.png", "fonts/font.xml");
+            game.load.image("MenuScreenText",               "assets/menu_state_text.png");
+            game.load.image("MenuScreenBackground",         "assets/textures/bg_texture.png");
+            game.load.image("castbar_texture",              "assets/textures/BantoBar.png");
+            game.load.image("castbar_texture2",             "assets/textures/LiteStep.png");
+            game.load.image("ab_texture",                   "assets/textures/action_bar_texture.png");
+            game.load.image("bg",                           "assets/play_state_background.png");
+            game.load.image("spell_holy_powerwordshield",   "assets/icons/spell_holy_powerwordshield.jpg");
+            game.load.image("blue_particle",                "assets/textures/blue.png");
+            game.load.bitmapFont("myriad",                  "assets/fonts/font.png", "assets/fonts/font.xml");
         }
 
         onWindowResize(data) {

@@ -31,12 +31,18 @@
                     var race = game.rnd.between(player_race.MIN, player_race.MAX);
                     var level = 100;
                     var name = data.generatePlayerName();
-                    
-                    var unit = this.playState.raid.createUnit(classs,race,level,name);
-                    this.raid.push(new UnitFrame(this.container,this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit, this.playState));
+
+                    var unit = this.playState.raid.createUnit(classs, race, level, name);
+                    this.raid.push(new UnitFrame(this.container, this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit, this.playState));
                 }
             }
-            // Arrange the frames spacing etc. to be within the boundaries set in this class
+
+            /* Totally uneeded fancy effect */
+            for (var player = 0; player < this.raid.length; player++) {
+                var unitFrame_frame = this.raid[player].container;
+                game.add.tween(unitFrame_frame).to({ x: window.innerWidth/2, y:-200 }, game.rnd.between(1200, 1500), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
+            }
+
         }
     }
 }
