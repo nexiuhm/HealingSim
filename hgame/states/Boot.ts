@@ -30,7 +30,11 @@ namespace States {
             // Set scalemode for the game.
             game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
             game.scale.onSizeChange.add((data) => this.onWindowResize(data));
-           
+            
+            // Register game states
+            game.state.add("MainMenu", States.MainMenu);
+            game.state.add("Play", States.Play);
+
             // Register addons to the game
             game.addons.add("Cast Bar 0.1", Addons.CastFrame);
             game.addons.add("Raid Frames 0.1", Addons.RaidFrame);
