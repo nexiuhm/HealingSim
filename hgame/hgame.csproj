@@ -22,6 +22,7 @@
     <Content Include="app.css" />
     <Content Include="assets\fonts\font.png" />
     <Content Include="assets\fonts\font.xml" />
+    <Content Include="assets\icons\power_infusion.jpg" />
     <Content Include="assets\textures\action_bar_texture.png" />
     <Content Include="assets\textures\BantoBar.png" />
     <Content Include="assets\play_state_background.png" />

@@ -25,8 +25,11 @@
 
             // TEST
 
-            var test = new CooldownFrame(this);
-
+            var test = new CooldownFrame(this, 5, 500, 500);
+           
+            var test2 = new CooldownFrame(this, 2, 555, 500);
+        
+           
         }
 
         update() {

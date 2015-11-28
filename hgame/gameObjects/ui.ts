@@ -156,49 +156,56 @@ class CooldownFrame {
     playState: States.Play;
 
     // Display objects
+    container: Phaser.Group;
     spellIcon: Phaser.Image;
     texture;
     cd_overlay: Phaser.Graphics;
 
-    // haxx
-    angle = {current: 0};
+    // Angle needs to be an object so we can pass it as a reference to the onGameUpdate callback
+    angle = {current: 0}; 
     animTween: Phaser.Tween;
-    constructor(state: States.Play) {
+
+    constructor(state: States.Play,spellid,x,y) {
 
         this.playState = state;
-        // listen to cooldown start event
-        this.playState.events.ON_COOLDOWN_START.add((e) => this._onCooldownStart(e));
-        this.playState.events.ON_COOLDOWN_ENDED.add(() => this._onCooldownEnded());
-        var container = this.playState.add.group();
-        container.x = 500;
-        container.y = 500;
+        this.spellid = spellid; 
+
+        this.container = this.playState.add.group();
+        this.container.x = x;
+        this.container.y = y;
 
 
         // Spell icon
-        var spellIcon = this.playState.add.image(0, 0, "spell_holy_powerwordshield");
+        var spellIcon = this.playState.add.image(0, 0, "icon_"+spellid);
         spellIcon.width = this.w;
         spellIcon.height = this.h;
         spellIcon.alpha = 1;
         // Alpha mask for cooldown overlay
-        var mask = this.playState.add.graphics(500, 500);
+        var mask = this.playState.add.graphics(this.container.x, this.container.y);
         mask.beginFill(0xFFFFFF);
         mask.drawRect(0, 0, this.w, this.h);
         
         // Cooldown overlay arc init
         this.cd_overlay = this.playState.add.graphics(0, 0);
-        this.cd_overlay.alpha = 0.7;
-        
+        this.cd_overlay.alpha = 0.8;
         this.cd_overlay.mask = mask;
         this.cd_overlay.blendMode = PIXI.blendModes.MULTIPLY;
 
-        container.add(spellIcon);
-        container.add(this.cd_overlay);
+        // adding displayObjects to the parent container
+        this.container.add(spellIcon);
+        this.container.add(this.cd_overlay);
+
+        // listen to cooldown start event
+        this.playState.events.ON_COOLDOWN_START.add((e) => this._onCooldownStart(e));
+        this.playState.events.ON_COOLDOWN_ENDED.add((e) => this._onCooldownEnded(e));
     }
 
     private _onCooldownStart(event) {
+        this.cd_overlay.alpha = 0.8;
         // The event is fired every time a spell cooldown starts, so we need to check if its the correct spell.
-        //if (event.spellid !== this.spellid)
-        //    return;
+        console.log("E: " + event.spellid + "  L: " + this.spellid);
+        if (event.spellid != this.spellid)
+           return;
         // Create a timer that updates a variable locally.
         this.animTween = this.playState.add.tween(this.angle).to({ current: 270 }, event.cooldownLenght,undefined, true);
         // Hook the update cooldown arc to the main loop
@@ -207,30 +214,30 @@ class CooldownFrame {
         console.log(" In _coooldownstart : " + event.cooldownLenght);
     }
 
-    private _onCooldownEnded() {
-      
-        this.playState.events.GAME_LOOP_UPDATE.removeAll();
-        this.cd_overlay.clear();
+    private _onCooldownEnded(event) {
+        if (event.spellid != this.spellid)
+            return;
+        //this.hook.remove();
+        this.cd_overlay.alpha = 0;
         this.animTween.stop();
         this.angle.current = 0;
         this.cd_overlay.clear();
-     
-        console.log(" in cooldown ednded");
- 
-        // remove the hook
-        // clear the graphics
-        // 
+    
     }
 
     private _updateCooldownArc() {
-        console.log("UPDATING");
-        
+
         this.cd_overlay.clear();
         this.cd_overlay.beginFill(0x323232);
         this.cd_overlay.arc(25, 25, 50, Phaser.Math.degToRad(270), Phaser.Math.degToRad(this.angle.current), true);
         this.cd_overlay.endFill();
         // clear
         // redraw based on new values
+    }
+
+    public setPos(x:number, y:number) {
+        this.container.x = x;
+        this.container.y = y;
     }
 
 }

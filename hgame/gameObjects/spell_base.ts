@@ -9,6 +9,7 @@ class SpellBase {
     name: string;
     base_casttime: number;
     base_cooldown: number;
+    spellid: number;
     // #################
     player: Player;
     target: Player;
@@ -28,6 +29,7 @@ class SpellBase {
         this.powerType = spelldata.resourceType;
         this.school = spelldata.school;
         this.name = spelldata.name;
+        this.spellid = spelldata.id;
         this.base_casttime = spelldata.casttime;
         this.base_cooldown = spelldata.cooldown;
 
@@ -84,7 +86,7 @@ class SpellBase {
         var cd = this.cooldown();
         // Start the timer with callback
         this.current_cooldown = game.time.events.add(cd, () => this.onCooldownReady());
-        this.player.events.ON_COOLDOWN_START.dispatch({ cooldownLenght: cd });
+        this.player.events.ON_COOLDOWN_START.dispatch({ cooldownLenght: cd, spellid:this.spellid });
     }
 
    can_use():boolean {
@@ -101,9 +103,7 @@ class SpellBase {
     }
 
     cast_time() {
-        // ### TODO #######
         return this.base_casttime * (1-(this.player.total_haste()/100));
-
     }
 
     cancel_cast() {
@@ -117,9 +117,8 @@ class SpellBase {
     }
 
     onCooldownReady() {
-        console.log("CD READY");
         this.onCooldown = false;
-        this.player.events.ON_COOLDOWN_ENDED.dispatch();
+        this.player.events.ON_COOLDOWN_ENDED.dispatch({ spellid: this.spellid });
     }
 
     cooldown() {

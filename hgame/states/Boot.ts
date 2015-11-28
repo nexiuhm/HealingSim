@@ -9,8 +9,8 @@ namespace States {
             game.load.image("castbar_texture2",             "assets/textures/LiteStep.png");
             game.load.image("ab_texture",                   "assets/textures/action_bar_texture.png");
             game.load.image("bg",                           "assets/play_state_background.png");
-            game.load.image("spell_holy_powerwordshield",   "assets/icons/spell_holy_powerwordshield.jpg");
-            game.load.image("blue_particle",                "assets/textures/blue.png");
+            game.load.image("icon_5",                       "assets/icons/spell_holy_powerwordshield.jpg");
+            game.load.image("icon_2",                       "assets/icons/power_infusion.jpg");
             game.load.bitmapFont("myriad",                  "assets/fonts/font.png", "assets/fonts/font.xml");
         }
 

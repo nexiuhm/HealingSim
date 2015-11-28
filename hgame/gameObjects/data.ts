@@ -80,16 +80,17 @@
             resource_cost: 10,
             resource_type: "mana",
             cooldown: 0,
-            name: 'Flash Of Light'
-
+            name: 'Flash Of Light',
+            id: 1
         },
 
         power_infusion: {
             casttime: 0,
             resource_cost: 10,
             resource_type: "mana",
-            cooldown: 120000,
-            name: 'Power Infusion'
+            cooldown: 30000,
+            name: 'Power Infusion',
+            id: 2
 
         },
 
@@ -98,7 +99,8 @@
             resource_cost: 10,
             resource_type: "mana",
             cooldown: 0,
-            name: 'Flash Of Light'
+            name: 'Flash Of Light',
+            id: 3
 
         },
 
@@ -107,7 +109,9 @@
             resource_cost: 10,
             resource_type: "mana",
             cooldown: 0,
-            name: 'Chain Heal'
+            name: 'Chain Heal',
+            id: 4
+            
 
         },
 
@@ -116,7 +120,8 @@
             resource_cost: 10,
             resource_type: "mana",
             cooldown: 4000,
-            name: 'Power Word Shield'
+            name: 'Power Word Shield',
+            id: 5
         },
 
         clarity_of_will: {
@@ -124,7 +129,8 @@
             resource_cost: 10,
             resource_type: "mana",
             cooldown: 0,
-            name: 'Clarity Of Will'
+            name: 'Clarity Of Will',
+            id: 6
         }
 
 
