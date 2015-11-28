@@ -85,11 +85,11 @@ class UnitFrame {
         // Set up event listeners. ### TODO Need a way to filter out events that is not coming from this unit
         this.state.events.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
         this.state.events.UNIT_ABSORB.add(() => this.UPDATE());
-        this.state.events.UNIT_DEATH.add(() => this.UNIT_DEATH());
+        this.state.events.UNIT_DEATH.add((evt) => this.UNIT_DEATH(evt));
     }
 
     UPDATE() {
-
+        
         var new_health_width = this.calcBarWidth(this.unit.getCurrentHealth(), this.unit.getMaxHealth());
         var new_absorb_width = this.calcBarWidth(this.unit.getAbsorb(), this.unit.getMaxHealth());
         // Need to update the x value of the absorb everytime the health "moves"
@@ -117,8 +117,9 @@ class UnitFrame {
         // animate the change in resource
     }
 
-    UNIT_DEATH() {
-
+    UNIT_DEATH(evt) {
+        if (evt.unit != this.unit)
+            return;
         this.health.width = this.width;
         this.unit_name.setText("DEAD");
         this.health.alpha = 0;

@@ -171,7 +171,7 @@
             if (value <= 0) {
                 this.stats.health.value = 0;
                 this.alive = false;
-                this.events.UNIT_DEATH.dispatch();
+                this.events.UNIT_DEATH.dispatch({ unit: this });
                 return;
             }
             if (value >= this.getMaxHealth()) {

@@ -16,12 +16,13 @@
 
             // Init player. ## TODO ##: Use data from selection screen. See Phaser documentation for sending args between states?
             this.player = this.raid.createUnit(class_e.PRIEST, race_e.RACE_BLOOD_ELF, 100, "Player");
-
+            this.raid.addPlayer(this.player);
+            this.raid.generateTestPlayers();
             // Load enabled addons
             game.addons.loadEnabledAddons(this);
 
             // Start the boss/healing simulator
-            this.raid.startTestDamage(this.player);
+            this.raid.startTestDamage();
 
             // TEST
 

@@ -24,15 +24,14 @@
             // TODO
             // Create a UnitFrame for each player in the raid
             //
+            var playersInRaid = this.playState.raid.getPlayerList();
+            console.log(this.playState.raid.getPlayerList());
             for (var g = 0; g < 4; g++) {
                 for (var p = 0; p < 5; p++) {
-
-                    var classs = game.rnd.between(player_class.MIN, player_class.MAX);
-                    var race = game.rnd.between(player_race.MIN, player_race.MAX);
-                    var level = 100;
-                    var name = data.generatePlayerName();
-
-                    var unit = this.playState.raid.createUnit(classs, race, level, name);
+             
+                    var unit = playersInRaid[(g*5) + p];
+                    if (!unit)
+                        break;
                     this.raid.push(new UnitFrame(this.container, this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit, this.playState));
                 }
             }
