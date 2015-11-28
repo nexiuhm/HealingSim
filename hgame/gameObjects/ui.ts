@@ -201,17 +201,16 @@ class CooldownFrame {
     }
 
     private _onCooldownStart(event) {
-        this.cd_overlay.alpha = 0.8;
+       
         // The event is fired every time a spell cooldown starts, so we need to check if its the correct spell.
-        console.log("E: " + event.spellid + "  L: " + this.spellid);
         if (event.spellid != this.spellid)
            return;
         // Create a timer that updates a variable locally.
+        this.cd_overlay.alpha = 0.8;
         this.animTween = this.playState.add.tween(this.angle).to({ current: 270 }, event.cooldownLenght,undefined, true);
         // Hook the update cooldown arc to the main loop
         this.playState.events.GAME_LOOP_UPDATE.add(() => this._updateCooldownArc());
 
-        console.log(" In _coooldownstart : " + event.cooldownLenght);
     }
 
     private _onCooldownEnded(event) {
@@ -233,11 +232,6 @@ class CooldownFrame {
         this.cd_overlay.endFill();
         // clear
         // redraw based on new values
-    }
-
-    public setPos(x:number, y:number) {
-        this.container.x = x;
-        this.container.y = y;
     }
 
 }
