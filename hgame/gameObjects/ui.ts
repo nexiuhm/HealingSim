@@ -147,7 +147,93 @@ class UnitFrame {
         this.absorb.drawRect(0, 0, 1, this.height);
     }
 }
+class CooldownFrame {
+    x = 500;
+    y = 500;
+    w = 50;
+    h = 50;
+    spellid;
+    playState: States.Play;
 
+    // Display objects
+    spellIcon: Phaser.Image;
+    texture;
+    cd_overlay: Phaser.Graphics;
+
+    // haxx
+    angle = {current: 0};
+    animTween: Phaser.Tween;
+    constructor(state: States.Play) {
+
+        this.playState = state;
+        // listen to cooldown start event
+        this.playState.events.ON_COOLDOWN_START.add((e) => this._onCooldownStart(e));
+        this.playState.events.ON_COOLDOWN_ENDED.add(() => this._onCooldownEnded());
+        var container = this.playState.add.group();
+        container.x = 500;
+        container.y = 500;
+
+
+        // Spell icon
+        var spellIcon = this.playState.add.image(0, 0, "spell_holy_powerwordshield");
+        spellIcon.width = this.w;
+        spellIcon.height = this.h;
+        spellIcon.alpha = 1;
+        // Alpha mask for cooldown overlay
+        var mask = this.playState.add.graphics(500, 500);
+        mask.beginFill(0xFFFFFF);
+        mask.drawRect(0, 0, this.w, this.h);
+        
+        // Cooldown overlay arc init
+        this.cd_overlay = this.playState.add.graphics(0, 0);
+        this.cd_overlay.alpha = 0.7;
+        
+        this.cd_overlay.mask = mask;
+        this.cd_overlay.blendMode = PIXI.blendModes.MULTIPLY;
+
+        container.add(spellIcon);
+        container.add(this.cd_overlay);
+    }
+
+    private _onCooldownStart(event) {
+        // The event is fired every time a spell cooldown starts, so we need to check if its the correct spell.
+        //if (event.spellid !== this.spellid)
+        //    return;
+        // Create a timer that updates a variable locally.
+        this.animTween = this.playState.add.tween(this.angle).to({ current: 270 }, event.cooldownLenght,undefined, true);
+        // Hook the update cooldown arc to the main loop
+        this.playState.events.GAME_LOOP_UPDATE.add(() => this._updateCooldownArc());
+
+        console.log(" In _coooldownstart : " + event.cooldownLenght);
+    }
+
+    private _onCooldownEnded() {
+      
+        this.playState.events.GAME_LOOP_UPDATE.removeAll();
+        this.cd_overlay.clear();
+        this.animTween.stop();
+        this.angle.current = 0;
+        this.cd_overlay.clear();
+     
+        console.log(" in cooldown ednded");
+ 
+        // remove the hook
+        // clear the graphics
+        // 
+    }
+
+    private _updateCooldownArc() {
+        console.log("UPDATING");
+        
+        this.cd_overlay.clear();
+        this.cd_overlay.beginFill(0x323232);
+        this.cd_overlay.arc(25, 25, 50, Phaser.Math.degToRad(270), Phaser.Math.degToRad(this.angle.current), true);
+        this.cd_overlay.endFill();
+        // clear
+        // redraw based on new values
+    }
+
+}
 class TargetFrame extends UnitFrame {
     ownerUnit: Player;
     constructor(parentContainer,x, y, w, h, unit: Player, state: States.Play) {

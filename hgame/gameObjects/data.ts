@@ -115,7 +115,7 @@
             casttime: 0,
             resource_cost: 10,
             resource_type: "mana",
-            cooldown: 1000,
+            cooldown: 4000,
             name: 'Power Word Shield'
         },
 

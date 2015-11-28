@@ -84,6 +84,7 @@ class SpellBase {
         var cd = this.cooldown();
         // Start the timer with callback
         this.current_cooldown = game.time.events.add(cd, () => this.onCooldownReady());
+        this.player.events.ON_COOLDOWN_START.dispatch({ cooldownLenght: cd });
     }
 
    can_use():boolean {
@@ -118,6 +119,7 @@ class SpellBase {
     onCooldownReady() {
         console.log("CD READY");
         this.onCooldown = false;
+        this.player.events.ON_COOLDOWN_ENDED.dispatch();
     }
 
     cooldown() {

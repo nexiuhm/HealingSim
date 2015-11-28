@@ -36,7 +36,6 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="addons\action_bar.ts" />
     <TypeScriptCompile Include="addons\castbar.ts" />
     <TypeScriptCompile Include="addons\console.ts" />
     <TypeScriptCompile Include="addons\debug.ts" />

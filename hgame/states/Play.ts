@@ -23,6 +23,10 @@
             // Start the boss/healing simulator
             this.raid.startTestDamage(this.player);
 
+            // TEST
+
+            var test = new CooldownFrame(this);
+
         }
 
         update() {
