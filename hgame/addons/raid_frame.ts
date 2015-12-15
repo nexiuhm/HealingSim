@@ -25,8 +25,7 @@
             // Create a UnitFrame for each player in the raid
             //
             var playersInRaid = this.playState.raid.getPlayerList();
-            console.log(this.playState.raid.getPlayerList());
-            for (var g = 0; g < 4; g++) {
+            for (var g = 0; g < 5; g++) {
                 for (var p = 0; p < 5; p++) {
              
                     var unit = playersInRaid[(g*5) + p];
@@ -41,7 +40,6 @@
                 var unitFrame_frame = this.raid[player].container;
                 game.add.tween(unitFrame_frame).to({ x: window.innerWidth/2, y:-200 }, game.rnd.between(1200, 1500), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
             }
-
         }
     }
 }

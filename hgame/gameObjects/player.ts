@@ -4,14 +4,17 @@
         name: string;
         classId: class_e;
         race: race_e;
+
         // ----Players current target--------------
         target: Player = this;
         isCasting: boolean = false;
         alive: boolean = true;
         instance: Raid = null; // reference to the raid group the players are in
+
         // --- Players spells ---------------------
         spells: any; 
         buffs: any;
+
         // --- Reference to the event manager --- //
         events: EventManager;
         
@@ -45,7 +48,7 @@
         constructor( _class:class_e, race:race_e, level, name:string,events:EventManager) {
             
             this.events = events;
-
+            this.level = level;
             this.race = race;
             this.name = name;
             this.classId = _class;
@@ -58,8 +61,8 @@
             this.base_stats.agility =   data.classBaseStats(this.classId, this.level, stat_e.AGILITY) + data.raceBaseStats(this.race, stat_e.AGILITY); // +gear
             this.base_stats.stamina =   data.classBaseStats(this.classId, this.level, stat_e.STAMINA) + data.raceBaseStats(this.race, stat_e.STAMINA) + this.gear_stats.stamina; // + gear
             this.base_stats.intellect = data.classBaseStats(this.classId, this.level, stat_e.INTELLECT) + data.raceBaseStats(this.race, stat_e.INTELLECT);// + gear
-            this.base_stats.spirit = data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);// + gear
-            this.base_stats.strenght = data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);// + gear
+            this.base_stats.spirit =    data.classBaseStats(this.classId, this.level, stat_e.SPIRIT) + data.raceBaseStats(this.race, stat_e.SPIRIT);// + gear
+            this.base_stats.strenght =  data.classBaseStats(this.classId, this.level, stat_e.STRENGHT) + data.raceBaseStats(this.race, stat_e.STRENGHT);// + gear
 
             this.base_stats.mastery_rating = 0;
             this.base_stats.haste_rating = this.gear_stats.haste_rating;

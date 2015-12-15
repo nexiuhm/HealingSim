@@ -12,7 +12,7 @@
     }
 
     export function classBaseStats(_class: class_e, level: number, stat: stat_e): number {
-        return class_base_stats_by_level[_class+1][level-1][stat];
+        return class_base_stats_by_level[(_class+1)][(level-1)][stat];
     }
 
     export function getKeyBindings() {
@@ -70,7 +70,7 @@
         ACTION_BUTTON_1: { key: '1', spell: 'flash_of_light' },
         ACTION_BUTTON_2: { key: '2', spell: 'power_word_shield' },
         ACTION_BUTTON_3: { key: '3', spell: 'clarity_of_will' },
-         ACTION_BUTTON_4: { key: '4', spell: 'power_infusion' }
+        ACTION_BUTTON_4: { key: '4', spell: 'power_infusion' }
     };
 
     var spelldata = {
