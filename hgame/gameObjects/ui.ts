@@ -57,28 +57,40 @@ class StatusBar  {
     // defaults
     private _animationStyle = Phaser.Easing.Linear;
     private _animationDuration = 200;
-    private _width:number = 100;
-    private _height:number =  50;
+    private _width:number = 200;
+    private _height:number =  20;
 
-    // displayObject
+    // displayObjects
     private _bar: Phaser.Graphics;
-
+    private _texture: Phaser.Sprite;
     //
-    private _minValue;
-    private _maxValue;
-    private _currentValue: number;
+    private _minValue = 0;
+    private _maxValue = 1;
+    private _currentValue = 1;
      
-    constructor( maxValue: number) {
-        this._minValue = 0;
-        this._maxValue = maxValue;
-        this._currentValue = maxValue;
+    constructor(parent:Phaser.Group) {
+       
 
-        this._bar = new Phaser.Graphics(game, 0, 0);
+        this._bar = new Phaser.Graphics(game, 400, 400);
+        this._bar.beginFill(0x00cc00);
+        this._bar.drawRect(0, 0, this._width, this._height);
+        this._bar.endFill();
+        
+        parent.addChild(this._bar);
+
+        this._texture = new Phaser.Sprite(game, 0, 0, "castbar_texture");
+        this._texture.width = this._width;
+        this._texture.height = this._height;
+        this._texture.blendMode = PIXI.blendModes.MULTIPLY;
+
+        this._bar.addChild(this._texture);
+
+        this._updateBarWidth();
 
     };
 
     private _updateBarWidth() {
-        if (this._currentValue >= this._minValue) {
+        if (this._currentValue <= this._minValue) {
             this._bar.alpha = 0;
         }
         else {
@@ -99,42 +111,32 @@ class StatusBar  {
     }
 
     setTexture() {
-        // Create the texture layer
-        /*
-        this.overlay_texture = new Phaser.Sprite(game, 0, 0, "castbar_texture");
-        this.overlay_texture.blendMode = PIXI.blendModes.MULTIPLY;
-        this.overlay_texture.width = w;
-        this.overlay_texture.height = h;
-        */
+        // 
     }
-    setMaxValue(newMaxValue:number) {
+    setMaxValue(newMaxValue: number) {
+        this._maxValue = newMaxValue;
         this._updateBarWidth();
     }
 
     setValue(newValue:number) {
-        if (newValue > this._maxValue)
-            newValue = this._maxValue;
+        this._currentValue = newValue;
+            
         this._updateBarWidth();
        
     }
 }
+/*
 class UnitFrame {
     constructor(parentContainer, x, y, w, h, unit: Player, playState: States.Play) {
     }
 }
-/* ## Major todo ##
+*/
 class UnitFrame {
     //options
     unit: Player;
-    width: number;
-    height: number;
-    x: number;
-    y: number;
     config = {
         allowedAbsorbOverflow: 10
     };
-    container;
-    state: States.Play;
 
     // Atonomy of the unit frame
     healthBar: StatusBar;
@@ -142,60 +144,54 @@ class UnitFrame {
     powerBar: StatusBar;
     unit_name: Phaser.BitmapText;
     health_text: Phaser.BitmapText;
+    container;
 
-    constructor(parentContainer,x, y, w, h, unit: Player, playState: States.Play) {
- 
+    constructor(parentContainer,x, y, w, h, unit: Player) {
+        return;
         // Reference to the player object we are representing.
         this.unit = unit;
 
         //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
-        this.container = new Frame()
-            .setSize(width, height);
-        this.container.enableInteraction();
-        
-        // Create the healthbar layer
-        this.health = new StatusBar();
-                        .setTexture
-        // Create absorb layer
-        this.absorb = new StatusBar();
-        this.absorb.blendMode = PIXI.blendModes.ADD;
-        this.absorb.alpha = 0.5;
+        this.container = new Phaser.Group(game); // Should be frame
+        // Create the healthbar
+                                      // Parent //
+        this.healthBar = new StatusBar(this.container);
+                        
+        // Create absorb indicator
+        this.absorbBar = new StatusBar(this.container);
 
+        // Manabar, rage , energy
+        this.powerBar = new StatusBar(this.container);
        
-
-        // Create the player name layer
-        this.unit_name = this.state.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
-        this.unit_name.tint = data.getClassColor(this.unit.classId);
-        this.unit_name.anchor.set(0.5);
-        
+        // this.roleIcon = new StatsIcon();
+        // Shows if tank healer or dps
     
-        // Set up event listeners. ### TODO Need a way to filter out events that is not coming from this unit
-        this.state.events.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
-        this.state.events.UNIT_ABSORB.add(() => this.UPDATE());
-        this.state.events.UNIT_DEATH.add((evt) => this.UNIT_DEATH(evt));
+        // listen for HealthChange
+        // listen for MaxHealthChange
+        // listen for Death
+        // listen for Role Change
     }
 
-    UPDATE() {
-        
-       
+    UNIT_HEALTH_CHANGE() {
+        this.healthBar.setValue(this.unit.getCurrentHealth());
     }
-
-    UNIT_MANA_CHANGE(eventData) {
-        // animate the change in resource
+    UNIT_MAX_HEALTH_CHANGED() {
+        this.healthBar.setMaxValue(this.unit.getMaxHealth());
+    }
+    UNIT_MANA_CHANGE() {
+    }
+    UNIT_ROLE_CHANGED() {
     }
 
     UNIT_DEATH(evt) {
         if (evt.unit != this.unit)
             return;
-        this.health.width = this.width;
-        this.unit_name.setText("DEAD");
-        this.health.alpha = 0;
-        this.absorb.alpha = 0;
+       
     }
 
 }
-*/
-class CooldownFrame {
+/* ## TODO ## Make this more general */
+class StatusIcon {
     x = 500;
     y = 500;
     w = 50;

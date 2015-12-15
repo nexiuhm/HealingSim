@@ -29,11 +29,10 @@
             this.raid.startTestDamage();
 
             // TEST
-                                               
-            var test =  new CooldownFrame(this, 5, 500, 500);
-           
-            var test2 = new CooldownFrame(this, 2, 555, 500);
-        
+            var test =  new StatusIcon(this, 5, 500, 500);
+            var test2 = new StatusIcon(this, 2, 555, 500);
+            var fuckingWorkAlready = new StatusBar(this.world).setValue(1);                  
+
            
         }
 
