@@ -15,7 +15,7 @@
             this.interactionLayer = screen.add.sprite(0, 0,"castbar_texture");
             
             new UnitFrame(this.container,widthFactor*25 - this.unitFrameWidth/2, heightFactor * 75 - this.unitFrameHeight / 2, 300, 50, screen.player, screen);
-            new TargetFrame(this.container,widthFactor * 75 - this.targetFrameWidth/2, heightFactor * 75 - (this.targetFrameHeight / 2), 300, 50, screen.player, screen);
+            //new TargetFrame(this.container,widthFactor * 75 - this.targetFrameWidth/2, heightFactor * 75 - (this.targetFrameHeight / 2), 300, 50, screen.player, screen);
             
             /* ## Below is experimental stuff, will clean up ##*/
             this.interactionLayer.inputEnabled = true;

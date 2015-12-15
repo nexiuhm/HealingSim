@@ -37,11 +37,12 @@
             }
 
             /* Totally uneeded fancy effect */
+            /*
             for (var player = 0; player < this.raid.length; player++) {
                 var unitFrame_frame = this.raid[player].container;
                 game.add.tween(unitFrame_frame).to({ x: window.innerWidth/2, y:-200 }, game.rnd.between(1200, 1500), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
             }
-
+            */
         }
     }
 }
