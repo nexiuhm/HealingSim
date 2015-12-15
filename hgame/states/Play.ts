@@ -10,14 +10,18 @@
             // Start the world fade-in effect
             this.world.alpha = 0;
             this.add.tween(this.world).to({ alpha: 1 }, 4000, Phaser.Easing.Cubic.InOut, true);
-
+             
             // Add a background to the screen
             game.add.image(game.stage.x, game.stage.y, "bg");
 
+            // Set raid size
+            this.raid.setRaidSize(raid_size.TWENTYFIVEMAN);
+            
             // Init player. ## TODO ##: Use data from selection screen. See Phaser documentation for sending args between states?
             this.player = this.raid.createUnit(class_e.PRIEST, race_e.RACE_BLOOD_ELF, 100, "Player");
-            this.raid.addPlayer(this.player);
             this.raid.generateTestPlayers();
+            this.raid.addPlayer(this.player);
+
             // Load enabled addons
             game.addons.loadEnabledAddons(this);
 
