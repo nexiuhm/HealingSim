@@ -25,8 +25,8 @@
             this.raid.startTestDamage();
 
             // TEST
-
-            var test = new CooldownFrame(this, 5, 500, 500);
+                                               
+            var test =  new CooldownFrame(this, 5, 500, 500);
            
             var test2 = new CooldownFrame(this, 2, 555, 500);
         

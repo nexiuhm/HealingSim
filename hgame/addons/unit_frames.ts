@@ -5,7 +5,7 @@
         unitFrameWidth = 300;
         targetFrameHeight = 50;
         targetFrameWidth = 300;
-        interactionLayer;
+        interactionLayer: Phaser.Sprite;
         container;
         x;
         y;

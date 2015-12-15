@@ -4,6 +4,109 @@
 /*      In it most basic form it will only display a healthbar.  */
 /*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
 
+
+class Frame {
+    width = 200;
+    height = 100;
+    x = 200;
+    y = 200;
+    interactionEnabled = true;
+    playState: States.Play;
+    // Main container
+    displayObjectContainer: Phaser.Group;
+    // Interaction / input overlay
+    interactionLayer: Phaser.Sprite;
+
+    constructor(x?, y?, w?, h?){
+        this.displayObjectContainer = new Phaser.Group(game);
+        this.interactionLayer = new Phaser.Sprite(game, 0, 0);
+
+        // Set default pos
+        this.displayObjectContainer.x = this.x;
+        this.displayObjectContainer.y = this.y;
+
+        this.interactionLayer.width = this.width;
+        this.interactionLayer.height = this.height;
+
+        this.displayObjectContainer.add(this.interactionLayer);
+        
+    }
+
+    enableInteraction() {
+        this.interactionLayer.inputEnabled = true;
+    }
+
+    setSize(width,height) {
+
+    };
+
+    addChild() {
+    };
+
+    hide() {
+    };
+
+    setPos(x, y) {
+    };
+
+}
+
+
+
+class StatusBar  {
+    // defaults
+    private _animationStyle = Phaser.Easing.Linear;
+    private _animationDuration = 200;
+    private _width:number = 100;
+    private _height:number =  50;
+
+    // displayObject
+    private _bar: Phaser.Graphics;
+
+    //
+    private _minValue;
+    private _maxValue;
+    private _currentValue: number;
+     
+    constructor(maxValue: number) {
+        this._minValue = 0;
+        this._maxValue = maxValue;
+        this._currentValue = maxValue;
+
+        this._bar = new Phaser.Graphics(game, 0, 0);
+
+    };
+
+    private _updateBarWidth() {
+        if (this._currentValue >= this._minValue) {
+            this._bar.alpha = 0;
+        }
+        else {
+            this._bar.alpha = 1;
+            var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
+            this._bar.width = barWidthInPixels;
+        }
+    }
+
+    /* Public interface below */
+
+    setColor() {
+    }
+
+    setMinMaxValues(){
+    }
+
+    setMaxValue(newMaxValue:number) {
+        this._updateBarWidth();
+    }
+
+    setValue(newValue:number) {
+        if (newValue > this._maxValue)
+            newValue = this._maxValue;
+        this._updateBarWidth();
+       
+    }
+}
 class UnitFrame {
     //options
     unit: Player;
@@ -148,7 +251,7 @@ class UnitFrame {
         this.absorb.drawRect(0, 0, 1, this.height);
     }
 }
-class CooldownFrame {
+class CooldownFrame extends Frame {
     x = 500;
     y = 500;
     w = 50;
@@ -166,7 +269,7 @@ class CooldownFrame {
     angle = {current: 0}; 
     animTween: Phaser.Tween;
 
-    constructor(state: States.Play,spellid,x,y) {
+    constructor(state: States.Play, spellid, x, y ) {
 
         this.playState = state;
         this.spellid = spellid; 
@@ -177,10 +280,10 @@ class CooldownFrame {
 
 
         // Spell icon
-        var spellIcon = this.playState.add.image(0, 0, "icon_"+spellid);
+        var spellIcon = this.playState.add.image(0, 0, "icon_" + spellid);
         spellIcon.width = this.w;
         spellIcon.height = this.h;
-        spellIcon.alpha = 1;
+
         // Alpha mask for cooldown overlay
         var mask = this.playState.add.graphics(this.container.x, this.container.y);
         mask.beginFill(0xFFFFFF);
@@ -218,6 +321,7 @@ class CooldownFrame {
         if (event.spellid != this.spellid)
             return;
         //this.hook.remove();
+        // #TODO## Remove hook from game loop
         this.cd_overlay.alpha = 0;
         this.animTween.stop();
         this.angle.current = 0;
