@@ -119,17 +119,12 @@
                 // Full absorb
                 if (this.stats.absorb > dmg.amount) {
                     this.setAbsorb(-dmg.amount);
-
                 }
-     
                 else {
                     dmg.amount -= this.stats.absorb;
                     this.setAbsorb(-this.stats.absorb);
-
-
                     this.setHealth(this.getCurrentHealth() - dmg.amount);
                 }
-
             }
         }
 
@@ -154,7 +149,6 @@
 
         resistance(dmg): number {
             return 0;
-
         }
 
         die() {
@@ -181,6 +175,7 @@
                 this.stats.health.value = this.getMaxHealth();
             }
             else {
+                console.log(this.stats.health.value);
                 this.stats.health.value = value;
             }
 
@@ -194,9 +189,7 @@
             if (!this.alive)
                 return;
 
-            
             this.stats.absorb += value;
-
             this.events.UNIT_ABSORB.dispatch(this);
             
             // ## TODO ##
@@ -219,7 +212,6 @@
 
             // Set target & emitt event 
             this.target = unit;
-            
             this.events.TARGET_CHANGE_EVENT.dispatch();
         }
         

@@ -103,47 +103,61 @@
     }
 
     startTestDamage() {
-        var tank = this.players[2];
+        var tank = this.players[1];
 
         // --- Create some random damage for testing purposes ----
-        var createSomeRandomDamage = setInterval(bossSwing.bind(this), 3600);
-        var createSomeRandomDamage2 = setInterval(singelTargetDamage.bind(this), 1560);
-        var createSomeRandomDamage3 = setInterval(applyAbsorb.bind(this), 1960);
-        var testAoeDamage = setInterval(aoeDamage.bind(this), 1960);
-        var testAoeHealing = setInterval(aoeHealing.bind(this), 2500);
+        var bossSwingInterval = setInterval(bossSwing.bind(this), 1500);
+        //var bossSingelTargetSpell = setInterval(singelTargetDamage.bind(this), 60000);
+        var tankSelfHealOrAbsorb = setInterval(applyAbsorb.bind(this), 3000);
+        var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 60000); // Big aoe after 3 minutes, 180000
+        var raidAoeDamage = setInterval(raidDamage.bind(this), 3000);
+        var raidAIHealing = setInterval(raidHealing.bind(this), 4000);
 
         function bossSwing() {
-            tank.recive_damage({ amount: game.rnd.between(15555, 338900) });
+            var bossSwing = game.rnd.between(105550, 238900);
+            var bossSwingCriticalHit = Math.random();
+
+            // 20% chance to critt. Experimental.
+            if (bossSwingCriticalHit < 0.8)
+                bossSwing *= 1.5;
+            
+            tank.recive_damage({ amount: game.rnd.between(105550, 238900) });
         }
 
-        function bossAoE() {
-        }
-
-        function raidDamage() {
-        }
-
-        function singelTargetDamage() {
-            var random = game.rnd.between(0, this.players.length);
-            this.players[random].recive_damage({ amount: game.rnd.between(100000, 250000) });
-        }
-
-        function encounterAdds() {
-        }
- 
-        function aoeDamage() {
-            var i = game.rnd.between(0, this.players.length);
-            for (; i < this.players.length; i++) {
-                var player = this.players[i];
-                player.recive_damage({ amount: game.rnd.between(25555, 68900) })
-
+        function bossAoEDamage() {
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.player[i]
+                player.recive_damage({ amount: 120000 });
             }
         }
 
-        function aoeHealing() {
+        function raidDamage() {
+            var i = game.rnd.between(0, this.players.length - 1);
+            for (; i < this.players.length; i++) {
+                var player = this.players[i];
+                player.recive_damage({ amount: game.rnd.between(85555, 168900) })
+            }
+        }
+
+        function singelTargetDamage() {
+            var random = game.rnd.between(0, this.players.length-1);
+            this.players[random].recive_damage({ amount: game.rnd.between(100000, 250000) });
+        }
+
+        function bossEncounterAdds() {
+        }
+ 
+        function raidHealing() {
+
             for (var i = 0; i < this.players.length; i++) {
                 var player = this.players[i];
-                player.setHealth(player.getCurrentHealth() + game.rnd.between(15000, 78900));
+                var incomingHeal = player.getCurrentHealth() + game.rnd.between(80000, 120000);
+                var criticalHeal = Math.random();
 
+                if (criticalHeal < 0.8)
+                    incomingHeal *= 1.5;
+
+                player.setHealth(incomingHeal);
             }
         }
 
