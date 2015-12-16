@@ -5,63 +5,77 @@
 /*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
 
 
-class Frame {
-    width = 200;
-    height = 100;
+/* Adding some extra functionality to the Phaser.Group  */
+
+class Frame extends Phaser.Group  {
+    _width = 200;
+    _height = 100;
     x = 200;
     y = 200;
     interactionEnabled = true;
-    playState: States.Play;
     // Main container
-    displayObjectContainer: Phaser.Group;
+    _displayObjectContainer: Phaser.Group;
     // Interaction / input overlay
-    interactionLayer: Phaser.Sprite;
+    private _interactionLayer: Phaser.Sprite;
 
-    constructor(x?, y?, w?, h?){
-        this.displayObjectContainer = new Phaser.Group(game);
-        this.interactionLayer = new Phaser.Sprite(game, 0, 0);
+    constructor(parent , x?, y?, w?, h?){
+        super(game,parent);
 
         // Set default pos
-        this.displayObjectContainer.x = this.x;
-        this.displayObjectContainer.y = this.y;
+ 
+        this._interactionLayer = new Phaser.Sprite(game, 0, 0);
 
-        this.interactionLayer.width = this.width;
-        this.interactionLayer.height = this.height;
+        this._interactionLayer.width = this._width;
+        this._interactionLayer.height = this._height;
 
-        this.displayObjectContainer.add(this.interactionLayer);
+        this.addChild(this._interactionLayer);
+        this._interactionLayer.bringToTop();
         
     }
 
     enableInteraction() {
-        this.interactionLayer.inputEnabled = true;
+        this._interactionLayer.inputEnabled = true;
+        // Test case
+        this._interactionLayer.events.onInputOver.add(function (e) {
+            console.log("I moused over a displayObject with enabled input");
+        });
     }
 
-    setSize(width,height) {
+    setSize(width, height) {
+        this._width = width;
+        this._height = height;
+        this._interactionLayer.width = this._width;
+        this._interactionLayer.height = this._height;
 
     };
 
-    addChild() {
-    };
+
 
     hide() {
+        this.alpha = 0;
     };
 
-    setPos(x, y) {
+    show() {
+        this.alpha = 1;
+    };
+
+    setPos(x:number, y:number) {
+        this.x = x;
+        this.y = y;
     };
 
 }
 
 
 
-class StatusBar  {
+class StatusBar extends Frame  {
     // defaults
-    private _animationStyle = Phaser.Easing.Linear;
+    private _animationStyle = "Linear";
     private _animationDuration = 200;
-    private _width:number = 200;
-    private _height:number =  20;
 
+    
     // displayObjects
-    private _bar: Phaser.Graphics;
+    private _bar: PIXI.Graphics;
     private _texture: Phaser.Sprite;
     //
     private _minValue = 0;
@@ -70,13 +84,16 @@ class StatusBar  {
      
     constructor(parent:Phaser.Group) {
        
-
-        this._bar = new Phaser.Graphics(game, 400, 400);
+        super(parent);
+        
+        
+        this.setSize(300, 50);
+        this.enableInteraction();
+        
+        this._bar = new Phaser.Graphics(game,0,0);
         this._bar.beginFill(0x00cc00);
         this._bar.drawRect(0, 0, this._width, this._height);
         this._bar.endFill();
-        
-        parent.addChild(this._bar);
 
         this._texture = new Phaser.Sprite(game, 0, 0, "castbar_texture");
         this._texture.width = this._width;
@@ -84,6 +101,10 @@ class StatusBar  {
         this._texture.blendMode = PIXI.blendModes.MULTIPLY;
 
         this._bar.addChild(this._texture);
+        
+        this.addChild(this._bar);
+
+        
 
         this._updateBarWidth();
 
@@ -125,13 +146,8 @@ class StatusBar  {
        
     }
 }
-/*
-class UnitFrame {
-    constructor(parentContainer, x, y, w, h, unit: Player, playState: States.Play) {
-    }
-}
-*/
-class UnitFrame {
+
+class UnitFrame extends Frame {
     //options
     unit: Player;
     config = {
@@ -144,24 +160,27 @@ class UnitFrame {
     powerBar: StatusBar;
     unit_name: Phaser.BitmapText;
     health_text: Phaser.BitmapText;
-    container;
 
-    constructor(parentContainer,x, y, w, h, unit: Player) {
-        return;
+    constructor(parent, unit: Player) {
+        super(parent);
         // Reference to the player object we are representing.
         this.unit = unit;
 
+        this.setPos(500, 600);
         //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
-        this.container = new Phaser.Group(game); // Should be frame
         // Create the healthbar
                                       // Parent //
-        this.healthBar = new StatusBar(this.container);
-                        
+        this.healthBar = new StatusBar(this);
+        this.healthBar.setPos(0, 50);
         // Create absorb indicator
-        this.absorbBar = new StatusBar(this.container);
+        this.absorbBar = new StatusBar(this);
+        this.absorbBar.setPos(0, 100);
+        
 
         // Manabar, rage , energy
-        this.powerBar = new StatusBar(this.container);
+       // this.powerBar = new StatusBar(this);
+
+
        
         // this.roleIcon = new StatsIcon();
         // Shows if tank healer or dps
@@ -171,7 +190,7 @@ class UnitFrame {
         // listen for Death
         // listen for Role Change
     }
-
+    
     UNIT_HEALTH_CHANGE() {
         this.healthBar.setValue(this.unit.getCurrentHealth());
     }

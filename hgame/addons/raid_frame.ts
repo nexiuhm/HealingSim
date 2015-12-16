@@ -31,7 +31,7 @@
                     var unit = playersInRaid[(g*5) + p];
                     if (!unit)
                         break;
-                    this.raid.push(new UnitFrame(this.container, this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit));
+                    //this.raid.push(new UnitFrame(this.container, this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit));
                 }
             }
 

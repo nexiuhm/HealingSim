@@ -31,7 +31,11 @@
             // TEST
             var test =  new StatusIcon(this, 5, 500, 500);
             var test2 = new StatusIcon(this, 2, 555, 500);
-            var fuckingWorkAlready = new StatusBar(this.world).setValue(1);                  
+
+            var UIParent = this.add.group();
+
+            var fuckingWorkAlready = new StatusBar(UIParent).setValue(1);  
+            var plz = new UnitFrame(UIParent, this.player);                
 
            
         }
