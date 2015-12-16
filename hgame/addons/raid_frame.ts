@@ -1,47 +1,48 @@
 ﻿namespace Addons {
     export class RaidFrame {
-        raid: Array<UnitFrame> = [];
+        raidFrames: Array<UnitFrame> = [];
         unitFrameHeight: number = 40;
         unitFrameWidth: number = 90;
         playState: States.Play;
         spacing: number = 2;
-        interactionLayer: Phaser.Sprite;
-        container: Phaser.Group
+        container: Frame;
         x;
         y;
         
         constructor(playState: States.Play) {
-            this.x = widthFactor * 50 - this.unitFrameWidth * 2;
-            this.y = heightFactor * 50 - this.unitFrameHeight * 2;
+
             this.playState = playState;
 
-            this.container = playState.add.group();
+            this.container = new Frame(playState.UIParent);
             this.createRaidFrame();
-            //this.interactionLayer = new Phaser.Sprite(game, 0, 0);
-            //this.container.addChild(this.interactionLayer);}
+            this.container.enableDrag();
+
+
         }
         createRaidFrame() {
-            // TODO
-            // Create a UnitFrame for each player in the raid
-            //
+
             var playersInRaid = this.playState.raid.getPlayerList();
             for (var g = 0; g < 5; g++) {
                 for (var p = 0; p < 5; p++) {
-             
                     var unit = playersInRaid[(g*5) + p];
                     if (!unit)
                         break;
-                    //this.raid.push(new UnitFrame(this.container, this.unitFrameWidth * g + this.x, p * (this.unitFrameHeight + this.spacing) + this.y, this.unitFrameWidth, this.unitFrameHeight, unit));
+                    var raidFrame = new UnitFrame(this.container, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
+                    raidFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
+                    this.raidFrames.push(raidFrame);
                 }
             }
 
-            /* Totally uneeded fancy effect */
-            /*
-            for (var player = 0; player < this.raid.length; player++) {
-                var unitFrame_frame = this.raid[player].container;
-                game.add.tween(unitFrame_frame).to({ x: window.innerWidth/2, y:-200 }, game.rnd.between(1200, 1500), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
+            /* Position parent frame base on how big the raid got */
+            this.container.x = widthFactor * 50 - this.unitFrameWidth * (g/2);
+            this.container.y = heightFactor * 50 - this.unitFrameHeight * (g/2);
+           
+            /* Spawn effect */
+            for (var player = 0; player < this.raidFrames.length; player++) {
+                var unitFrame = this.raidFrames[player];
+                game.add.tween(unitFrame).to({y:-800 }, 1550 + (player*10), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
             }
-            */
+            
         }
     }
 }

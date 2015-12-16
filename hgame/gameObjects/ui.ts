@@ -1,10 +1,4 @@
 ﻿
-// ### Major todo: Clean up & refactoring ###
-/*----  Unit frame to contain basic unit info. -------------- */ 
-/*      In it most basic form it will only display a healthbar.  */
-/*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
-
-
 /* Adding some extra functionality to the Phaser.Group  */
 
 class Frame extends Phaser.Group  {
@@ -17,28 +11,56 @@ class Frame extends Phaser.Group  {
     _displayObjectContainer: Phaser.Group;
     // Interaction / input overlay
     private _interactionLayer: Phaser.Sprite;
-
+    
     constructor(parent , x?, y?, w?, h?){
+        
         super(game,parent);
+       
 
         // Set default pos
  
         this._interactionLayer = new Phaser.Sprite(game, 0, 0);
 
-        this._interactionLayer.width = this._width;
-        this._interactionLayer.height = this._height;
+        this._interactionLayer.width = this.width;
+        this._interactionLayer.height = this.height;
 
         this.addChild(this._interactionLayer);
+        
         this._interactionLayer.bringToTop();
         
     }
 
+    addChild(child:PIXI.DisplayObject):PIXI.DisplayObject {
+        var childAdded = super.addChild(child)
+        this._interactionLayer.width = this.width;
+        this._interactionLayer.height = this.height;
+        return childAdded;
+    }
+    
+    private _drag() {
+        // Capture initial positions when the object is clicked
+        var initialMousePos = { x: this.game.input.x, y: this.game.input.y };
+        var containerInitialPos = { x: this.x, y: this.y };
+        this.alpha = 0.5;
+        // Attatch callback to the game main loop. Usure if we should use the event system for this.
+        MAINSTATE.events.GAME_LOOP_UPDATE.add(() => {
+            this.x = this.game.input.mousePointer.x - initialMousePos.x + containerInitialPos.x;
+            this.y = this.game.input.mousePointer.y - initialMousePos.y + containerInitialPos.y;
+        });
+    }
+
+    /* Public interface below */
+
+    // aka unlock
+    enableDrag() {
+        this.enableInteraction();
+        this._interactionLayer.events.onInputDown.add(() => { this._drag() });
+        this._interactionLayer.events.onInputUp.add(() => { MAINSTATE.events.GAME_LOOP_UPDATE.removeAll(); this.alpha = 1;});
+    }
+
     enableInteraction() {
         this._interactionLayer.inputEnabled = true;
-        // Test case
-        this._interactionLayer.events.onInputOver.add(function (e) {
-            console.log("I moused over a displayObject with enabled input");
-        });
+        this._interactionLayer.bringToTop();
     }
 
     setSize(width, height) {
@@ -48,9 +70,7 @@ class Frame extends Phaser.Group  {
         this._interactionLayer.height = this._height;
 
     };
-
-
-
+  
     hide() {
         this.alpha = 0;
     };
@@ -82,19 +102,19 @@ class StatusBar extends Frame  {
     private _maxValue = 1;
     private _currentValue = 1;
      
-    constructor(parent:Phaser.Group) {
+    constructor(parent:Phaser.Group, width,height) {
        
         super(parent);
         
-        
-        this.setSize(300, 50);
+        this.setPos(0, 0);
+        this.setSize(width, height);
         this.enableInteraction();
         
         this._bar = new Phaser.Graphics(game,0,0);
-        this._bar.beginFill(0x00cc00);
+        this._bar.beginFill(0xFFFFFF);
         this._bar.drawRect(0, 0, this._width, this._height);
         this._bar.endFill();
-
+        
         this._texture = new Phaser.Sprite(game, 0, 0, "castbar_texture");
         this._texture.width = this._width;
         this._texture.height = this._height;
@@ -117,7 +137,8 @@ class StatusBar extends Frame  {
         else {
             this._bar.alpha = 1;
             var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
-            this._bar.width = barWidthInPixels;
+            game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
+            //this._bar.width = barWidthInPixels;
         }
     }
 
@@ -158,41 +179,42 @@ class UnitFrame extends Frame {
     healthBar: StatusBar;
     absorbBar: StatusBar;
     powerBar: StatusBar;
-    unit_name: Phaser.BitmapText;
-    health_text: Phaser.BitmapText;
 
-    constructor(parent, unit: Player) {
+    constructor(parent, state:States.Play, unit: Player, width,height) {
         super(parent);
         // Reference to the player object we are representing.
         this.unit = unit;
-
-        this.setPos(500, 600);
+        this.setSize(width, height);
         //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
         // Create the healthbar
                                       // Parent //
-        this.healthBar = new StatusBar(this);
-        this.healthBar.setPos(0, 50);
+        this.healthBar = new StatusBar(this ,width, height/3*2);
+        this.healthBar.setMaxValue( this.unit.getMaxHealth() );
+        this.healthBar.setValue(this.unit.getMaxHealth());
+        this.healthBar.setColor(data.getClassColor(this.unit.classId));
         // Create absorb indicator
-        this.absorbBar = new StatusBar(this);
-        this.absorbBar.setPos(0, 100);
-        
+       // this.absorbBar = new StatusBar(this.healthBar, width, height/3);
 
-        // Manabar, rage , energy
-       // this.powerBar = new StatusBar(this);
+        this.powerBar = new StatusBar(this,width,height/3);
+        this.powerBar.setPos(0, this.healthBar.height);
+        this.powerBar.setColor(0x005ce6);
 
-
-       
         // this.roleIcon = new StatsIcon();
         // Shows if tank healer or dps
-    
-        // listen for HealthChange
-        // listen for MaxHealthChange
-        // listen for Death
-        // listen for Role Change
+   
+        state.events.UNIT_HEALTH_CHANGE.add((e) => this.UNIT_HEALTH_CHANGE(e));
+        state.events.UNIT_DEATH.add((e) => this.UNIT_DEATH(e));
+
     }
     
-    UNIT_HEALTH_CHANGE() {
+    UNIT_HEALTH_CHANGE(e) {
+        if (e != this.unit)
+            return;
         this.healthBar.setValue(this.unit.getCurrentHealth());
+        /*
+        if (this.unit.healthPercent > 20) { 
+            this.healthBar.setColor(red)
+        } */
     }
     UNIT_MAX_HEALTH_CHANGED() {
         this.healthBar.setMaxValue(this.unit.getMaxHealth());
@@ -200,12 +222,16 @@ class UnitFrame extends Frame {
     UNIT_MANA_CHANGE() {
     }
     UNIT_ROLE_CHANGED() {
+        // set role icon
     }
 
+    
+
     UNIT_DEATH(evt) {
-        if (evt.unit != this.unit)
+        if (evt != this.unit)
             return;
-       
+        this.healthBar.setValue(0);
+        
     }
 
 }

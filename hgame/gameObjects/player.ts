@@ -174,7 +174,7 @@
             if (value <= 0) {
                 this.stats.health.value = 0;
                 this.alive = false;
-                this.events.UNIT_DEATH.dispatch({ unit: this });
+                this.events.UNIT_DEATH.dispatch(this);
                 return;
             }
             if (value >= this.getMaxHealth()) {
@@ -223,7 +223,8 @@
             this.events.TARGET_CHANGE_EVENT.dispatch();
         }
         
-        consume_resource(resource,amount) {
+        consume_resource(resource, amount) {
+            
         }
 
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras
