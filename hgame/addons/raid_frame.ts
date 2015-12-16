@@ -5,7 +5,7 @@
         unitFrameWidth: number = 90;
         playState: States.Play;
         spacing: number = 2;
-        container: Frame;
+        container;
         x;
         y;
         
@@ -14,20 +14,24 @@
             this.playState = playState;
 
             this.container = new Frame(playState.UIParent);
-            this.createRaidFrame();
             this.container.enableDrag();
-
-
+            this.createRaidFrame();
+ 
         }
         createRaidFrame() {
 
             var playersInRaid = this.playState.raid.getPlayerList();
             for (var g = 0; g < 5; g++) {
                 for (var p = 0; p < 5; p++) {
-                    var unit = playersInRaid[(g*5) + p];
+                    var unit = playersInRaid[(g * 5) + p];
+                    
                     if (!unit)
                         break;
                     var raidFrame = new UnitFrame(this.container, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
+
+                    if (unit === this.playState.player)
+                        raidFrame.togglePowerBar();
+
                     raidFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
                     this.raidFrames.push(raidFrame);
                 }
