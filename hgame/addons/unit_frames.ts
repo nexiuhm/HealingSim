@@ -18,9 +18,6 @@
             bossFrame.setPos(1200, 500);
 
             //test case
-           
         }
-
-
     }
 }

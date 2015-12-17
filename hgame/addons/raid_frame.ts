@@ -10,11 +10,11 @@
         constructor(playState: States.Play) {
 
             this.playState = playState;
-
             this.raidFrame = new Frame(playState.UIParent);
             this.createRaidFrame();
  
         }
+
         createRaidFrame() {
             const MAX_GROUPS = 5;
             const MAX_PLAYERS_PER_GROUP = 5;
@@ -47,7 +47,6 @@
                 var unitFrame = this.raidFrames[player];
                 game.add.tween(unitFrame).to({y:-800 }, 1550 + (player*10), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
             }
-            
         }
     }
 }

@@ -31,6 +31,5 @@ class Game extends Phaser.Game {
             return;
         else
            currentState.handleKeyBoardInput(keyPressData);
-
     };
 }

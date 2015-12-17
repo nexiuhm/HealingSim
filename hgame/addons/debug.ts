@@ -4,8 +4,6 @@
         constructor(playState: States.Play) {
             playState.events.GAME_LOOP_RENDER.add(() => this.onRenderGame());
             this.player = playState.player;
-
-
         }
         onRenderGame() {
             //* ### TODO ### Nicer way of doing exactly this. Make it an addon? Listen to target change events etc.
@@ -19,9 +17,8 @@
                 game.debug.text("#### Mana: " + this.player.getMana(), 20, 140, '#00FF96');
                 game.debug.text("#### Haste_percent: " + this.player.target.total_haste() + ' %', 20, 160, '#00FF96');
                 game.debug.text("#### Absorb: " + this.player.stats.absorb, 20, 180, '#00FF96');
-
-
             }
+
             game.debug.text("window.innerWidth: " + window.innerWidth, 20, 200, '#00FF96');
             game.debug.text("window.innerHeight: " + window.innerHeight, 20, 220, '#00FF96');
             //game.debug.text("World CenterX: " + game.world.centerX, 20, 360, '#00FF96');

@@ -5,6 +5,7 @@
         classId: class_e;
         race: race_e;
         isEnemy = false;
+
         // ----Players current target--------------
         target: Player = this;
         isCasting: boolean = false;
@@ -12,7 +13,7 @@
         instance: Raid = null; // reference to the raid group the players are in
 
         // --- Players spells ---------------------
-        spells: any; 
+        spells: any;
         buffs: any;
 
         // --- Reference to the event manager --- //

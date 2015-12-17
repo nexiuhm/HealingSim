@@ -41,7 +41,7 @@
        
         var validTankClasses: number[] = [0, 1, 5, 9, 10];
         var validHealerClasses: number[] = [1, 4, 6, 9, 10];
-                
+             
         while (numberOfTanks--) {
             var classs = validTankClasses[game.rnd.integerInRange(0, validTankClasses.length - 1)],
                 race = game.rnd.integerInRange(player_race.MIN, player_race.MAX),
@@ -94,18 +94,17 @@
             default:
                 return new Player(classs, race, level, name, this.events);
                 break;
-
         }
 
     }
 
     startTestDamage() {
-        var tank = this.players[1];
+        var tank = this.players[0];
 
         // --- Create some random damage for testing purposes ----
         var bossSwingInterval = setInterval(bossSwing.bind(this), 1500);
         //var bossSingelTargetSpell = setInterval(singelTargetDamage.bind(this), 60000);
-        var tankSelfHealOrAbsorb = setInterval(applyAbsorb.bind(this), 3000);
+        var tankSelfHealOrAbsorb = setInterval(applyAbsorb.bind(this), 5000);
         var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 60000); // Big aoe after 3 minutes, 180000
         var raidAoeDamage = setInterval(raidDamage.bind(this), 3000);
         var raidAIHealing = setInterval(raidHealing.bind(this), 4000);
@@ -154,7 +153,7 @@
                 // 20% chance to critt. Experimental.
                 if (criticalHeal < 0.8)
                     incomingHeal *= 1.5;
-
+                
                 player.setHealth(incomingHeal);
             }
         }
@@ -163,5 +162,7 @@
             //this.player.setAbsorb(game.rnd.between(115, 88900));
             tank.setHealth(tank.getCurrentHealth() + game.rnd.between(10000, 38900));
         }
+
+        // Legge inn AI shields på raidmembers.
     }
 }
