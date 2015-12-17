@@ -12,10 +12,15 @@
             this.playState = playState;
 
             this.raidFrame = new Frame(playState.UIParent);
-            this.createRaidFrame();
+            //this.raidFrame.inputEnabled = true;
+            //this.raidFrame.input.enableDrag();
+
+            // get keyboard focus
+            // Release keyboard focus
+            this.createUnitFrames();
  
         }
-        createRaidFrame() {
+        createUnitFrames() {
             const MAX_GROUPS = 5;
             const MAX_PLAYERS_PER_GROUP = 5;
 
@@ -28,7 +33,6 @@
                         break;
                                                     // parent //
                     var unitFrame = new UnitFrame(this.raidFrame, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
-
                     if (unit === this.playState.player)
                         unitFrame.togglePowerBar();
 

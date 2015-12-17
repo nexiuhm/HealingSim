@@ -18,7 +18,7 @@
                 game.debug.text("#### Class: " + this.player.target.classId, 20, 120, '#00FF96');
                 game.debug.text("#### Mana: " + this.player.getMana(), 20, 140, '#00FF96');
                 game.debug.text("#### Haste_percent: " + this.player.target.total_haste() + ' %', 20, 160, '#00FF96');
-                game.debug.text("#### Absorb: " + this.player.stats.absorb, 20, 180, '#00FF96');
+                game.debug.text("#### Absorb: " + this.player.target.stats.absorb, 20, 180, '#00FF96');
 
 
             }
