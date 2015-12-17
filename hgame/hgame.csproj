@@ -43,6 +43,7 @@
     <TypeScriptCompile Include="addons\error_frame.ts" />
     <TypeScriptCompile Include="addons\raid_frame.ts" />
     <TypeScriptCompile Include="addons\spell_effects.ts" />
+    <TypeScriptCompile Include="addons\timers.ts" />
     <TypeScriptCompile Include="addons\unit_frames.ts" />
     <TypeScriptCompile Include="gameObjects\class_modules\priest.ts" />
     <TypeScriptCompile Include="enums.ts" />

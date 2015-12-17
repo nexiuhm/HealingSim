@@ -9,7 +9,7 @@ window.onload = () => {
     // Force WEBGL since Canvas doesnt support textures / blendmodes which we use heavily.
     // Automatically starts the boot state aka. application entry point
 
-    game = new Game('100%','100%',Phaser.WEBGL,undefined,States.Boot);
+    game = new Game('100%', '100%', Phaser.WEBGL, undefined, States.Boot);
 };
 
 /* Adding some extra functionality to the Phaser game engine */

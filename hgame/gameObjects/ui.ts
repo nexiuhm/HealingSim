@@ -1,154 +1,231 @@
 ﻿
-// ### Major todo: Clean up & refactoring ###
-/*----  Unit frame to contain basic unit info. -------------- */ 
-/*      In it most basic form it will only display a healthbar.  */
-/*      This should be the first thing to be implemented (Used for target/ player frame + raid frames )  */
+/* Adding some extra functionality to the Phaser.Group  */
+/* Todo: add interaction functionality to the frame */
 
-class UnitFrame {
-    //options
-    unit: Player;
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-    config = {
-        allowedAbsorbOverflow: 10
+class Frame extends Phaser.Group  {
+    _width = 200;
+    _height = 100;
+    
+    // Interaction / input overlay    
+    constructor(parent){   
+        super(game,parent);
+    }
+
+    private _drag() {
+        // Capture initial positions when the object is clicked
+        var initialMousePos = { x: this.game.input.x, y: this.game.input.y };
+        var containerInitialPos = { x: this.x, y: this.y };
+        this.alpha = 0.5;
+        // Attatch callback to the game main loop. Usure if we should use the event system for this.
+        MAINSTATE.events.GAME_LOOP_UPDATE.add(() => {
+            this.x = this.game.input.mousePointer.x - initialMousePos.x + containerInitialPos.x;
+            this.y = this.game.input.mousePointer.y - initialMousePos.y + containerInitialPos.y;
+        });
+    }
+
+    /* Public interface below */
+
+    enableDrag() {
+    }
+
+    setSize(width, height) {
+        this._width = width;
+        this._height = height;
+
     };
-    container: Phaser.Graphics;
-    state: States.Play;
-
-    // Atonomy of the unit frame
-    health: Phaser.Graphics;
-    absorb: Phaser.Graphics;
-    background: Phaser.Graphics;
-    overlay_texture: Phaser.Sprite;
-    unit_name: Phaser.BitmapText;
-    health_text: Phaser.BitmapText;
-
-    constructor(parentContainer,x, y, w, h, unit: Player, playState: States.Play) {
+    setPos(x:number, y:number) {
         this.x = x;
         this.y = y;
-        this.width = w;
-        this.height = h;
-        
-        
-        // Reference to the player object we are representing.
-        this.unit = unit;
-        // Reference to the state we are going to draw to ( This feels like a weird way to do it, improve later)
-        this.state = playState;
+    };
 
-        //  - Create container for the UnitFrame, all the other stuff is added as children of this element.
-        this.container = new Phaser.Graphics(game,x, y);
-        this.container.width = w;
-        this.container.height = h; 
-        
-        // Create the healthbar layer
-        this.health = new Phaser.Graphics(game,0, 0);
-        // Create absorb layer
-        this.absorb = new Phaser.Graphics(game,0, 0);
-        
-        this.absorb.blendMode = PIXI.blendModes.ADD;
-        this.absorb.alpha = 0.5;
+}
 
-        // Create the texture layer
-        this.overlay_texture = new Phaser.Sprite(game,0, 0, "castbar_texture");
-        this.overlay_texture.blendMode = PIXI.blendModes.MULTIPLY;
-        this.overlay_texture.width = w;
-        this.overlay_texture.height = h;
 
-        // Create the player name layer
-        this.unit_name = this.state.add.bitmapText(w / 2, h / 2,"myriad", this.unit.name, 12);
-        this.unit_name.tint = data.getClassColor(this.unit.classId);
-        this.unit_name.anchor.set(0.5);
-       
-        // Add the layers as children of the container
-        this.container.addChild(this.health);
-        this.container.addChild(this.overlay_texture);
-        this.container.addChild(this.absorb);
-        this.container.addChild(this.unit_name);
+class StatusBar extends Frame  {
+    // defaults
+    private _animationStyle = "Linear";
+    private _animationDuration = 200;
 
-        parentContainer.add(this.container);
-       
-
-        // Add interaction
-        this.container.inputEnabled = true;
-        
-        this.container.events.onInputDown.add(() => {
-            this.state.player.setTarget(this.unit );
-        });
-        
-        //Scale the health bar to represent the player's health.
-        this.initHealthBar();
-        this.initAbsorbBar();
-        this.UPDATE();
-        
-        // Set up event listeners. ### TODO Need a way to filter out events that is not coming from this unit
-        this.state.events.UNIT_HEALTH_CHANGE.add(() => this.UPDATE());
-        this.state.events.UNIT_ABSORB.add(() => this.UPDATE());
-        this.state.events.UNIT_DEATH.add((evt) => this.UNIT_DEATH(evt));
-    }
-
-    UPDATE() {
-        
-        var new_health_width = this.calcBarWidth(this.unit.getCurrentHealth(), this.unit.getMaxHealth());
-        var new_absorb_width = this.calcBarWidth(this.unit.getAbsorb(), this.unit.getMaxHealth());
-        // Need to update the x value of the absorb everytime the health "moves"
-        var new_absorb_x = new_health_width;
-        
-        // Some weird stuff happens if the width of a displayObject is set to 0? Fucks up targetting. No idea why
-        // This fixes it for now
-
-        /* Make sure the absorb never overflows the bar width */
-        if ((new_absorb_width + new_health_width) > this.width)
-            new_absorb_width = this.width - new_health_width + this.config.allowedAbsorbOverflow;
-
-        if (new_health_width <= 0)
-            new_health_width = 1;
-        if (new_absorb_width <= 0)
-            new_absorb_width = 1;
-        
-        // ugly
-        this.state.add.tween(this.health).to({ width: new_health_width }, 150, "Linear", true);
-        this.state.add.tween(this.absorb).to({ x: new_absorb_x }, 150, "Linear", true);
-        this.state.add.tween(this.absorb).to({ width: new_absorb_width }, 50, "Linear", true);
-    }
-
-    UNIT_MANA_CHANGE(eventData) {
-        // animate the change in resource
-    }
-
-    UNIT_DEATH(evt) {
-        if (evt.unit != this.unit)
-            return;
-        this.health.width = this.width;
-        this.unit_name.setText("DEAD");
-        this.health.alpha = 0;
-        this.absorb.alpha = 0;
-    }
-
-    calcBarWidth(currentValue, maxValue): number {
-        var barWidthInPixels = Math.round((currentValue / maxValue ) * this.width);
-        return barWidthInPixels;
-    }
- 
-    initUnitName() {
-        this.unit_name.setText(this.unit.name);
-        this.unit_name.tint = data.getClassColor(this.unit.classId);
-    }
-
-    initHealthBar() { // Its not possible to change the color of the health bar. It needs to be redrawn from scratch.
-        this.health.clear();
-        this.health.beginFill(data.getClassColor(this.unit.classId));
-        this.health.drawRect(0, 0, 1, this.height);
-    }
     
-    initAbsorbBar() {  
-        this.absorb.clear();
-        this.absorb.beginFill(0x43b6e8);
-        this.absorb.drawRect(0, 0, 1, this.height);
+    // displayObjects
+    private _bar: PIXI.Graphics;
+    private _texture: Phaser.Sprite;
+    //
+    private _minValue = 0;
+    private _maxValue = 1;
+    private _currentValue = 1;
+     
+    constructor(parent:Phaser.Group, width,height) {
+       
+        super(parent);
+        
+        this.setPos(0, 0);
+        this.setSize(width, height);
+        
+        // The moving bar
+        this._bar = new Phaser.Graphics(game,0,0);
+        this._bar.beginFill(0xFFFFFF);
+        this._bar.drawRect(0, 0, this._width, this._height);
+        this._bar.endFill();
+        
+        // Works as both a texture and a background
+        this._texture = new Phaser.Sprite(game, 0, 0, "castbar_texture");
+        this._texture.width = this._width;
+        this._texture.height = this._height;
+        this._texture.blendMode = PIXI.blendModes.MULTIPLY;
+
+        this.addChild(this._bar);
+        this.addChild(this._texture);
+
+        this._updateBarWidth();
+
+    };
+
+    private _updateBarWidth(animationSpeed?) {
+        if (this._currentValue <= this._minValue) {
+            this._bar.alpha = 0;
+        }
+        else {
+            this._bar.alpha = 1;
+            var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
+
+            var animationSpeed = animationSpeed ? animationSpeed : this._animationDuration;
+            game.add.tween(this._bar).to({ width: barWidthInPixels }, animationSpeed, this._animationStyle, true);
+        }
+    }
+
+    /* Public interface below */
+
+    setColor(color) {
+        this._bar.tint = color;
+        
+    }
+
+    setValues(min, max, current, animationSpeed?){
+        this._maxValue = max;
+        this._minValue = min;
+        this._currentValue = current;
+        this._updateBarWidth(animationSpeed);
+    }
+
+    setTexture() {
+        // 
+    }
+
+    setMaxValue(newMaxValue: number) {
+        this._maxValue = newMaxValue;
+        this._updateBarWidth();
+    }
+
+    setValue(newValue:number, animationSpeed?) {
+        this._currentValue = newValue;
+            
+        this._updateBarWidth(animationSpeed);
+       
     }
 }
-class CooldownFrame {
+
+class UnitFrame extends Frame {
+  
+    unit: Player;
+    config = {
+        allowedAbsorbOverflow: 10,
+        powerBarEnabled: false,
+        playerNameEnabled: true,
+        enemyColor: 0xFA1A16,
+        powerBarColor: 0x00D1FF
+    };
+    // DisplayObjects
+    healthBar: StatusBar;
+    absorbBar: StatusBar; // ## TODO ##
+    powerBar: StatusBar;
+    playerName: Phaser.BitmapText;
+
+    constructor(parent, state: States.Play, unit: Player, width?, height?) {
+        super(parent);
+
+        this.unit = unit;
+        if (width)  this._width = width;
+        if (height) this._height = height;
+
+        this._init();
+    }
+    
+    private _init() {
+        // Clear all displayObjects from the Frame
+        this.removeAll(true);
+        
+        this.healthBar = new StatusBar(this, this._width, this._height / 4 * (this.config.powerBarEnabled ? 3 : 4));
+        this.healthBar.setColor( this.unit.isEnemy ? this.config.enemyColor : data.getClassColor(this.unit.classId) );
+        this.healthBar.setValues(0, this.unit.getMaxHealth(), this.unit.getCurrentHealth(),0);
+
+        if (this.config.playerNameEnabled) {
+            this.playerName = new Phaser.BitmapText(game, this.healthBar.width / 2, this.healthBar.height/2, "myriad", null, 12);
+            this.playerName.setText(this.unit.name);
+            this.playerName.anchor.set(0.5);
+            this.playerName.tint = data.getClassColor(this.unit.classId);
+            this.healthBar.addChild(this.playerName);
+        }
+       
+        if (this.config.powerBarEnabled) {
+            this.powerBar = new StatusBar(this, this._width, this._height / 4);
+            this.powerBar.setValues(0, this.unit.getMana(), this.unit.getMaxMana());
+            this.powerBar.setPos(0, this.healthBar.height);
+            this.powerBar.setColor(this.config.powerBarColor);
+
+            MAINSTATE.events.MANA_CHANGE.add((unit) => this._onUnitManaChanged(unit));
+
+        }
+
+        MAINSTATE.events.UNIT_HEALTH_CHANGE.add((unit) => this._onUnitHealthChanged(unit));
+        MAINSTATE.events.UNIT_DEATH.add((unit) => this._onUnitDeath(unit));
+        
+
+    }
+
+    private _onUnitHealthChanged(unit) {
+        if (unit != this.unit)
+            return;
+        this.healthBar.setValue(this.unit.getCurrentHealth());
+        /*
+        if (this.unit.healthPercent > 20) { 
+            this.healthBar.setColor(red)
+        } */
+    }
+    private _onUnitMaxHealthChanged(unit) {
+        this.healthBar.setMaxValue(this.unit.getMaxHealth());
+    }
+    private _onUnitManaChanged(unit) {
+  
+        this.powerBar.setValue(this.unit.getMana());
+    }
+
+    private _onUnitRoleChanged() {
+        // set role icon
+    }
+
+    private _onUnitDeath(unit) {
+        if (unit != this.unit)
+            return;
+        this.healthBar.setValue(0);
+        this.powerBar.setValue(0);
+        
+    }
+
+    /* Public interface below */
+
+    togglePowerBar() {
+        this.config.powerBarEnabled = this.config.powerBarEnabled ? false : true;
+        this._init();
+    }
+
+    setUnit(unit: Player) {
+        this.unit = unit;
+        this._init();
+    }
+}
+/* ## TODO ## fix fix */
+class StatusIcon {
     x = 500;
     y = 500;
     w = 50;
@@ -166,7 +243,7 @@ class CooldownFrame {
     angle = {current: 0}; 
     animTween: Phaser.Tween;
 
-    constructor(state: States.Play,spellid,x,y) {
+    constructor(state: States.Play, spellid, x, y ) {
 
         this.playState = state;
         this.spellid = spellid; 
@@ -177,10 +254,10 @@ class CooldownFrame {
 
 
         // Spell icon
-        var spellIcon = this.playState.add.image(0, 0, "icon_"+spellid);
+        var spellIcon = this.playState.add.image(0, 0, "icon_" + spellid);
         spellIcon.width = this.w;
         spellIcon.height = this.h;
-        spellIcon.alpha = 1;
+
         // Alpha mask for cooldown overlay
         var mask = this.playState.add.graphics(this.container.x, this.container.y);
         mask.beginFill(0xFFFFFF);
@@ -218,6 +295,7 @@ class CooldownFrame {
         if (event.spellid != this.spellid)
             return;
         //this.hook.remove();
+        // #TODO## Remove hook from game loop
         this.cd_overlay.alpha = 0;
         this.animTween.stop();
         this.angle.current = 0;
@@ -235,22 +313,4 @@ class CooldownFrame {
         // redraw based on new values
     }
 
-}
-class TargetFrame extends UnitFrame {
-    ownerUnit: Player;
-    constructor(parentContainer,x, y, w, h, unit: Player, state: States.Play) {
-        super(parentContainer,x, y, w, h, unit, state);
-        this.ownerUnit = this.unit;
-        this.unit = this.ownerUnit.target;
-        // Subscribe to the target change event. This event is emitted in the Player.setTarget() function
-        this.state.events.TARGET_CHANGE_EVENT.add(() => this.UNIT_TARGET_CHANGE());
-    }
-
-    UNIT_TARGET_CHANGE() {
-          this.unit = this.ownerUnit.target;
-          this.initUnitName();
-          this.initHealthBar();
-          this.initAbsorbBar();
-          this.UPDATE();
-    }
 }

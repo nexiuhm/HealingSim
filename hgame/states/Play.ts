@@ -1,19 +1,26 @@
-﻿namespace States {
+﻿
+var MAINSTATE; // ## Temporary ##
+namespace States {
     export class Play extends Phaser.State {
 
         player: Player;
         events = new EventManager(); //### TODO ###
         raid = new Raid(this.events); // ### TODO ###
         
+        UIParent ;
+
         create() {
-         
+            MAINSTATE = this; // ## Temporary ##
             // Start the world fade-in effect
             this.world.alpha = 0;
             this.add.tween(this.world).to({ alpha: 1 }, 4000, Phaser.Easing.Cubic.InOut, true);
-             
+            
             // Add a background to the screen
             game.add.image(game.stage.x, game.stage.y, "bg");
 
+            // Add Ui parent container
+            this.UIParent = this.add.group(this.world);
+            
             // Set raid size
             this.raid.setRaidSize(raid_size.TWENTYFIVEMAN);
             
@@ -28,13 +35,9 @@
             // Start the boss/healing simulator
             this.raid.startTestDamage();
 
-            // TEST
-
-            var test = new CooldownFrame(this, 5, 500, 500);
-           
-            var test2 = new CooldownFrame(this, 2, 555, 500);
-        
-           
+            // TEST 
+            var test =  new StatusIcon(this, 5, 500, 500);
+            var test2 = new StatusIcon(this, 2, 555, 500);
         }
 
         update() {

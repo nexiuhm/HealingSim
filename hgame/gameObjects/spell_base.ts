@@ -25,7 +25,7 @@ class SpellBase {
     constructor(spelldata, player) {
         // The player that owns the spell
         this.player = player;
-
+        this.powerCost = spelldata.resource_cost;
         this.powerType = spelldata.resourceType;
         this.school = spelldata.school;
         this.name = spelldata.name;
@@ -113,7 +113,7 @@ class SpellBase {
     consumeResource() {
         if (!this.hasPowerCost)
             return;
-        this.player.consume_resource(this.powerType, this.powerCost);
+        this.player.consume_resource(this.powerCost);
     }
 
     onCooldownReady() {
