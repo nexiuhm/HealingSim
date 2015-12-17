@@ -109,7 +109,11 @@
         var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 60000); // Big aoe after 3 minutes, 180000
         var raidAoeDamage = setInterval(raidDamage.bind(this), 3000);
         var raidAIHealing = setInterval(raidHealing.bind(this), 4000);
+        var manaRegenYolo = setInterval(gain_mana.bind(this), 1200);
 
+        function gain_mana() {
+            MAINSTATE.player.gain_resource(1600);
+        }
         function bossSwing() {
             var bossSwing = game.rnd.between(105550, 238900);
             var bossSwingCriticalHit = Math.random();

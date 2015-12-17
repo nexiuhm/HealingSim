@@ -186,7 +186,6 @@
                 this.stats.health.value = this.getMaxHealth();
             }
             else {
-                console.log(this.stats.health.value);
                 this.stats.health.value = value;
             }
 
@@ -228,6 +227,13 @@
         
         consume_resource(amount) {
             this.stats.mana.value -= amount;
+            this.events.MANA_CHANGE.dispatch(amount);
+        }
+        gain_resource(amount) {
+            if (amount >= this.stats.mana.max_value) {
+                this.stats.mana.value = this.stats.mana.max_value;
+            }
+            this.stats.mana.value += amount;
             this.events.MANA_CHANGE.dispatch(amount);
         }
 
