@@ -71,15 +71,12 @@
             var unit = this.createUnit(classs, race, level, name);
             this.addPlayer(unit);
         }
-
-
     }
 
     addPlayer(unit: Player) {
         this.players.push(unit);
     }
-    // Make a function who will only make a valid raid: 2 tanks, 3 healer and 5 dps for 10 man template
-    // Extend to 25 man
+  
     // When you create a unit you also have to pass them a reference to the event manager, so they know how to communicate events.
     createUnit(classs, race, level, name) { 
 
@@ -154,6 +151,7 @@
                 var incomingHeal = player.getCurrentHealth() + game.rnd.between(80000, 120000);
                 var criticalHeal = Math.random();
 
+                // 20% chance to critt. Experimental.
                 if (criticalHeal < 0.8)
                     incomingHeal *= 1.5;
 
