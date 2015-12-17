@@ -11,8 +11,12 @@
 
             this.playState = playState;
             this.raidFrame = new Frame(playState.UIParent);
+            //this.raidFrame.inputEnabled = true;
+            //this.raidFrame.input.enableDrag();
+
+            // get keyboard focus
+            // Release keyboard focus
             this.createRaidFrame();
- 
         }
 
         createRaidFrame() {
@@ -28,7 +32,6 @@
                         break;
                                                     // parent //
                     var unitFrame = new UnitFrame(this.raidFrame, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
-
                     if (unit === this.playState.player)
                         unitFrame.togglePowerBar();
 

@@ -6,7 +6,6 @@ namespace States {
         player: Player;
         events = new EventManager(); //### TODO ###
         raid = new Raid(this.events); // ### TODO ###
-        
         UIParent ;
 
         create() {
@@ -14,7 +13,6 @@ namespace States {
             // Start the world fade-in effect
             this.world.alpha = 0;
             this.add.tween(this.world).to({ alpha: 1 }, 4000, Phaser.Easing.Cubic.InOut, true);
-            
             // Add a background to the screen
             game.add.image(game.stage.x, game.stage.y, "bg");
 

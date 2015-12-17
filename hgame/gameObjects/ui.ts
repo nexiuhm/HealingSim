@@ -2,35 +2,20 @@
 /* Adding some extra functionality to the Phaser.Group  */
 /* Todo: add interaction functionality to the frame */
 
-class Frame extends Phaser.Group  {
+class Frame extends Phaser.Graphics  {
     _width = 200;
     _height = 100;
     
-    // Interaction / input overlay    
     constructor(parent){   
-        super(game,parent);
-    }
+        super(game);
+        parent.addChild(this);
 
-    private _drag() {
-        // Capture initial positions when the object is clicked
-        var initialMousePos = { x: this.game.input.x, y: this.game.input.y };
-        var containerInitialPos = { x: this.x, y: this.y };
-        this.alpha = 0.5;
-        // Attatch callback to the game main loop. Usure if we should use the event system for this.
-        MAINSTATE.events.GAME_LOOP_UPDATE.add(() => {
-            this.x = this.game.input.mousePointer.x - initialMousePos.x + containerInitialPos.x;
-            this.y = this.game.input.mousePointer.y - initialMousePos.y + containerInitialPos.y;
-        });
-    }
-
-    /* Public interface below */
-
-    enableDrag() {
     }
 
     setSize(width, height) {
         this._width = width;
         this._height = height;
+
 
     };
     setPos(x:number, y:number) {
@@ -55,7 +40,7 @@ class StatusBar extends Frame  {
     private _maxValue = 1;
     private _currentValue = 1;
      
-    constructor(parent:Phaser.Group, width,height) {
+    constructor(parent, width,height) {
        
         super(parent);
         
@@ -98,7 +83,7 @@ class StatusBar extends Frame  {
 
     setColor(color) {
         this._bar.tint = color;
-        
+
     }
 
     setValues(min, max, current, animationSpeed?){
@@ -153,14 +138,15 @@ class UnitFrame extends Frame {
     
     private _init() {
         // Clear all displayObjects from the Frame
-        this.removeAll(true);
-        
+        this.removeChildren();
+        this.events.destroy();
+
         this.healthBar = new StatusBar(this, this._width, this._height / 4 * (this.config.powerBarEnabled ? 3 : 4));
         this.healthBar.setColor( this.unit.isEnemy ? this.config.enemyColor : data.getClassColor(this.unit.classId) );
         this.healthBar.setValues(0, this.unit.getMaxHealth(), this.unit.getCurrentHealth(),0);
 
         if (this.config.playerNameEnabled) {
-            this.playerName = new Phaser.BitmapText(game, this.healthBar.width / 2, this.healthBar.height/2, "myriad", null, 12);
+            this.playerName = new Phaser.BitmapText(game, this.healthBar._width / 2, this.healthBar._height/2, "myriad", null, 12);
             this.playerName.setText(this.unit.name);
             this.playerName.anchor.set(0.5);
             this.playerName.tint = data.getClassColor(this.unit.classId);
@@ -170,12 +156,14 @@ class UnitFrame extends Frame {
         if (this.config.powerBarEnabled) {
             this.powerBar = new StatusBar(this, this._width, this._height / 4);
             this.powerBar.setValues(0, this.unit.getMana(), this.unit.getMaxMana());
-            this.powerBar.setPos(0, this.healthBar.height);
+            this.powerBar.setPos(0, this.healthBar._height);
             this.powerBar.setColor(this.config.powerBarColor);
 
             MAINSTATE.events.MANA_CHANGE.add((unit) => this._onUnitManaChanged(unit));
 
         }
+        this.inputEnabled = true;
+        this.events.onInputDown.add(() => { MAINSTATE.player.setTarget(this.unit); console.log(this.unit); });
 
         MAINSTATE.events.UNIT_HEALTH_CHANGE.add((unit) => this._onUnitHealthChanged(unit));
         MAINSTATE.events.UNIT_DEATH.add((unit) => this._onUnitDeath(unit));
@@ -224,6 +212,7 @@ class UnitFrame extends Frame {
         this._init();
     }
 }
+
 /* ## TODO ## fix fix */
 class StatusIcon {
     x = 500;

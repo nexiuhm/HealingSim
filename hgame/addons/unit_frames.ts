@@ -9,10 +9,10 @@
             var playerFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             playerFrame.togglePowerBar();
             playerFrame.setPos(500, 800);
+            playerFrame.input.enableDrag();
 
             var targetFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             targetFrame.setPos(1000, 800);
-
 
             var bossFrame = new UnitFrame(screen.UIParent, screen, testBoss, 300, 50);
             bossFrame.setPos(1200, 500);

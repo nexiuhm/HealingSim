@@ -77,7 +77,7 @@
 
         flash_of_light: {
             casttime: 1500,
-            resource_cost: 8500,
+            resource_cost: 6500,
             resource_type: "mana",
             cooldown: 0,
             name: 'Flash Of Light',
@@ -86,7 +86,7 @@
 
         power_infusion: {
             casttime: 0,
-            resource_cost: 10000,
+            resource_cost: 5000,
             resource_type: "mana",
             cooldown: 30000,
             name: 'Power Infusion',
@@ -117,7 +117,7 @@
 
         power_word_shield: {
             casttime: 0,
-            resource_cost: 4800,
+            resource_cost: 3800,
             resource_type: "mana",
             cooldown: 1500,
             name: 'Power Word Shield',
@@ -126,7 +126,7 @@
 
         clarity_of_will: {
             casttime: 2500,
-            resource_cost: 3200,
+            resource_cost: 2500,
             resource_type: "mana",
             cooldown: 0,
             name: 'Clarity Of Will',
