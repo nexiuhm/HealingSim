@@ -16,9 +16,10 @@
                 game.debug.text("#### Name: " + this.player.target.name, 20, 80, '#00FF96');
                 game.debug.text("#### Health: " + this.player.target.getCurrentHealth(), 20, 100, '#00FF96');
                 game.debug.text("#### Class: " + this.player.target.classId, 20, 120, '#00FF96');
-                game.debug.text("#### Race: " + this.player.target.race, 20, 140, '#00FF96');
+                game.debug.text("#### Mana: " + this.player.getMana(), 20, 140, '#00FF96');
                 game.debug.text("#### Haste_percent: " + this.player.target.total_haste() + ' %', 20, 160, '#00FF96');
                 game.debug.text("#### Absorb: " + this.player.stats.absorb, 20, 180, '#00FF96');
+
 
             }
             game.debug.text("window.innerWidth: " + window.innerWidth, 20, 200, '#00FF96');

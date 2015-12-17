@@ -13,4 +13,5 @@
     GAME_LOOP_RENDER = new Phaser.Signal();
     ON_COOLDOWN_START = new Phaser.Signal();
     ON_COOLDOWN_ENDED = new Phaser.Signal();
+    MANA_CHANGE = new Phaser.Signal();
 }

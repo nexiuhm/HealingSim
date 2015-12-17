@@ -4,7 +4,7 @@
         name: string;
         classId: class_e;
         race: race_e;
-
+        isEnemy = false;
         // ----Players current target--------------
         target: Player = this;
         isCasting: boolean = false;
@@ -45,8 +45,10 @@
             mastery: 0.08, // 8% is base mastery for every class
         };
 
-        constructor( _class:class_e, race:race_e, level, name:string,events:EventManager) {
+        constructor( _class:class_e, race:race_e, level, name:string,events:EventManager, isEnemy?) {
             
+            if (isEnemy)
+                this.isEnemy = true;
             this.events = events;
             this.level = level;
             this.race = race;
@@ -93,6 +95,15 @@
            
             return spellList;
 
+        }
+
+        getMana() {
+            return this.stats.mana.value;
+
+        }
+        
+        getMaxMana() {
+            return this.stats.mana.max_value;
         }
 
         recive_damage(dmg) {
@@ -223,8 +234,9 @@
             this.events.TARGET_CHANGE_EVENT.dispatch();
         }
         
-        consume_resource(resource, amount) {
-            
+        consume_resource(amount) {
+            this.stats.mana.value -= amount;
+            this.events.MANA_CHANGE.dispatch(amount);
         }
 
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras

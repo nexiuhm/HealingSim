@@ -5,41 +5,42 @@
         unitFrameWidth: number = 90;
         playState: States.Play;
         spacing: number = 2;
-        container;
-        x;
-        y;
+        raidFrame: Frame;
         
         constructor(playState: States.Play) {
 
             this.playState = playState;
 
-            this.container = new Frame(playState.UIParent);
-            this.container.enableDrag();
+            this.raidFrame = new Frame(playState.UIParent);
             this.createRaidFrame();
  
         }
         createRaidFrame() {
+            const MAX_GROUPS = 5;
+            const MAX_PLAYERS_PER_GROUP = 5;
 
             var playersInRaid = this.playState.raid.getPlayerList();
-            for (var g = 0; g < 5; g++) {
-                for (var p = 0; p < 5; p++) {
+            for (var g = 0; g < MAX_GROUPS; g++) {
+                for (var p = 0; p < MAX_PLAYERS_PER_GROUP; p++) {
                     var unit = playersInRaid[(g * 5) + p];
                     
                     if (!unit)
                         break;
-                    var raidFrame = new UnitFrame(this.container, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
+                                                    // parent //
+                    var unitFrame = new UnitFrame(this.raidFrame, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
 
                     if (unit === this.playState.player)
-                        raidFrame.togglePowerBar();
+                        unitFrame.togglePowerBar();
 
-                    raidFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
-                    this.raidFrames.push(raidFrame);
+                    unitFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
+                    this.raidFrames.push(unitFrame);
+                    console.log(g);
                 }
             }
 
             /* Position parent frame base on how big the raid got */
-            this.container.x = widthFactor * 50 - this.unitFrameWidth * (g/2);
-            this.container.y = heightFactor * 50 - this.unitFrameHeight * (g/2);
+            this.raidFrame.x = widthFactor * 50 - this.raidFrame.width / 2;
+            this.raidFrame.y = heightFactor * 50 - this.raidFrame.height /2;
            
             /* Spawn effect */
             for (var player = 0; player < this.raidFrames.length; player++) {
