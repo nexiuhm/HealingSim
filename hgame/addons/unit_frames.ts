@@ -13,7 +13,7 @@
 
             var targetFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             targetFrame.setPos(1000, 800);
-
+            
             var bossFrame = new UnitFrame(screen.UIParent, screen, testBoss, 300, 50);
             bossFrame.setPos(1200, 500);
 

@@ -230,12 +230,14 @@
             this.stats.mana.value -= amount;
             this.events.MANA_CHANGE.dispatch(amount);
         }
-        gain_resource(amount) {
-            if (amount >= this.stats.mana.max_value) {
-                this.stats.mana.value = this.stats.mana.max_value;
+        gain_resource(gain) {
+            if (gain + this.getMana() >= this.getMaxMana()) {
+                this.stats.mana.value = this.getMaxMana();
             }
-            this.stats.mana.value += amount;
-            this.events.MANA_CHANGE.dispatch(amount);
+            else {
+                this.stats.mana.value += gain;
+            }
+            this.events.MANA_CHANGE.dispatch(gain);
         }
 
         // ## TODO ## Calculates the total haste amount on the player. Base stats + buffs + auras

@@ -37,14 +37,13 @@
 
                     unitFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
                     this.raidFrames.push(unitFrame);
-                    console.log(g);
                 }
             }
 
             /* Position parent frame base on how big the raid got */
-            this.raidFrame.x = widthFactor * 50 - this.raidFrame.width / 2;
-            this.raidFrame.y = heightFactor * 50 - this.raidFrame.height /2;
-           
+            this.raidFrame.x = widthFactor * 50 - 250;
+            this.raidFrame.y = heightFactor * 50 - 80;
+
             /* Spawn effect */
             for (var player = 0; player < this.raidFrames.length; player++) {
                 var unitFrame = this.raidFrames[player];

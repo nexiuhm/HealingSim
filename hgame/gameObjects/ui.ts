@@ -73,9 +73,7 @@ class StatusBar extends Frame  {
         else {
             this._bar.alpha = 1;
             var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
-
-            var animationSpeed = animationSpeed ? animationSpeed : this._animationDuration;
-            game.add.tween(this._bar).to({ width: barWidthInPixels }, animationSpeed, this._animationStyle, true);
+            game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
         }
     }
 
@@ -86,11 +84,11 @@ class StatusBar extends Frame  {
 
     }
 
-    setValues(min, max, current, animationSpeed?){
+    setValues(min, max, current){
         this._maxValue = max;
         this._minValue = min;
         this._currentValue = current;
-        this._updateBarWidth(animationSpeed);
+        this._updateBarWidth();
     }
 
     setTexture() {
@@ -102,10 +100,15 @@ class StatusBar extends Frame  {
         this._updateBarWidth();
     }
 
-    setValue(newValue:number, animationSpeed?) {
-        this._currentValue = newValue;
+    setValue(newValue:number) {
+        if (newValue < this._minValue)
+            this._currentValue = this._minValue;
+        else if (newValue > this._maxValue)
+            this._currentValue = this._maxValue;
+        else
+            this._currentValue = newValue;
             
-        this._updateBarWidth(animationSpeed);
+        this._updateBarWidth();
        
     }
 }
@@ -114,7 +117,6 @@ class UnitFrame extends Frame {
   
     unit: Player;
     config = {
-        allowedAbsorbOverflow: 10,
         powerBarEnabled: false,
         playerNameEnabled: true,
         enemyColor: 0xFA1A16,
@@ -125,6 +127,7 @@ class UnitFrame extends Frame {
     absorbBar: StatusBar; // ## TODO ##
     powerBar: StatusBar;
     playerName: Phaser.BitmapText;
+    manaPercentText: Phaser.BitmapText;
 
     constructor(parent, state: States.Play, unit: Player, width?, height?) {
         super(parent);
@@ -141,34 +144,51 @@ class UnitFrame extends Frame {
         this.removeChildren();
         this.events.destroy();
 
-        this.healthBar = new StatusBar(this, this._width, this._height / 4 * (this.config.powerBarEnabled ? 3 : 4));
-        this.healthBar.setColor( this.unit.isEnemy ? this.config.enemyColor : data.getClassColor(this.unit.classId) );
-        this.healthBar.setValues(0, this.unit.getMaxHealth(), this.unit.getCurrentHealth(),0);
+        this._initHealthBar();
 
-        if (this.config.playerNameEnabled) {
-            this.playerName = new Phaser.BitmapText(game, this.healthBar._width / 2, this.healthBar._height/2, "myriad", null, 12);
-            this.playerName.setText(this.unit.name);
-            this.playerName.anchor.set(0.5);
-            this.playerName.tint = data.getClassColor(this.unit.classId);
-            this.healthBar.addChild(this.playerName);
-        }
-       
         if (this.config.powerBarEnabled) {
-            this.powerBar = new StatusBar(this, this._width, this._height / 4);
-            this.powerBar.setValues(0, this.unit.getMana(), this.unit.getMaxMana());
-            this.powerBar.setPos(0, this.healthBar._height);
-            this.powerBar.setColor(this.config.powerBarColor);
-
-            MAINSTATE.events.MANA_CHANGE.add((unit) => this._onUnitManaChanged(unit));
+            this._initPowerBar();
 
         }
         this.inputEnabled = true;
         this.events.onInputDown.add(() => { MAINSTATE.player.setTarget(this.unit); console.log(this.unit); });
 
+        this._initEventListeners();
+    }
+
+    private _initEventListeners() {
         MAINSTATE.events.UNIT_HEALTH_CHANGE.add((unit) => this._onUnitHealthChanged(unit));
         MAINSTATE.events.UNIT_DEATH.add((unit) => this._onUnitDeath(unit));
-        
 
+        if(this.config.powerBarEnabled)
+            MAINSTATE.events.MANA_CHANGE.add((unit) => this._onUnitManaChanged(unit));
+    }
+
+    private _initPowerBar() {
+        this.powerBar = new StatusBar(this, this._width, this._height / 4);
+        this.powerBar.setValues(0, this.unit.getMana(), this.unit.getMaxMana());
+        this.powerBar.setPos(0, this.healthBar._height);
+        this.powerBar.setColor(this.config.powerBarColor);
+
+        this.manaPercentText = new Phaser.BitmapText(game, this.powerBar._width / 2, this.powerBar._height / 2, "myriad", null, 11);
+        this.manaPercentText.tint = this.config.powerBarColor;
+        this.manaPercentText.anchor.set(0.5);
+        this.powerBar.addChild(this.manaPercentText);
+
+    }
+    
+    private _initHealthBar() {
+        this.healthBar = new StatusBar(this, this._width, this._height / 4 * (this.config.powerBarEnabled ? 3 : 4));
+        this.healthBar.setColor(this.unit.isEnemy ? this.config.enemyColor : data.getClassColor(this.unit.classId));
+        this.healthBar.setValues(0, this.unit.getMaxHealth(), this.unit.getCurrentHealth());
+
+        if (this.config.playerNameEnabled) {
+            this.playerName = new Phaser.BitmapText(game, this.healthBar._width / 2, this.healthBar._height / 2, "myriad", null, 12);
+            this.playerName.setText(this.unit.name);
+            this.playerName.anchor.set(0.5);
+            this.playerName.tint = data.getClassColor(this.unit.classId);
+            this.healthBar.addChild(this.playerName);
+        }
     }
 
     private _onUnitHealthChanged(unit) {
@@ -186,6 +206,9 @@ class UnitFrame extends Frame {
     private _onUnitManaChanged(unit) {
   
         this.powerBar.setValue(this.unit.getMana());
+
+        var mana_pct = ( this.unit.getMana() / this.unit.getMaxMana() ) * 100;
+        this.manaPercentText.setText(mana_pct.toFixed(1) + "%");
     }
 
     private _onUnitRoleChanged() {
