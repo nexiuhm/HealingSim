@@ -3,8 +3,12 @@
         
         constructor(screen: States.Play) {
 
+            var config = {
+                emphasizedTime: 5000
+            };
+
             var testBoss = new Player(class_e.WARRIOR, race_e.RACE_HUMAN, 100, "Ragnaros", screen.events,true);
-            setInterval(function () { testBoss.recive_damage({ amount: 4250 }) }, 1200);
+            setInterval(function () { testBoss.recive_damage({ amount: 5250 }) }, 1200);
 
             var playerFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             playerFrame.togglePowerBar();
@@ -17,7 +21,6 @@
             var bossFrame = new UnitFrame(screen.UIParent, screen, testBoss, 300, 50);
             bossFrame.setPos(1200, 500);
 
-            //test case
         }
     }
 }

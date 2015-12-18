@@ -106,7 +106,7 @@
         var bossSwingInterval = setInterval(bossSwing.bind(this), 1600);
         //var bossSingelTargetSpell = setInterval(singelTargetDamage.bind(this), 60000);
         var tankSelfHealOrAbsorb = setInterval(applyAbsorb.bind(this), 5000);
-        var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 60000); // Big aoe after 3 minutes, 180000
+        var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 30000); // Big aoe after 3 minutes, 180000
         var raidAoeDamage = setInterval(raidDamage.bind(this), 3000);
         var raidAIHealing = setInterval(raidHealing.bind(this), 4000);
         var manaRegenYolo = setInterval(gain_mana.bind(this), 1200);
@@ -117,14 +117,14 @@
         }
 
         function bossSpike() {
-            var massiveBlow = game.rnd.between(340000, 350900);
+            var massiveBlow = game.rnd.between(330000, 340900);
            
             tank.recive_damage({ amount: massiveBlow });
             offTank.recive_damage({ amount: massiveBlow / 2 });
 
         }
         function bossSwing() {
-            var bossSwing = game.rnd.between(60000, 82900);
+            var bossSwing = game.rnd.between(70000, 90900);
             var bossSwingCriticalHit = Math.random();
 
             // 20% chance to critt. Experimental.
@@ -136,9 +136,9 @@
         }
 
         function bossAoEDamage() {
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.player[i]
-                player.recive_damage({ amount: 120000 });
+            for (var i = 0; i < this.players.length-1; i++) {
+                var player = this.players[i]
+                player.recive_damage({ amount: 170000 });
             }
         }
 
@@ -152,7 +152,7 @@
 
         function singelTargetDamage() {
             var random = game.rnd.between(2, this.players.length-1);
-            this.players[random].recive_damage({ amount: game.rnd.between(100000, 250000) });
+            this.players[random].recive_damage({ amount: game.rnd.between(100000, 150000) });
         }
 
         function bossEncounterAdds() {

@@ -8,6 +8,7 @@ namespace States {
             game.load.image("castbar_texture",              "./assets/textures/BantoBar.png");
             game.load.image("castbar_texture2",             "./assets/textures/LiteStep.png");
             game.load.image("ab_texture",                   "./assets/textures/action_bar_texture.png");
+            game.load.image("elite",                        "./assets/textures/elite_texture.png");
             game.load.image("bg",                           "./assets/play_state_background.png");
             game.load.image("icon_5",                       "./assets/icons/spell_holy_powerwordshield.jpg");
             game.load.image("icon_2",                       "./assets/icons/power_infusion.jpg");
@@ -40,6 +41,8 @@ namespace States {
             game.addons.add("Raid Frames 0.1", Addons.RaidFrame);
             game.addons.add("Unit Frames 0.1", Addons.UnitFrames);
             game.addons.add("Debug", Addons.Debug);
+            game.addons.add("BossTimers", Addons.BigWigs);
+
 
             // Enable this to capture FPS
             game.time.advancedTiming = true;

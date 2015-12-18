@@ -66,15 +66,11 @@ class StatusBar extends Frame  {
 
     };
 
-    private _updateBarWidth(animationSpeed?) {
-        if (this._currentValue <= this._minValue) {
-            this._bar.alpha = 0;
-        }
-        else {
-            this._bar.alpha = 1;
-            var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
-            game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
-        }
+    private _updateBarWidth() {
+        var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
+        if (barWidthInPixels <= 0) // something bad happens if it goes to 0
+            barWidthInPixels = 1;
+        game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
     }
 
     /* Public interface below */
@@ -100,14 +96,16 @@ class StatusBar extends Frame  {
         this._updateBarWidth();
     }
 
-    setValue(newValue:number) {
+    setValue(newValue:number, duration?) {
         if (newValue < this._minValue)
             this._currentValue = this._minValue;
         else if (newValue > this._maxValue)
             this._currentValue = this._maxValue;
         else
             this._currentValue = newValue;
-            
+
+        if (duration)
+            this._animationDuration = duration;
         this._updateBarWidth();
        
     }
@@ -128,6 +126,7 @@ class UnitFrame extends Frame {
     powerBar: StatusBar;
     playerName: Phaser.BitmapText;
     manaPercentText: Phaser.BitmapText;
+    dragonTexture: Phaser.Sprite;
 
     constructor(parent, state: States.Play, unit: Player, width?, height?) {
         super(parent);
@@ -149,6 +148,12 @@ class UnitFrame extends Frame {
         if (this.config.powerBarEnabled) {
             this._initPowerBar();
         }
+
+        if (this.unit.isEnemy) {
+            this.dragonTexture = new Phaser.Sprite(game, this._width-55, -10, "elite");
+            this.addChild(this.dragonTexture);
+        }
+
         this.inputEnabled = true;
         this.events.onInputDown.add(() => { MAINSTATE.player.setTarget(this.unit); console.log(this.unit); });
 
@@ -185,7 +190,7 @@ class UnitFrame extends Frame {
             this.playerName = new Phaser.BitmapText(game, this.healthBar._width / 2, this.healthBar._height / 2, "myriad", null, 12);
             this.playerName.setText(this.unit.name);
             this.playerName.anchor.set(0.5);
-            this.playerName.tint = data.getClassColor(this.unit.classId);
+            this.playerName.tint = this.unit.isEnemy ? this.config.enemyColor : data.getClassColor(this.unit.classId);
             this.healthBar.addChild(this.playerName);
         }
     }

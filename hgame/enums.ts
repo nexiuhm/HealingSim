@@ -29,3 +29,4 @@ enum player_level { MIN = 1, MAX = 100, DEFAULT = 100 };
 enum player_race { MIN = 7, MAX = 21 };
 enum player_class { MIN = 0, MAX = 10 };
 enum raid_size { GROUP = 5, TENMAN = 10, TWENTYFIVEMAN = 25 };
+enum player_role { TANK, HEALER, DAMAGE };

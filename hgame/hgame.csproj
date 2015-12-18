@@ -28,6 +28,7 @@
     <Content Include="assets\play_state_background.png" />
     <Content Include="assets\textures\bg_texture.png" />
     <Content Include="assets\textures\blue_particle.png" />
+    <Content Include="assets\textures\elite_texture.png" />
     <Content Include="assets\textures\LiteStep.png" />
     <Content Include="assets\menu_state_background.png" />
     <Content Include="assets\icons\spell_holy_powerwordshield.jpg" />
@@ -62,7 +63,7 @@
     <TypeScriptCompile Include="typescript_def_files\p2.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\phaser.d.ts" />
     <TypeScriptCompile Include="typescript_def_files\pixi.d.ts" />
-    <TypeScriptCompile Include="gameObjects\ui.ts" />
+    <TypeScriptCompile Include="gameObjects\addon_api.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
