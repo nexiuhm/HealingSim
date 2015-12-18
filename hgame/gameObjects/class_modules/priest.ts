@@ -40,7 +40,7 @@ namespace Priest {
             super.execute();
             //this.target.consumeAura("tidal_waves", 1); 
             var crit = game.rnd.between(1, 2);
-            this.target.setHealth(this.target.getCurrentHealth() + 120000 * crit);
+            this.target.setHealth(this.target.getCurrentHealth() + 130000 * crit);
         }
     }
 
@@ -61,7 +61,7 @@ namespace Priest {
         execute() {
             super.execute();
            
-            this.target.setAbsorb(150000);
+            this.target.setAbsorb(190000);
         }
 }
 
@@ -85,7 +85,7 @@ namespace Priest {
         execute() {
             super.execute();
             var crit = game.rnd.between(1, 2);
-            this.target.setAbsorb(110000 * crit);
+            this.target.setAbsorb(120000 * crit);
         }
     }
 }

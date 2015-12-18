@@ -4,7 +4,7 @@
         constructor(screen: States.Play) {
 
             var testBoss = new Player(class_e.WARRIOR, race_e.RACE_HUMAN, 100, "Ragnaros", screen.events,true);
-            setInterval(function () { testBoss.recive_damage({ amount: 3500 }) }, 1200);
+            setInterval(function () { testBoss.recive_damage({ amount: 4250 }) }, 1200);
 
             var playerFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             playerFrame.togglePowerBar();
@@ -13,7 +13,7 @@
 
             var targetFrame = new UnitFrame(screen.UIParent, screen, screen.player, 300, 50);
             targetFrame.setPos(1000, 800);
-            
+            screen.events.TARGET_CHANGE_EVENT.add(() => targetFrame.setUnit(screen.player.target));
             var bossFrame = new UnitFrame(screen.UIParent, screen, testBoss, 300, 50);
             bossFrame.setPos(1200, 500);
 

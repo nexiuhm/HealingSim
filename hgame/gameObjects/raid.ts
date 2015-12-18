@@ -100,28 +100,39 @@
 
     startTestDamage() {
         var tank = this.players[0];
+        var offTank = this.players[1];
 
         // --- Create some random damage for testing purposes ----
-        var bossSwingInterval = setInterval(bossSwing.bind(this), 1500);
+        var bossSwingInterval = setInterval(bossSwing.bind(this), 1600);
         //var bossSingelTargetSpell = setInterval(singelTargetDamage.bind(this), 60000);
         var tankSelfHealOrAbsorb = setInterval(applyAbsorb.bind(this), 5000);
         var bossTimedDamage = setInterval(bossAoEDamage.bind(this), 60000); // Big aoe after 3 minutes, 180000
         var raidAoeDamage = setInterval(raidDamage.bind(this), 3000);
         var raidAIHealing = setInterval(raidHealing.bind(this), 4000);
         var manaRegenYolo = setInterval(gain_mana.bind(this), 1200);
+        var spike = setInterval(bossSpike.bind(this), 8000);
 
         function gain_mana() {
             MAINSTATE.player.gain_resource(1600);
         }
+
+        function bossSpike() {
+            var massiveBlow = game.rnd.between(340000, 350900);
+           
+            tank.recive_damage({ amount: massiveBlow });
+            offTank.recive_damage({ amount: massiveBlow / 2 });
+
+        }
         function bossSwing() {
-            var bossSwing = game.rnd.between(105550, 238900);
+            var bossSwing = game.rnd.between(60000, 82900);
             var bossSwingCriticalHit = Math.random();
 
             // 20% chance to critt. Experimental.
-            if (bossSwingCriticalHit < 0.8)
+            if (bossSwingCriticalHit < 0.85)
                 bossSwing *= 1.5;
-            
-            tank.recive_damage({ amount: game.rnd.between(105550, 238900) });
+            tank.recive_damage({ amount: bossSwing });
+            offTank.recive_damage({ amount: bossSwing / 2 });
+
         }
 
         function bossAoEDamage() {
@@ -140,7 +151,7 @@
         }
 
         function singelTargetDamage() {
-            var random = game.rnd.between(0, this.players.length-1);
+            var random = game.rnd.between(2, this.players.length-1);
             this.players[random].recive_damage({ amount: game.rnd.between(100000, 250000) });
         }
 

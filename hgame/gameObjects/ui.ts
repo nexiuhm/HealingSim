@@ -120,7 +120,7 @@ class UnitFrame extends Frame {
         powerBarEnabled: false,
         playerNameEnabled: true,
         enemyColor: 0xFA1A16,
-        powerBarColor: 0x00D1FF
+        powerBarColor: 0x00D1FF,
     };
     // DisplayObjects
     healthBar: StatusBar;
@@ -148,7 +148,6 @@ class UnitFrame extends Frame {
 
         if (this.config.powerBarEnabled) {
             this._initPowerBar();
-
         }
         this.inputEnabled = true;
         this.events.onInputDown.add(() => { MAINSTATE.player.setTarget(this.unit); console.log(this.unit); });
@@ -159,9 +158,9 @@ class UnitFrame extends Frame {
     private _initEventListeners() {
         MAINSTATE.events.UNIT_HEALTH_CHANGE.add((unit) => this._onUnitHealthChanged(unit));
         MAINSTATE.events.UNIT_DEATH.add((unit) => this._onUnitDeath(unit));
-
         if(this.config.powerBarEnabled)
             MAINSTATE.events.MANA_CHANGE.add((unit) => this._onUnitManaChanged(unit));
+
     }
 
     private _initPowerBar() {
@@ -218,9 +217,7 @@ class UnitFrame extends Frame {
     private _onUnitDeath(unit) {
         if (unit != this.unit)
             return;
-        this.healthBar.setValue(0);
-        this.powerBar.setValue(0);
-        
+        this.healthBar.setValue(0);        
     }
 
     /* Public interface below */
@@ -234,6 +231,7 @@ class UnitFrame extends Frame {
         this.unit = unit;
         this._init();
     }
+
 }
 
 /* ## TODO ## fix fix */
