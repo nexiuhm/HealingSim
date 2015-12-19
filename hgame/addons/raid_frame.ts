@@ -31,7 +31,7 @@
                     if (!unit)
                         break;
                                                     // parent //
-                    var unitFrame = new UnitFrame(this.raidFrame, this.playState, unit,this.unitFrameWidth, this.unitFrameHeight);
+                    var unitFrame = new UnitFrame(this.raidFrame, unit, this.unitFrameWidth, this.unitFrameHeight);
                     if (unit === this.playState.player)
                         unitFrame.togglePowerBar();
 

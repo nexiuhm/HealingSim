@@ -128,7 +128,7 @@ class UnitFrame extends Frame {
     manaPercentText: Phaser.BitmapText;
     dragonTexture: Phaser.Sprite;
 
-    constructor(parent, state: States.Play, unit: Player, width?, height?) {
+    constructor(parent:PIXI.DisplayObjectContainer, unit: Player, width?, height?) {
         super(parent);
 
         this.unit = unit;
@@ -155,12 +155,13 @@ class UnitFrame extends Frame {
         }
 
         this.inputEnabled = true;
-        this.events.onInputDown.add(() => { MAINSTATE.player.setTarget(this.unit); console.log(this.unit); });
+        this.events.onInputDown.add(() => { setTarget(this.unit) });
 
         this._initEventListeners();
     }
 
     private _initEventListeners() {
+        //onEvent("UNIT_HEALTH_CHANGE", (e) => this._onUnitHealthChanged(e));
         MAINSTATE.events.UNIT_HEALTH_CHANGE.add((unit) => this._onUnitHealthChanged(unit));
         MAINSTATE.events.UNIT_DEATH.add((unit) => this._onUnitDeath(unit));
         if(this.config.powerBarEnabled)
@@ -300,7 +301,7 @@ class StatusIcon {
            return;
         // Create a timer that updates a variable locally.
         this.cd_overlay.alpha = 0.8;
-        this.animTween = this.playState.add.tween(this.angle).to({ current: 270 }, event.cooldownLenght,undefined, true);
+        this.animTween = game.add.tween(this.angle).to({ current: 270 }, event.cooldownLenght,undefined, true);
         // Hook the update cooldown arc to the main loop
         this.playState.events.GAME_LOOP_UPDATE.add(() => this._updateCooldownArc());
 
@@ -328,4 +329,15 @@ class StatusIcon {
         // redraw based on new values
     }
 
+}
+
+
+
+// Addon API function toolkit
+
+function setTarget(unit){
+    MAINSTATE.player.setTarget(unit);
+}
+
+function onEvent() {
 }
