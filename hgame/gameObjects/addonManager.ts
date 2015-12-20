@@ -30,12 +30,12 @@ class AddonManager {
         return addonList;
     }
 
-    /* Executes the addon code to the current state/stage */
-    loadEnabledAddons(stateToDrawTo: Phaser.State) {
+    /* Loads addons to the current context/state*/
+    loadEnabledAddons() {
         for (var addon in this.addons) {
             var currentAddon = this.addons[addon];
             if (currentAddon.enabled)
-                new currentAddon.code(stateToDrawTo);
+                currentAddon.code();
         }
     }
 }

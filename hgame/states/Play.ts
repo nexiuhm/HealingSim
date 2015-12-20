@@ -28,7 +28,7 @@ namespace States {
             this.raid.addPlayer(this.player);
 
             // Load enabled addons
-            game.addons.loadEnabledAddons(this);
+            game.addons.loadEnabledAddons();
 
             // Start the boss/healing simulator
             this.raid.startTestDamage();

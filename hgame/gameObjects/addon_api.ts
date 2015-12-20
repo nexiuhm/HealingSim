@@ -8,7 +8,11 @@ class Frame extends Phaser.Graphics  {
     
     constructor(parent){   
         super(game);
-        parent.addChild(this);
+        if (parent === 'UIParent')
+            MAINSTATE.UIParent.addChild(this);
+        else
+            parent.addChild(this);
+
 
     }
 
@@ -70,7 +74,11 @@ class StatusBar extends Frame  {
         var barWidthInPixels = Math.round((this._currentValue / this._maxValue) * this._width);
         if (barWidthInPixels <= 0) // something bad happens if it goes to 0
             barWidthInPixels = 1;
-        game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
+
+        if (!this._animationDuration)
+            this._bar.width = barWidthInPixels;
+        else 
+            game.add.tween(this._bar).to({ width: barWidthInPixels }, this._animationDuration, this._animationStyle, true);
     }
 
     /* Public interface below */
@@ -97,15 +105,17 @@ class StatusBar extends Frame  {
     }
 
     setValue(newValue:number, duration?) {
-        if (newValue < this._minValue)
+        if (newValue <= this._minValue)
             this._currentValue = this._minValue;
         else if (newValue > this._maxValue)
             this._currentValue = this._maxValue;
         else
             this._currentValue = newValue;
-
         if (duration)
             this._animationDuration = duration;
+        else if (duration === 0)
+            this._animationDuration = duration;
+       
         this._updateBarWidth();
        
     }
@@ -128,7 +138,7 @@ class UnitFrame extends Frame {
     manaPercentText: Phaser.BitmapText;
     dragonTexture: Phaser.Sprite;
 
-    constructor(parent:PIXI.DisplayObjectContainer, unit: Player, width?, height?) {
+    constructor(parent, unit: Player, width?, height?) {
         super(parent);
 
         this.unit = unit;
@@ -333,11 +343,16 @@ class StatusIcon {
 
 
 
-// Addon API function toolkit
+// Addon API function toolkit ## mainstate isnt supposed to be global etc. This is just temp
 
 function setTarget(unit){
     MAINSTATE.player.setTarget(unit);
 }
 
-function onEvent() {
+function getGroupMembers() {
+    return MAINSTATE.raid.getPlayerList();
+}
+
+function localPlayer() {
+    return MAINSTATE.player;
 }

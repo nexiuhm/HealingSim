@@ -1,54 +1,45 @@
 ﻿namespace Addons {
-    export class RaidFrame {
-        raidFrames: Array<UnitFrame> = [];
-        unitFrameHeight: number = 40;
-        unitFrameWidth: number = 90;
-        playState: States.Play;
-        spacing: number = 2;
-        raidFrame: Frame;
-        
-        constructor(playState: States.Play) {
+    export function RaidFrame() {
 
-            this.playState = playState;
-            this.raidFrame = new Frame(playState.UIParent);
-            //this.raidFrame.inputEnabled = true;
+        var unitFrames:Array<UnitFrame> = [];
+        var config = {
+            spacing: 2,
+            unitFrameWidth: 90,
+            unitFrameHeight: 40
+        };
+
+        var raidFrame = new Frame("UIParent");
+        //this.raidFrame.inputEnabled = true;
             //this.raidFrame.input.enableDrag();
 
-            // get keyboard focus
-            // Release keyboard focus
-            this.createRaidFrame();
-        }
+        (() => { // Anonymous namespace, since we dont want to pollute this function scope
+            var MAX_GROUPS = 5;
+            var MAX_PLAYERS_PER_GROUP = 5;
+            var playersInRaid = getGroupMembers();
 
-        createRaidFrame() {
-            const MAX_GROUPS = 5;
-            const MAX_PLAYERS_PER_GROUP = 5;
-
-            var playersInRaid = this.playState.raid.getPlayerList();
             for (var g = 0; g < MAX_GROUPS; g++) {
                 for (var p = 0; p < MAX_PLAYERS_PER_GROUP; p++) {
-                    var unit = playersInRaid[(g * 5) + p];
-                    
-                    if (!unit)
-                        break;
-                                                    // parent //
-                    var unitFrame = new UnitFrame(this.raidFrame, unit, this.unitFrameWidth, this.unitFrameHeight);
-                    if (unit === this.playState.player)
+                    var unit = playersInRaid[(g * 5) + p]; if (!unit) break;
+
+                    var unitFrame = new UnitFrame(raidFrame, unit, config.unitFrameWidth, config.unitFrameHeight);
+                    if (unit === localPlayer())
                         unitFrame.togglePowerBar();
 
-                    unitFrame.setPos(this.unitFrameWidth * g, p * (this.unitFrameHeight + this.spacing));
-                    this.raidFrames.push(unitFrame);
+                    unitFrame.setPos(config.unitFrameWidth * g, p * (config.unitFrameHeight + config.spacing));
+
+                    unitFrames.push(unitFrame);
                 }
             }
+        })(); // -- END --
 
-            /* Position parent frame base on how big the raid got */
-            this.raidFrame.x = widthFactor * 50 - 250;
-            this.raidFrame.y = heightFactor * 50 - 80;
+        /* Position parent frame base on how big the raid got */
+        raidFrame.x = widthFactor * 50 - 250;
+        raidFrame.y = heightFactor * 50 - 80;
 
-            /* Spawn effect */
-            for (var player = 0; player < this.raidFrames.length; player++) {
-                var unitFrame = this.raidFrames[player];
-                game.add.tween(unitFrame).to({y:-800 }, 1550 + (player*10), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
-            }
+        /* Spawn effect */
+        for (var player = 0; player < unitFrames.length; player++) {
+             var unitFrame = unitFrames[player];
+             game.add.tween(unitFrame).to({y:-800 }, 1550 + (player*10), Phaser.Easing.Elastic.Out, true,undefined,undefined,true);
         }
     }
 }

@@ -1,26 +1,22 @@
 ﻿namespace Addons {
-    export class UnitFrames {
-        
-        constructor(screen: States.Play) {
+    export function UnitFrames(){
 
-            var config = {
-                emphasizedTime: 5000
-            };
+        // Local player
+        var playerFrame = new UnitFrame("UIParent", localPlayer(), 300, 50);
+        playerFrame.togglePowerBar();
+        playerFrame.setPos(500, 800);
+        playerFrame.input.enableDrag();
 
-            var testBoss = new Player(class_e.WARRIOR, race_e.RACE_HUMAN, 100, "Ragnaros", screen.events,true);
-            setInterval(function () { testBoss.recive_damage({ amount: 5250 }) }, 1200);
+        // Target
+        var targetFrame = new UnitFrame("UIParent", localPlayer().target, 300, 50);
+        targetFrame.setPos(1000, 800);
+        MAINSTATE.events.TARGET_CHANGE_EVENT.add(() => targetFrame.setUnit(localPlayer().target));
 
-            var playerFrame = new UnitFrame(screen.UIParent, screen.player, 300, 50);
-            playerFrame.togglePowerBar();
-            playerFrame.setPos(500, 800);
-            playerFrame.input.enableDrag();
+        // Boss
+        var testBoss = new Player(class_e.WARRIOR, race_e.RACE_HUMAN, 100, "Ragnaros", MAINSTATE.events, true);
+        setInterval(function () { testBoss.recive_damage({ amount: 5250 }) }, 1200);
+        var bossFrame = new UnitFrame("UIParent", testBoss, 300, 50);
+        bossFrame.setPos(1200, 500);
 
-            var targetFrame = new UnitFrame(screen.UIParent, screen.player, 300, 50);
-            targetFrame.setPos(1000, 800);
-            screen.events.TARGET_CHANGE_EVENT.add(() => targetFrame.setUnit(screen.player.target));
-            var bossFrame = new UnitFrame(screen.UIParent, testBoss, 300, 50);
-            bossFrame.setPos(1200, 500);
-
-        }
     }
 }
